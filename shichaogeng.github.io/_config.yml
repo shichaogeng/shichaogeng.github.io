@@ -74,15 +74,15 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 theme: next
 
-algolia:
-  applicationID: 4SVQ45BFZL
-  apiKey: 0dc1486a00af19a1beac8a52d45adbd1
-  adminApiKey: b33e0f1a296af07a2d49793ac6d4b26f
-  indexName: MyBlog
-  chunkSize: 5000
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
   repo: https://github.com/shichaogeng/shichaogeng.github.io.git
   branch: master
+  
+search:
+ path: search.xml
+ field: post
+ format: html
+ limit: 10000
