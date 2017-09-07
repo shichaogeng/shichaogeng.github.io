@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="为了保证数据的一致完整性，任何一个数据库都存在锁定机制。锁定机制的优劣直接响应到一个数据库系统的并发处理能力和性能，所以锁定机制的实现也就成为了各种数据库的核心技术之一。本章将对MySQL中两种使用最为频繁的存储引擎MyISAM和Innodb各自的锁定机制进行较为详细的分析。">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL优化（一）--- MySQL锁机制">
+<meta property="og:url" content="http://yoursite.com/2017/08/29/MySQL锁机制/index.html">
+<meta property="og:site_name" content="Gengsc">
+<meta property="og:description" content="为了保证数据的一致完整性，任何一个数据库都存在锁定机制。锁定机制的优劣直接响应到一个数据库系统的并发处理能力和性能，所以锁定机制的实现也就成为了各种数据库的核心技术之一。本章将对MySQL中两种使用最为频繁的存储引擎MyISAM和Innodb各自的锁定机制进行较为详细的分析。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-06T15:28:22.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL优化（一）--- MySQL锁机制">
+<meta name="twitter:description" content="为了保证数据的一致完整性，任何一个数据库都存在锁定机制。锁定机制的优劣直接响应到一个数据库系统的并发处理能力和性能，所以锁定机制的实现也就成为了各种数据库的核心技术之一。本章将对MySQL中两种使用最为频繁的存储引擎MyISAM和Innodb各自的锁定机制进行较为详细的分析。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/29/MySQL锁机制/"/>
+
+
+
+
+
+  <title>MySQL优化（一）--- MySQL锁机制 | Gengsc</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c4c91eda846c9ec5faf2a726c6e0f69f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gengsc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/29/MySQL锁机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL优化（一）--- MySQL锁机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T09:50:23+08:00">
+                2017-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL优化/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/29/MySQL锁机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/29/MySQL锁机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>为了保证数据的一致完整性，任何一个数据库都存在锁定机制。锁定机制的优劣直接响应到一个数据库系统的并发处理能力和性能，所以锁定机制的实现也就成为了各种数据库的核心技术之一。本章将对MySQL中两种使用最为频繁的存储引擎MyISAM和Innodb各自的锁定机制进行较为详细的分析。</p>
+<a id="more"></a>
+<h2 id="理论基础"><a href="#理论基础" class="headerlink" title="理论基础"></a>理论基础</h2><p>总的来说，划分锁类型要依赖两种标准。按照对数据操作的类型分：读锁，写锁。按照数据操作的粒度：表锁，行锁，页锁（本文不作介绍）。</p>
+<h3 id="读锁"><a href="#读锁" class="headerlink" title="读锁"></a>读锁</h3><p>也称为共享锁。 共享锁的代号是S，是Share的缩写。针对同一资源，多个并发读操作可以并行执行，并且互不影响,不能写。</p>
+<h3 id="写锁"><a href="#写锁" class="headerlink" title="写锁"></a>写锁</h3><p>也称排它锁。排它锁的代号是X，是eXclusive的缩写。当前线程写数据的时候，会阻塞其它线程来读取或者写数据。</p>
+<h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p>就是锁住整个表，主要在myisam表存储引擎中出现，myisam默认表锁。<br>表级别的锁定是MySQL各存储引擎中最大颗粒度的锁定机制。该锁定机制最大的特点是实现<font color="red">逻辑简单</font>，带来的<font color="red">系统负面影响最小</font>。所以获取锁和释放锁的<font color="red">速度很快</font>。由于表级锁一次会将整个表锁定，所以可以很好的<font color="red">避免死锁问题</font>。当然，锁定颗粒度大所带来最大的负面影响就是出现锁定资源争用的概率也会最高，致使<font color="red">并发度较低</font>。</p>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>锁定单独的某个表中的某一行记录，主要用于innodb存储引擎，innodb默认行锁。<br>行级锁是目前各大数据库管理软件所实现的锁定颗粒度最小的,所以发生<font color="red">锁定资源争用的概率也最小</font>，能够给予应用程序尽可能大的<font color="red">并发处理能力</font>而提高一些需要高并发应用系统的整体性能。 但是由于锁定资源的<font color="red">颗粒度很小</font>，所以每次获取锁和释放锁<font color="red">消耗的资源也更多</font>，带来的消耗自然也就更大了。此外，行级锁定也最容易发生<font color="red">死锁</font>。</p>
+<h2 id="实践测试"><a href="#实践测试" class="headerlink" title="实践测试"></a>实践测试</h2><p>表结构及数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 表锁案例*/</span></div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> lock_one(</div><div class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</div><div class="line">	<span class="keyword">col</span> <span class="built_in">int</span></div><div class="line">)<span class="keyword">engine</span>=myisam;</div><div class="line"></div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_one(<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">1</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_one(<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">2</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_one(<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">3</span>);</div><div class="line"></div><div class="line"><span class="comment">/* 行锁案例*/</span></div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> lock_two(</div><div class="line">	<span class="keyword">id</span> <span class="built_in">int</span>,</div><div class="line">	<span class="keyword">col</span> <span class="built_in">int</span></div><div class="line">)<span class="keyword">engine</span>=<span class="keyword">innodb</span>;</div><div class="line"></div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_two(<span class="keyword">id</span>,<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">1</span>,<span class="number">1</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_two(<span class="keyword">id</span>,<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">2</span>,<span class="number">2</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> lock_two(<span class="keyword">id</span>,<span class="keyword">col</span>) <span class="keyword">values</span> (<span class="number">3</span>,<span class="number">3</span>);</div></pre></td></tr></table></figure></p>
+<h3 id="测试表锁"><a href="#测试表锁" class="headerlink" title="测试表锁"></a>测试表锁</h3><p>语法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 手动增加表锁：</span></div><div class="line">lock table 表名 [<span class="built_in">read</span>|write]，表名 [<span class="built_in">read</span>|write]…</div><div class="line"><span class="comment"># 查看锁状态</span></div><div class="line">show open tables; </div><div class="line"><span class="comment"># 解开所有锁</span></div><div class="line">unlock tables;</div><div class="line"></div><div class="line"><span class="comment"># 表锁的一些状态查询：</span></div><div class="line">show status like <span class="string">'table_lock%'</span>;</div><div class="line">说明:</div><div class="line">Table_locks_immediate：表示可以立即获取锁的查询次数，每获取一次锁就增加</div><div class="line">Table_locks_waited：锁等待的次数</div></pre></td></tr></table></figure>
+<h4 id="测试全表读锁"><a href="#测试全表读锁" class="headerlink" title="测试全表读锁"></a>测试全表读锁</h4><ol>
+<li><p>开两个会话session1和session2</p>
+</li>
+<li><p>在session1中锁定lock_one表</p>
+<blockquote>
+<p>MySQL&gt; lock table lock_one read;<br> Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_one执行查询，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_one\G;<br>*************************** 1. row ***************************<br>id: 1<br>col: 1<br>*************************** 2. row ***************************<br>id: 2<br>col: 2<br>*************************** 3. row ***************************<br>id: 3<br>col: 3<br>3 rows in set (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_one执行修改，<font color="red">报错</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 11 where id = 1;<br>ERROR 1099 (HY000): Table ‘lock_one’ was locked with a READ lock and can’t be updated</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_two执行查询，<font color="red">报错</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 11 where id = 1;<br>ERROR 1100 (HY000): Table ‘lock_two’ was not locked with LOCK TABLES</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_two执行修改，<font color="red">报错</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 11 where id = 1;<br>ERROR 1100 (HY000): Table ‘lock_two’ was not locked with LOCK TABLES</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_one执行查询，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_one\G;<br>*************************** 1. row ***************************<br>id: 1<br>col: 1<br>*************************** 2. row ***************************<br>id: 2<br>col: 2<br>*************************** 3. row ***************************<br>id: 3<br>col: 3<br>3 rows in set (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_one执行修改，<font color="red">阻塞</font>。</p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 22 where id = 2;</p>
+</blockquote>
+<p> 在session1中解锁</p>
+<blockquote>
+<p>MySQL&gt; unlock tables;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p> session2中阻塞更新操作执行</p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 22 where id = 2;<br>Query OK, 1 row affected (17.71 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_two执行查询，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_two\G;<br>*************************** 1. row ***************************<br>id: 1<br>col: 1<br>*************************** 2. row ***************************<br>id: 2<br>col: 2<br>*************************** 3. row ***************************<br>id: 3<br>col: 3<br>3 rows in set (0.01 sec)</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_two执行修改，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 2;<br>Query OK, 2 rows affected (0.01 sec)<br>Rows matched: 3  Changed: 2  Warnings: 0</p>
+</blockquote>
+</li>
+</ol>
+<p>据以上测试，结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>session1</th>
+<th>session2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发送锁表语句lock table t1 read;</td>
+<td>连接</td>
+</tr>
+<tr>
+<td>可以查询当前锁定的表t1</td>
+<td>可以查询t1</td>
+</tr>
+<tr>
+<td>更新t1表，报错</td>
+<td>更新t1表，阻塞</td>
+</tr>
+<tr>
+<td>查询其他表，报错</td>
+<td>可以查询其他表</td>
+</tr>
+<tr>
+<td>更新其他表，报错</td>
+<td>可以查询其他表</td>
+</tr>
+<tr>
+<td>执行unlock tables</td>
+<td>执行等待的更新操作</td>
+</tr>
+</tbody>
+</table>
+<p>分析：读锁是共享锁。在全表上添加读锁时，本线程被锁定，只能进行被锁定表的<font color="red">读</font>操作。其他线程可以对共享表进行读操作，但是要等待锁释放才能进行写操作。</p>
+<h4 id="测试全表写锁"><a href="#测试全表写锁" class="headerlink" title="测试全表写锁"></a>测试全表写锁</h4><ol>
+<li><p>开两个会话session1和session2</p>
+</li>
+<li><p>在session1中锁定lock_one表</p>
+<blockquote>
+<p>MySQL&gt; lock table lock_one write;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_one执行查询，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_one\G<br>*************************** 1. row ***************************<br>id: 1<br>col: 2<br>*************************** 2. row ***************************<br>id: 2<br>col: 22<br>*************************** 3. row ***************************<br>id: 3<br>col: 2<br>3 rows in set (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_one执行修改，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 3;<br>Query OK, 3 rows affected (0.00 sec)<br>Rows matched: 3  Changed: 3  Warnings: 0</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_two执行查询，<font color="red">报错</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_two;<br>ERROR 1100 (HY000): Table ‘lock_two’ was not locked with LOCK TABLES</p>
+</blockquote>
+</li>
+<li><p>在session1中对lock_two执行修改，<font color="red">报错</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 2;<br>ERROR 1100 (HY000): Table ‘lock_two’ was not locked with LOCK TABLES</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_one执行查询，<font color="red">阻塞</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_one\G;</p>
+</blockquote>
+<p> 在session1中执行</p>
+<blockquote>
+<p>MySQL&gt; unlock tables;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p> session2中查询执行</p>
+<blockquote>
+<p>MySQL&gt; select * from lock_one\G;<br>*************************** 1. row ***************************<br>id: 1<br>col: 2<br>*************************** 2. row ***************************<br>id: 2<br>col: 2<br>*************************** 3. row ***************************<br>id: 3<br>col: 2<br>3 rows in set (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_one执行修改，<font color="red">阻塞</font>。</p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 22 where id = 2;</p>
+</blockquote>
+<p> 在session1中解锁</p>
+<blockquote>
+<p>MySQL&gt; unlock tables;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p> session2中阻塞更新操作执行</p>
+<blockquote>
+<p>MySQL&gt; update lock_one set col = 22 where id = 2;<br>Query OK, 1 row affected (17.71 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_two执行查询，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; select * from lock_two\G;<br>*************************** 1. row ***************************<br>id: 1<br>col: 1<br>*************************** 2. row ***************************<br>id: 2<br>col: 2<br>*************************** 3. row ***************************<br>id: 3<br>col: 3<br>3 rows in set (0.01 sec)</p>
+</blockquote>
+</li>
+<li><p>在session2中对lock_two执行修改，<font color="red">成功</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 2;<br>Query OK, 2 rows affected (0.01 sec)<br>Rows matched: 3  Changed: 2  Warnings: 0</p>
+</blockquote>
+</li>
+</ol>
+<p>据以上测试，结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>session1</th>
+<th>session2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发送锁表语句lock table t1 write;</td>
+<td>连接</td>
+</tr>
+<tr>
+<td>可以查询当前锁定的表t1</td>
+<td>查询t1,阻塞</td>
+</tr>
+<tr>
+<td>可以更新t1表</td>
+<td>更新t1表，阻塞</td>
+</tr>
+<tr>
+<td>查询其他表，报错</td>
+<td>可以查询其他表</td>
+</tr>
+<tr>
+<td>更新其他表，报错</td>
+<td>可以查询其他表</td>
+</tr>
+<tr>
+<td>执行unlock tables</td>
+<td>执行等待的操作</td>
+</tr>
+</tbody>
+</table>
+<p>分析：写锁是排他锁。在全表上添加写锁时，本线程被锁定，只能进行被锁定表的<font color="red">读写</font>操作。其他线程等待本线程释放排他锁，才能进行读写操作。</p>
+<h4 id="MYISAM存储引擎中锁的特点"><a href="#MYISAM存储引擎中锁的特点" class="headerlink" title="MYISAM存储引擎中锁的特点"></a>MYISAM存储引擎中锁的特点</h4><p>执行select语句的时候，会自动给涉及的表加上读锁，在执行更新操作时，会自动给表加上写锁。</p>
+<p>myisam存储引擎比较适合作为以查询为主的表存储引擎，不适合写为主的表存储引擎，因为加写锁后，是锁住整个表，其他用户线程不能做任何操作，这样会导致大量用户线程堵塞的情况。</p>
+<h3 id="测试行锁"><a href="#测试行锁" class="headerlink" title="测试行锁"></a>测试行锁</h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"># 隔离级别</div><div class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%iso%'</span>;</div><div class="line"># 查看自动提交参数</div><div class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%autocommit%'</span>;</div><div class="line"># 关闭自动提交</div><div class="line"><span class="keyword">set</span> autocommit = <span class="number">0</span>;</div><div class="line"># 手动锁一行记录</div><div class="line"><span class="keyword">begin</span>;</div><div class="line">	<span class="keyword">select</span> \* <span class="keyword">from</span> lock_two <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">2</span> <span class="keyword">for</span> <span class="keyword">update</span>；</div><div class="line"># 查看行锁的信息</div><div class="line"><span class="keyword">show</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">'%innodb_row_lock%'</span>\G;</div><div class="line">输出结果：</div><div class="line">*************************** 1. row ***************************</div><div class="line">Variable_name: Innodb_row_lock_current_waits</div><div class="line">        Value: 0</div><div class="line">*************************** 2. row ***************************</div><div class="line">Variable_name: Innodb_row_lock_time</div><div class="line">        Value: 147166</div><div class="line">*************************** 3. row ***************************</div><div class="line">Variable_name: Innodb_row_lock_time_avg</div><div class="line">        Value: 21023</div><div class="line">*************************** 4. row ***************************</div><div class="line">Variable_name: Innodb_row_lock_time_max</div><div class="line">        Value: 51044</div><div class="line">*************************** 5. row ***************************</div><div class="line">Variable_name: Innodb_row_lock_waits</div><div class="line">        Value: 7</div><div class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</div><div class="line">说明：</div><div class="line">Innodb_row_lock_current_waits ：当前正在等待的数量</div><div class="line">Innodb_row_lock_time: 从启动到现在锁定的总时长，单位是ms</div><div class="line">Innodb_row_lock_time_avg :锁等待的平均时长</div><div class="line">Innodb_row_lock_time_max：等待锁时间最长的一个时间</div><div class="line">Innodb_row_lock_waits：总共的等待次数</div></pre></td></tr></table></figure>
+<h4 id="开始测试"><a href="#开始测试" class="headerlink" title="开始测试"></a>开始测试</h4><ol>
+<li><p>开启两个会话session1、session2</p>
+</li>
+<li><p>在两个会话中设置自动提交为手动提交</p>
+<blockquote>
+<p>MySQL&gt; set autocommit=0;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+</li>
+<li><p>在session1中执行update，没有提交事物</p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 2 where id = 2;<br>Query OK, 0 rows affected (0.00 sec)<br>Rows matched: 1  Changed: 0  Warnings: 0</p>
+</blockquote>
+<p>在session2中update同一行记录，<font color="red">发生阻塞</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 2 where id = 2;</p>
+</blockquote>
+<p>提交session1和session2中的事物</p>
+<blockquote>
+<p>MySQL&gt; commit;<br> Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<font color="red">分析：InnoDB自动加行级锁，修改时改行记录已被锁定，其他会话不能修改。</font></li>
+<li><p>在session1中执行update,没有提交事物</p>
+<blockquote>
+<p>MySQL&gt; MySQL&gt; update lock_two set col = 3 where id = 3;<br>Query OK, 1 row affected (0.00 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+<p>在session2中执行update，操作非同行记录，<font color="red">发生阻塞</font></p>
+<blockquote>
+<p>MySQL&gt; update lock_two set col = 22 where id = 2;</p>
+</blockquote>
+<p>提交session1和session2中的事物</p>
+<blockquote>
+<p>MySQL&gt; commit;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p>为嘛啊，为嘛啊，说好的行锁呢。<font color="red">分析：实际上，因为MySQL不确定哪行记录被修改，会在全表的范围上加上读锁，然后其他会话就不能更新该表记录。</font></p>
+</li>
+<li><p>在lock_two上建立索引</p>
+<blockquote>
+<p>MySQL&gt; create index idx_id on lock_two(id);<br>Query OK, 0 rows affected (0.03 sec)<br>Records: 0  Duplicates: 0  Warnings: 0</p>
+</blockquote>
+<p>执行第4步的操作：</p>
+<p>在session1中执行update,没有提交事物</p>
+<blockquote>
+<p>MySQL&gt;update lock_two set col = 3 where id = 3;<br>Query OK, 1 row affected (0.00 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+<p>在session2中执行update，操作非同行记录，<font color="red">操作成功</font></p>
+<blockquote>
+<p>MySQL&gt; MySQL&gt; update lock_two set col = 22 where id = 2;<br>Query OK, 1 row affected (0.00 sec)<br>Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+<p>提交session1和session2中的事物</p>
+<blockquote>
+<p>MySQL&gt; commit;<br>Query OK, 0 rows affected (0.00 sec)</p>
+</blockquote>
+<p>为嘛啊，为嘛啊，又和说好的不一样。<font color="red">分析：大概，也许，因为MySQL能通过索引快速的锁定被修改的行，所以只会在被操作范围的记录上加上行锁，然后其他会话就能更新非此范围记录。</font></p>
+</li>
+</ol>
+<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h4><ol>
+<li>在session1中修改范围记录，不提交<blockquote>
+<p>MySQL&gt; update lock_two set col = 1 where id &gt; 2 and id &lt; 8;<br>Query OK, 2 rows affected (0.00 sec)<br>Rows matched: 2  Changed: 2  Warnings: 0</p>
+</blockquote>
+</li>
+</ol>
+<p>在session2中插入id在session1修改where范围的记录，发生阻塞</p>
+<blockquote>
+<p>MySQL&gt; insert into lock_two values(4,4);<br>ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction</p>
+</blockquote>
+<p>分析：在范围查找的情况下，innodb会给范围条件中的数据加上锁，无论数据是否是否真实存在。<br>建议：在innodb中，因为有间隙锁的存在，最好在where中少使用这种范围查找</p>
+<h4 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h4><p>结论：如果没有用上索引，行锁变成表锁<br>原因：在不使用索引的情况下，更新表要全表扫描查询定位更新记录的位置，所以会在表上加全表读锁。在有索引的情况下，会走索引查询记录，只使用行锁即可。</p>
+<h4 id="InnoDB存储引擎中锁的特点"><a href="#InnoDB存储引擎中锁的特点" class="headerlink" title="InnoDB存储引擎中锁的特点"></a>InnoDB存储引擎中锁的特点</h4><p>InnoDB存储引擎既支持行级锁（row-level locking），也支持表级锁，但默认情况下是采用行级锁。支持事务，开销大，加锁慢；会出现死锁；锁的粒度小，并发情况下，产生锁等待的概率比较低，所以支持的并发数比较高</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/28/MySQL库表设计/" rel="next" title="MySQL优化（二）--- MySQL库表设计">
+                <i class="fa fa-chevron-left"></i> MySQL优化（二）--- MySQL库表设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/30/MySQL主从复制/" rel="prev" title="MySQL优化（一）--- MySQL主从复制">
+                MySQL优化（一）--- MySQL主从复制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Geng Shichao" />
+          <p class="site-author-name" itemprop="name">Geng Shichao</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="Notes">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Notes
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#理论基础"><span class="nav-number">1.</span> <span class="nav-text">理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读锁"><span class="nav-number">1.1.</span> <span class="nav-text">读锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写锁"><span class="nav-number">1.2.</span> <span class="nav-text">写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表锁"><span class="nav-number">1.3.</span> <span class="nav-text">表锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行锁"><span class="nav-number">1.4.</span> <span class="nav-text">行锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实践测试"><span class="nav-number">2.</span> <span class="nav-text">实践测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试表锁"><span class="nav-number">2.1.</span> <span class="nav-text">测试表锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试全表读锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">测试全表读锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试全表写锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">测试全表写锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MYISAM存储引擎中锁的特点"><span class="nav-number">2.1.3.</span> <span class="nav-text">MYISAM存储引擎中锁的特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试行锁"><span class="nav-number">2.2.</span> <span class="nav-text">测试行锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#语法"><span class="nav-number">2.2.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开始测试"><span class="nav-number">2.2.2.</span> <span class="nav-text">开始测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁"><span class="nav-number">2.2.3.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试结果"><span class="nav-number">2.2.4.</span> <span class="nav-text">测试结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB存储引擎中锁的特点"><span class="nav-number">2.2.5.</span> <span class="nav-text">InnoDB存储引擎中锁的特点</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Geng Shichao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/08/29/MySQL锁机制/';
+          this.page.identifier = '2017/08/29/MySQL锁机制/';
+          this.page.title = 'MySQL优化（一）--- MySQL锁机制';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
