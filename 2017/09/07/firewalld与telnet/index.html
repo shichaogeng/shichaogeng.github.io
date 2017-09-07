@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -94,13 +94,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Gengsc">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+<meta name="description" content="操作MySQL主从复制时候需要设定防火墙规则，决定还是总结记录一下。操作系统CentOs7 firewalld防火墙firewalld是centos7的一大特性，最大的好处有两个：支持动态更新，不用重启服务；第二个就是加入了防火墙的“zone”概念 firewalld的字符界面管理工具是 firewall-cmd  firewalld默认配置文件有两个：/usr/lib/firewalld/ （系">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="firewalld与telnet">
+<meta property="og:url" content="http://yoursite.com/2017/09/07/firewalld与telnet/index.html">
 <meta property="og:site_name" content="Gengsc">
+<meta property="og:description" content="操作MySQL主从复制时候需要设定防火墙规则，决定还是总结记录一下。操作系统CentOs7 firewalld防火墙firewalld是centos7的一大特性，最大的好处有两个：支持动态更新，不用重启服务；第二个就是加入了防火墙的“zone”概念 firewalld的字符界面管理工具是 firewall-cmd  firewalld默认配置文件有两个：/usr/lib/firewalld/ （系">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-07T07:22:50.959Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gengsc">
+<meta name="twitter:title" content="firewalld与telnet">
+<meta name="twitter:description" content="操作MySQL主从复制时候需要设定防火墙规则，决定还是总结记录一下。操作系统CentOs7 firewalld防火墙firewalld是centos7的一大特性，最大的好处有两个：支持动态更新，不用重启服务；第二个就是加入了防火墙的“zone”概念 firewalld的字符界面管理工具是 firewall-cmd  firewalld默认配置文件有两个：/usr/lib/firewalld/ （系">
 
 
 
@@ -129,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/07/firewalld与telnet/"/>
 
 
 
 
 
-  <title>归档 | Gengsc</title>
+  <title>firewalld与telnet | Gengsc</title>
   
 
 
@@ -164,7 +169,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -302,222 +307,262 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/07/firewalld与telnet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">firewalld与telnet</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-07T15:18:03+08:00">
+                2017-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 5 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux设置/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux设置</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-          </div>
-        
-        
 
-        
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/07/firewalld与telnet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/07/firewalld与telnet/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/07/firewalld与telnet/" itemprop="url">
-              
-                <span itemprop="name">firewalld与telnet</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-07T15:18:03+08:00"
-              content="2017-09-07" >
-          09-07
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/30/MySQL主从复制/" itemprop="url">
-              
-                <span itemprop="name">MySQL优化（一）--- MySQL主从复制</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-30T20:38:23+08:00"
-              content="2017-08-30" >
-          08-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/29/MySQL锁机制/" itemprop="url">
-              
-                <span itemprop="name">MySQL优化（一）--- MySQL锁机制</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-29T09:50:23+08:00"
-              content="2017-08-29" >
-          08-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/28/MySQL库表设计/" itemprop="url">
-              
-                <span itemprop="name">MySQL优化（二）--- MySQL库表设计</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-28T14:56:07+08:00"
-              content="2017-08-28" >
-          08-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>操作MySQL主从复制时候需要设定防火墙规则，决定还是总结记录一下。操作系统CentOs7</p>
+<h2 id="firewalld防火墙"><a href="#firewalld防火墙" class="headerlink" title="firewalld防火墙"></a>firewalld防火墙</h2><p>firewalld是centos7的一大特性，最大的好处有两个：支持动态更新，不用重启服务；第二个就是加入了防火墙的“zone”概念</p>
+<p>firewalld的字符界面管理工具是 firewall-cmd </p>
+<p>firewalld默认配置文件有两个：/usr/lib/firewalld/ （系统配置）和 /etc/firewalld/ （用户配置）</p>
+<h3 id="zone概念"><a href="#zone概念" class="headerlink" title="zone概念"></a>zone概念</h3><p>硬件防火墙默认一般有三个区，firewalld引入这一概念系统默认存在以下区域：</p>
+<blockquote>
+<p>drop：任何流入网络的包都被丢弃，不作出任何响应。只允许流出的网络连接。<br>block：任何进入的网络连接都被拒绝，并返回 IPv4 的 icmp-host-prohibited 报文或者 IPv6 的 icmp6-adm-prohibited 报文。只允许由该系统初始化的网络连接。<br>public：用以可以公开的部分。你认为网络中其他的计算机不可信并且可能伤害你的计算机。只允许选中的连接接入。<br>external：用在路由器等启用伪装的外部网络。你认为网络中其他的计算机不可信并且可能伤害你的计算机。只允许选中的连接接入。<br>dmz：用以允许隔离区（dmz）中的电脑有限地被外界网络访问。只接受被选中的连接。<br>work：用在工作网络。你信任网络中的大多数计算机不会影响你的计算机。只接受被选中的连接。<br>home：用在家庭网络。你信任网络中的大多数计算机不会影响你的计算机。只接受被选中的连接。<br>internal：用在内部网络。你信任网络中的大多数计算机不会影响你的计算机。只接受被选中的连接。</p>
+</blockquote>
+<h3 id="安装、运行、停止、禁用、重启firewalld"><a href="#安装、运行、停止、禁用、重启firewalld" class="headerlink" title="安装、运行、停止、禁用、重启firewalld"></a>安装、运行、停止、禁用、重启firewalld</h3><ol>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install firewalld firewall-config</div></pre></td></tr></table></figure>
+</li>
+<li><p>启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl start  firewalld</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl status firewalld 或者 firewall-cmd --state</div></pre></td></tr></table></figure>
+</li>
+<li><p>停止]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="built_in">disable</span> firewalld</div></pre></td></tr></table></figure>
+</li>
+<li><p>禁用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop firewalld</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新防火墙规则(不会重启服务)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新防火墙规则（会重启服务）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --complete-reload</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="配置firewalld"><a href="#配置firewalld" class="headerlink" title="配置firewalld"></a>配置firewalld</h3><ol>
+<li><p>查看版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --version</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看帮助</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --<span class="built_in">help</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>查看区域信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --get-active-zones</div></pre></td></tr></table></figure>
+</li>
+<li><p>查询默认区域</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --get-default-zone</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置默认区域</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --<span class="built_in">set</span>-default-zone=public</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看所有打开的端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --zone=dmz --list-ports</div></pre></td></tr></table></figure>
+</li>
+<li><p>查询端口是否启用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd [--zone=&lt;zone&gt;] --query-port=&lt;port&gt;[-&lt;port&gt;]/&lt;protocol&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>添加指定端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --zone=&lt;zone&gt; --add-port=&lt;port&gt;[-&lt;port&gt;]/&lt;protocol&gt; [--timeout=&lt;seconds&gt;]</div><div class="line"><span class="comment"># 要使定义的协议永久生效，需要加一句--permanent，--zone不写则使用默认区域</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>移除允许的端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">firewall-cmd [--zone=&lt;zone&gt;] --remove-port=&lt;port&gt;[-&lt;port&gt;]/&lt;protocol&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="安装telnet"><a href="#安装telnet" class="headerlink" title="安装telnet"></a>安装telnet</h2><ol>
+<li><p>先检查CentOS7.0是否已经安装以下两个安装包:telnet-server、xinetd。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost sysconfig]<span class="comment"># rpm -qa telnet-server</span></div><div class="line">[root@localhost sysconfig]<span class="comment">#  rpm -qa xinetd</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>如果没有安装，则先安装。安装命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># yum list | grep telnet</span></div><div class="line">telnet.x86_64                              1:0.17-60.el7               base     </div><div class="line">telnet-server.x86_64                       1:0.17-60.el7               base     </div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># yum -y install telnet-server.x86_64</span></div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># yum -y install telnet.x86_64</span></div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># yum list |grep xinetd</span></div><div class="line">xinetd.x86_64                              2:2.3.15-13.el7             base     </div><div class="line"></div><div class="line">[root@localhost ~]<span class="comment"># yum -y install xinetd.x86_64</span></div><div class="line">```  </div><div class="line"></div><div class="line">1. 安装完成后，将xinetd服务加入开机自启动</div><div class="line">```bash</div><div class="line">[root@localhost ~]<span class="comment"># systemctl enable xinetd.service</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>最后，启动以上两个服务即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment">#   systemctl start telnet.socket</span></div><div class="line">[root@localhost ~]<span class="comment"># systemctl start xinetd</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>将telnet服务加入开机自启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># systemctl enable telnet.socket</span></div><div class="line">Created symlink from /etc/systemd/system/sockets.target.wants/telnet.socket to /usr/lib/systemd/system/telnet.socket.</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用的时候，用telnet测试下端口是否可以访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># ping 192.168.25.143</span></div><div class="line">PING 192.168.25.143 (192.168.25.143) 56(84) bytes of data.</div><div class="line">64 bytes from 192.168.25.143: icmp_seq=1 ttl=64 time=0.529 ms</div><div class="line">64 bytes from 192.168.25.143: icmp_seq=2 ttl=64 time=0.473 ms</div><div class="line">64 bytes from 192.168.25.143: icmp_seq=3 ttl=64 time=0.473 ms</div><div class="line">64 bytes from 192.168.25.143: icmp_seq=4 ttl=64 time=0.496 ms</div><div class="line">^C</div><div class="line">--- 192.168.25.143 ping statistics ---</div><div class="line">4 packets transmitted, 4 received, 0% packet loss, time 3001ms</div><div class="line">rtt min/avg/max/mdev = 0.473/0.492/0.529/0.035 ms</div><div class="line"></div><div class="line"><span class="comment"># 网络连接成功，下面测试端口</span></div><div class="line">[root@localhost ~]<span class="comment"># telnet 192.168.25.143 3306</span></div><div class="line">Trying 192.168.25.143...</div><div class="line">Connected to 192.168.25.143.</div><div class="line">Escape character is <span class="string">'^]'</span>.</div><div class="line">N</div><div class="line">5.7.14-log</div><div class="line">          gBI8)<span class="string">"ÿ󿾂uc49BQ,emysql_native_password123456</span></div><div class="line"><span class="string">!#08S01Got packets out of orderConnection closed by foreign host.</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/28/MySQL环境准备/" itemprop="url">
-              
-                <span itemprop="name">MySQL优化（一）--- MySQL环境准备</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-28T10:12:46+08:00"
-              content="2017-08-28" >
-          08-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/30/MySQL主从复制/" rel="next" title="MySQL优化（一）--- MySQL主从复制">
+                <i class="fa fa-chevron-left"></i> MySQL优化（一）--- MySQL主从复制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -525,6 +570,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -545,8 +601,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -643,6 +708,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#firewalld防火墙"><span class="nav-number">1.</span> <span class="nav-text">firewalld防火墙</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zone概念"><span class="nav-number">1.1.</span> <span class="nav-text">zone概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装、运行、停止、禁用、重启firewalld"><span class="nav-number">1.2.</span> <span class="nav-text">安装、运行、停止、禁用、重启firewalld</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置firewalld"><span class="nav-number">1.3.</span> <span class="nav-text">配置firewalld</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装telnet"><span class="nav-number">2.</span> <span class="nav-text">安装telnet</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -766,11 +847,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
 
 
   
@@ -789,6 +868,18 @@
       <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2017/09/07/firewalld与telnet/';
+          this.page.identifier = '2017/09/07/firewalld与telnet/';
+          this.page.title = 'firewalld与telnet';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
