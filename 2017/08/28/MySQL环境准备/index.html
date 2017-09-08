@@ -103,7 +103,7 @@
 <meta property="og:description" content="最近系统看了下MySQL，决定写系列文章做个总结，为自己做个梳理，也为以后有新的idea或者收获都有个修正和添加记录的地方。先说一点，实际上网上的资料和本文在MySQL官网上都有，英语好的推荐直接阅读官方文档，英语不好先学好英语去阅读官方文档。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E5%8E%86%E5%8F%B2%E7%89%88%E6%9C%AC%E4%B8%8B%E8%BD%BD.png">
-<meta property="og:updated_time" content="2017-09-08T02:19:10.493Z">
+<meta property="og:updated_time" content="2017-09-08T03:24:09.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL优化（一）--- MySQL环境准备">
 <meta name="twitter:description" content="最近系统看了下MySQL，决定写系列文章做个总结，为自己做个梳理，也为以后有新的idea或者收获都有个修正和添加记录的地方。先说一点，实际上网上的资料和本文在MySQL官网上都有，英语好的推荐直接阅读官方文档，英语不好先学好英语去阅读官方文档。">
@@ -455,7 +455,7 @@
 <ol>
 <li><p>编辑MySQL配置文件my.cnf</p>
 <p>vi /etc/my.cnf #编辑文件，找到[mysqld]，在下面添加一行skip-grant-tables</p>
-  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[mysqld]</div><div class="line">skip-grant-tables</div></pre></td></tr></table></figure>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 可通过以下命令查询my.cnf的位置</span></div><div class="line">whereis my.cnf</div><div class="line"></div><div class="line"><span class="comment"># 或</span></div><div class="line">mysqld --verbose --<span class="built_in">help</span> | grep -C 1 <span class="string">'Default opt'</span></div><div class="line"></div><div class="line"><span class="comment"># 编辑配置文件</span></div><div class="line">[mysqld]</div><div class="line">skip-grant-tables</div></pre></td></tr></table></figure>
 <p>  :wq! #保存退出,重启MySQL服务</p>
   <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service mysqld restart</div></pre></td></tr></table></figure>
 </li>
