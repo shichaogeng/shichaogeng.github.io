@@ -103,7 +103,7 @@
 <meta property="og:description" content="最近系统看了下MySQL，决定写系列文章做个总结，为自己做个梳理，也为以后有新的idea或者收获都有个修正和添加记录的地方。先说一点，实际上网上的资料和本文在MySQL官网上都有，英语好的推荐直接阅读官方文档，英语不好先学好英语去阅读官方文档。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E5%8E%86%E5%8F%B2%E7%89%88%E6%9C%AC%E4%B8%8B%E8%BD%BD.png">
-<meta property="og:updated_time" content="2017-09-08T01:28:53.886Z">
+<meta property="og:updated_time" content="2017-09-08T01:31:34.934Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL优化（一）--- MySQL环境准备">
 <meta name="twitter:description" content="最近系统看了下MySQL，决定写系列文章做个总结，为自己做个梳理，也为以后有新的idea或者收获都有个修正和添加记录的地方。先说一点，实际上网上的资料和本文在MySQL官网上都有，英语好的推荐直接阅读官方文档，英语不好先学好英语去阅读官方文档。">
@@ -468,11 +468,9 @@
 </ol>
 </li>
 </ol>
-<ol>
-<li>取消/etc/my.cnf中的skip-grant-tables<pre><code>vi /etc/my.cnf 编辑文件，找到[mysqld]，删除skip-grant-tables这一行
-</code></pre></li>
-</ol>
-<h3 id="配置文件和数据"><a href="#配置文件和数据" class="headerlink" title="配置文件和数据"></a>配置文件和数据</h3><p>配置文件默认位置:</p>
+<pre><code>4. 取消/etc/my.cnf中的skip-grant-tables
+    vi /etc/my.cnf 编辑文件，找到[mysqld]，删除skip-grant-tables这一行
+</code></pre><h3 id="配置文件和数据"><a href="#配置文件和数据" class="headerlink" title="配置文件和数据"></a>配置文件和数据</h3><p>配置文件默认位置:</p>
 <blockquote>
 <p>Linux:    /etc/my.cnf<br>Windows:     my.ini  在mysql安装的home目录</p>
 </blockquote>
