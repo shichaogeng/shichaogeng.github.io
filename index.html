@@ -321,6 +321,234 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/09/12/MySQL参数优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/12/MySQL参数优化/" itemprop="url">MySQL优化（一）--- MySQL参数优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T11:30:43+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MySQL优化/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL优化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/12/MySQL参数优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/12/MySQL参数优化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="操作系统的优化"><a href="#操作系统的优化" class="headerlink" title="操作系统的优化"></a>操作系统的优化</h2><h3 id="优化网络连接"><a href="#优化网络连接" class="headerlink" title="优化网络连接"></a>优化网络连接</h3><p>使用netstat查看连接<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># netstat -an</span></div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </div><div class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     </div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:58527      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:57553      ESTABLISHED</div><div class="line">tcp        0     52 192.168.25.143:22       192.168.25.1:58078      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:63590      ESTABLISHED</div><div class="line">tcp6       0      0 :::3306                 :::*                    LISTEN     </div><div class="line">tcp6       0      0 :::22                   :::*                    LISTEN     </div><div class="line">tcp6       0      0 192.168.25.143:3306     192.168.25.139:48938    ESTABLISHED</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>state参数：<br>ESTABLISHED：正在通讯</p>
+<p><font color="red">TIME_WAIT: 主动关闭</font></p>
+<p><font color="red">CLOSE_WAIT:被动关闭</font><br>time_wait会导致服务器error：Too Many Open files</p>
+</blockquote>
+<p>优化思路：让服务器能够自动快速回收和重复利用Time_Wait资源</p>
+<p>编辑vi /etc/sysctl.conf，加入的内容：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 开启重用：允许将TIME_WAIT socket资源重新用于新的TCP连接，默认是0，关闭 </span></div><div class="line">net.ipv4.tcp_rw_reuse=1</div><div class="line"></div><div class="line"><span class="comment"># 开启回收:</span></div><div class="line">net.ipv4.tcp_tw_recycle=1</div><div class="line"></div><div class="line"><span class="comment"># 使配置生效：</span></div><div class="line">sysctl –p</div></pre></td></tr></table></figure></p>
+<h3 id="Open-files"><a href="#Open-files" class="headerlink" title="Open files"></a>Open files</h3><p>查看用户默认打开的最大文件数，默认1024：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># ulimit -n</span></div><div class="line">1024</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>修改打开文件数，vi /etc/profile，加入如下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">ulimit</span> –n 65535</div><div class="line"></div><div class="line"><span class="comment"># 使配置生效</span></div><div class="line"><span class="built_in">source</span> /etc/profile</div></pre></td></tr></table></figure>
+</li>
+<li><p>vi /etc/security/limits.conf，在末尾加入如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">* soft nofile 65535</div><div class="line">* hard nofile 65535</div><div class="line">* soft nproc 65535</div><div class="line">* hard nproc 65535</div></pre></td></tr></table></figure>
+</li>
+<li><p>MySQL对多核CPU利用特点<br>MySQL5.1之后，支持多核心<br>5.6,5.7都支持64核CPU</p>
+</li>
+</ol>
+<h3 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h3><p>scale up ： 向上扩展，也叫纵向扩展<br>scale out： 向外扩展，也叫水平扩展</p>
+<h3 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h3><p>建议：MySQL内存配置位物理内存的70%左右</p>
+<h2 id="MySQL配置优化"><a href="#MySQL配置优化" class="headerlink" title="MySQL配置优化"></a>MySQL配置优化</h2><p>大部分情况下使用innodb作为表存储引擎,以下参数配置在my.cnf中</p>
+<h3 id="innodb的缓冲池配置"><a href="#innodb的缓冲池配置" class="headerlink" title="innodb的缓冲池配置"></a>innodb的缓冲池配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">innodb_buffer_pool_size</div></pre></td></tr></table></figure>
+<p>这对Innodb表来说非常重要。Innodb相比MyISAM表对缓冲更为敏感。MyISAM可以在默认的key_buffer_size设置下运行的可以，然而Innodb在默认的 innodb_buffer_pool_size设置下却跟蜗牛似的。由于Innodb把数据和索引都缓存起来，无需留给操作系统太多的内存，因此如果只需要用Innodb的话则可以设置它<strong>高达 70-80% 的可用内存</strong>。一些应用于 key_buffer 的规则有 — 如果你的数据量不大，并且不会暴增，那么无需把 innodb_buffer_pool_size 设置的太大了。</p>
+<h3 id="innodb-log-缓存配置"><a href="#innodb-log-缓存配置" class="headerlink" title="innodb log 缓存配置"></a>innodb log 缓存配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">innodb_log_buffer_size</div></pre></td></tr></table></figure>
+<p>此参数确定些日志文件所用的内存大小，以M为单位。缓冲区更大能提高性能，但意外的故障将会丢失数据.MySQL开发人员建议设置为1－8M之间</p>
+<h3 id="配置缓冲池个数"><a href="#配置缓冲池个数" class="headerlink" title="配置缓冲池个数"></a>配置缓冲池个数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">innodb_buffer_pool_instances</div></pre></td></tr></table></figure>
+<p>默认情况下只有一个</p>
+<h3 id="在提交事务的时候，是否刷新日志缓冲（重要，对性能影响较大）"><a href="#在提交事务的时候，是否刷新日志缓冲（重要，对性能影响较大）" class="headerlink" title="在提交事务的时候，是否刷新日志缓冲（重要，对性能影响较大）"></a>在提交事务的时候，是否刷新日志缓冲（重要，对性能影响较大）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">innodb_flush_log_at_trx_commit</div></pre></td></tr></table></figure>
+<blockquote>
+<p>有3个值：<br>0：不会主动触发日志缓冲写入磁盘<br>1（默认）：每次提交事务的时候，同时会把日志缓冲刷新到磁盘<br>2：每次提交事务的时候，会把日志缓冲刷新到磁盘，但是他不是同时进行的，而是每秒钟刷新一次</p>
+</blockquote>
+<p>怎么配置考虑两个点：</p>
+<ol>
+<li>考虑安全性：如果对数据安全性较高，配置成1</li>
+<li>考虑性能：建议配置成2</li>
+</ol>
+<p>理由：再高并发事务下，如果执行事务的同时就把缓存中刷新到磁盘，就会大量的对磁盘进行写操作，导致大量的IO</p>
+<h3 id="innodb读写IO的线程数"><a href="#innodb读写IO的线程数" class="headerlink" title="innodb读写IO的线程数"></a>innodb读写IO的线程数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">innodb_read_io_threads</div><div class="line">innodb_write_io_threads</div></pre></td></tr></table></figure>
+<p>默认都是4个</p>
+<h3 id="独立表空间配置"><a href="#独立表空间配置" class="headerlink" title="独立表空间配置"></a>独立表空间配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">innodb_file_per_table</div></pre></td></tr></table></figure>
+<p>默认是打开的</p>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">query_cache_size</div></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>可以找<a href="http://blog.csdn.net/orichisonic/article/details/48026031" target="_blank" rel="external">别人博客</a>中的介绍，或者自己到官网去看具体配置</p>
+<h2 id="常用的sql写法和优化"><a href="#常用的sql写法和优化" class="headerlink" title="常用的sql写法和优化"></a>常用的sql写法和优化</h2><h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><ol>
+<li><p>为保证大数据操作执行速度，添加mysql参数配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">innodb_flush_log_at_trx_commit=2</div><div class="line">innodb_buffer_pool_instances=4</div><div class="line">innodb_buffer_pool_size=2048M</div><div class="line">innodb_log_buffer_size=16M</div></pre></td></tr></table></figure>
+</li>
+<li><p>重启服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost mysql]<span class="comment"># service mysqld restart;</span></div><div class="line">Redirecting to /bin/systemctl restart  mysqld.service</div></pre></td></tr></table></figure>
+</li>
+<li><p>插入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">database</span> db5;</div><div class="line"><span class="keyword">use</span> db5;</div><div class="line"></div><div class="line"><span class="comment">/* 用户表 */</span></div><div class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> <span class="keyword">users</span>;</div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">users</span>(</div><div class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,</div><div class="line">	<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">20</span>)</div><div class="line">);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'A'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'B'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'C'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'D'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'E'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'F'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'G'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'H'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'I'</span>);</div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> <span class="keyword">users</span>(<span class="keyword">name</span>) <span class="keyword">values</span> (<span class="string">'J'</span>);</div><div class="line"></div><div class="line"><span class="comment">/* 订单表 */</span></div><div class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> orders;</div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> orders(</div><div class="line">	<span class="keyword">id</span> <span class="built_in">int</span> primary <span class="keyword">key</span> auto_increment,<span class="comment">/*订单id*/</span></div><div class="line">	order_no <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,<span class="comment">/*订单编号*/</span></div><div class="line">	title <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,<span class="comment">/*订单标题*/</span></div><div class="line">	goods_num <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,<span class="comment">/*商品数量*/</span></div><div class="line">	money <span class="built_in">decimal</span>(<span class="number">7</span>,<span class="number">4</span>) <span class="keyword">not</span> <span class="literal">null</span>,<span class="comment">/*订单金额*/</span></div><div class="line">	user_id <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>	<span class="comment">/*订单所属用户id*/</span></div><div class="line">)<span class="keyword">engine</span>=<span class="keyword">innodb</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8 ;</div><div class="line"></div><div class="line"></div><div class="line">delimiter $$</div><div class="line"><span class="keyword">drop</span> <span class="keyword">procedure</span> <span class="keyword">if</span> <span class="keyword">exists</span> batch_orders $$</div><div class="line"></div><div class="line"><span class="keyword">create</span> <span class="keyword">procedure</span> batch_orders(<span class="keyword">in</span> <span class="keyword">max</span> <span class="built_in">int</span>)</div><div class="line"><span class="keyword">begin</span></div><div class="line"><span class="keyword">declare</span> <span class="keyword">start</span> <span class="built_in">int</span> <span class="keyword">default</span> <span class="number">0</span>;</div><div class="line"><span class="keyword">declare</span> i <span class="built_in">int</span> <span class="keyword">default</span> <span class="number">0</span>;</div><div class="line"><span class="keyword">set</span> autocommit = <span class="number">0</span>;  </div><div class="line"> while i &lt; max do</div><div class="line">	<span class="keyword">set</span> i = i + <span class="number">1</span>;</div><div class="line">	<span class="keyword">insert</span> <span class="keyword">into</span> orders(order_no,title,goods_num,money,user_id) </div><div class="line">	<span class="keyword">values</span> (<span class="keyword">concat</span>(<span class="string">'NCS-'</span>,<span class="keyword">floor</span>(<span class="number">1</span> + <span class="keyword">rand</span>()*<span class="number">1000000000004</span> )),<span class="keyword">concat</span>(<span class="string">'订单title-'</span>,i),i%<span class="number">50</span>,(<span class="number">100.0000</span>+(i%<span class="number">50</span>)),i%<span class="number">10</span>);</div><div class="line"> <span class="keyword">end</span> <span class="keyword">while</span>;</div><div class="line"><span class="keyword">commit</span>;</div><div class="line"><span class="keyword">end</span> $$</div><div class="line">delimiter ;</div><div class="line"></div><div class="line"><span class="comment">/* 3百万数据*/</span></div><div class="line"><span class="keyword">call</span> batch_orders(<span class="number">3000000</span>);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Max"><a href="#Max" class="headerlink" title="Max()"></a>Max()</h3><p>在money上面加索引解决性能问题</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; create index idx_money on orders(money);</div><div class="line">Query OK, 0 rows affected (16.46 sec)</div><div class="line">Records: 0  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; explain select max(money) from orders\G;</div><div class="line">*************************** 1. row ***************************</div><div class="line">           id: 1</div><div class="line">  select_type: SIMPLE</div><div class="line">        table: NULL</div><div class="line">   partitions: NULL</div><div class="line">         type: NULL</div><div class="line">possible_keys: NULL</div><div class="line">          key: NULL</div><div class="line">      key_len: NULL</div><div class="line">          ref: NULL</div><div class="line">         rows: NULL</div><div class="line">     filtered: NULL</div><div class="line">        Extra: <span class="keyword">Select</span> <span class="keyword">tables</span> optimized away</div><div class="line"><span class="number">1</span> <span class="keyword">row</span> <span class="keyword">in</span> <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
+<p>“Select tables optimized away”，介是啥意思呢，官方解释：</p>
+<blockquote>
+<p>For explains on simple count queries (i.e. explain select count(*) from people) the extra section will read “Select tables optimized away.” This is due to the fact that MySQL can read the result directly from the table internals and therefore does not need to perform the select.</p>
+</blockquote>
+<p>意思就是记录已经保存了，不需要查询物理表或者索引，直接返回结果。</p>
+<h3 id="count"><a href="#count" class="headerlink" title="count()"></a>count()</h3><p>需求：分别查询出A用户和B用户各自的订单总数<br>A    B<br>3    20</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; create index idx_user_id on orders(user_id);</div><div class="line">Query OK, 0 rows affected (19.25 sec)</div><div class="line">Records: 0  Duplicates: 0  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; explain select count(case when user_id=1 then id end),count(case when user_id=2 then id end ) from orders\G;</div><div class="line">*************************** 1. row ***************************</div><div class="line">           id: 1</div><div class="line">  select_type: SIMPLE</div><div class="line">        table: orders</div><div class="line">   partitions: NULL</div><div class="line">         type: index</div><div class="line">possible_keys: NULL</div><div class="line">          key: idx_user_id</div><div class="line">      key_len: 4</div><div class="line">          ref: NULL</div><div class="line">         rows: 2987346</div><div class="line">     filtered: 100.00</div><div class="line">        Extra: Using index</div><div class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
+<h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><p>limit<br>    limit ?,?<br>    limit 555,5<br>    limit 55555555,5</p>
+<p>从rows可以看出来，limit的开始位置越大，必须检索的行就越多，就会对性能产生影响<br>而且如果太大了，会产生using filesort</p>
+<p>可以设置下面的参数来解决：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">分配的排序的空间大小</div><div class="line">max_length_for_sort_data</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>默认为1024字节<br>如果排序的字段的空间大于这个设置的值，就不会使用索引排序，而会使用using filesort<br>可以设置大点，这样就不会产生文件内排序</p>
+</blockquote>
+<h3 id="行列转换"><a href="#行列转换" class="headerlink" title="行列转换"></a>行列转换</h3><p>行转列：<br>name  total_goods_num<br>A        100<br>B        20<br>把上面的结果转换成下面的结果：<br>A        B<br>100        20</p>
+<p>SQL如下：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">1</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'A'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">2</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'B'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">3</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'C'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">4</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'D'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">5</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'E'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">6</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'F'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">7</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'G'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">8</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'H'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">9</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'I'</span>,</div><div class="line"><span class="keyword">sum</span>(<span class="keyword">case</span> <span class="keyword">when</span> u.id=<span class="number">10</span> <span class="keyword">then</span> goods_num <span class="keyword">end</span>) <span class="keyword">as</span> <span class="string">'J'</span></div><div class="line"><span class="keyword">from</span> <span class="keyword">users</span> u <span class="keyword">inner</span> <span class="keyword">join</span> orders o <span class="keyword">on</span> u.id=o.user_id;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+	
+	<div>
+  
+</div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/09/07/FirewalldAndTelnet/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1159,7 +1387,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
