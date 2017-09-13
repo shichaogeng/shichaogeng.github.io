@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="操作系统的优化优化网络连接使用netstat查看连接1234567891011[root@localhost ~]# netstat -anActive Internet connections (servers and established)Proto Recv-Q Send-Q Local Address           Foreign Address         State">
+<meta name="description" content="一些没营养的东西，懒得弄了，有时间再补充下吧，先记录下。">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL优化（一）--- MySQL参数优化">
 <meta property="og:url" content="http://blog.gengsc.com/2017/09/12/MySQL参数优化/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="操作系统的优化优化网络连接使用netstat查看连接1234567891011[root@localhost ~]# netstat -anActive Internet connections (servers and established)Proto Recv-Q Send-Q Local Address           Foreign Address         State">
+<meta property="og:description" content="一些没营养的东西，懒得弄了，有时间再补充下吧，先记录下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-13T05:16:33.464Z">
+<meta property="og:updated_time" content="2017-09-13T05:22:03.793Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL优化（一）--- MySQL参数优化">
-<meta name="twitter:description" content="操作系统的优化优化网络连接使用netstat查看连接1234567891011[root@localhost ~]# netstat -anActive Internet connections (servers and established)Proto Recv-Q Send-Q Local Address           Foreign Address         State">
+<meta name="twitter:description" content="一些没营养的东西，懒得弄了，有时间再补充下吧，先记录下。">
 
 
 
@@ -424,7 +424,9 @@
       
 
       
-        <h2 id="操作系统的优化"><a href="#操作系统的优化" class="headerlink" title="操作系统的优化"></a>操作系统的优化</h2><h3 id="优化网络连接"><a href="#优化网络连接" class="headerlink" title="优化网络连接"></a>优化网络连接</h3><p>使用netstat查看连接<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># netstat -an</span></div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </div><div class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     </div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:58527      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:57553      ESTABLISHED</div><div class="line">tcp        0     52 192.168.25.143:22       192.168.25.1:58078      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:63590      ESTABLISHED</div><div class="line">tcp6       0      0 :::3306                 :::*                    LISTEN     </div><div class="line">tcp6       0      0 :::22                   :::*                    LISTEN     </div><div class="line">tcp6       0      0 192.168.25.143:3306     192.168.25.139:48938    ESTABLISHED</div></pre></td></tr></table></figure></p>
+        <p>一些没营养的东西，懒得弄了，有时间再补充下吧，先记录下。</p>
+<a id="more"></a>
+<h2 id="操作系统的优化"><a href="#操作系统的优化" class="headerlink" title="操作系统的优化"></a>操作系统的优化</h2><h3 id="优化网络连接"><a href="#优化网络连接" class="headerlink" title="优化网络连接"></a>优化网络连接</h3><p>使用netstat查看连接<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># netstat -an</span></div><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State      </div><div class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     </div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:58527      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:57553      ESTABLISHED</div><div class="line">tcp        0     52 192.168.25.143:22       192.168.25.1:58078      ESTABLISHED</div><div class="line">tcp        0      0 192.168.25.143:22       192.168.25.1:63590      ESTABLISHED</div><div class="line">tcp6       0      0 :::3306                 :::*                    LISTEN     </div><div class="line">tcp6       0      0 :::22                   :::*                    LISTEN     </div><div class="line">tcp6       0      0 192.168.25.143:3306     192.168.25.139:48938    ESTABLISHED</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>state参数：<br>ESTABLISHED：正在通讯</p>
 <p><font color="red">TIME_WAIT: 主动关闭</font></p>
