@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Jenkins,git,github,jdk,maven," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="jenkins牛刀小试想用jenkins完成项目自动部署，结果搞了一下午各种失败，没办法，买了个阿里云服务器，以后在这上面玩吧。从头弄下，搭建个基本环境，然后记录下，故有此文。">
+<meta name="keywords" content="Jenkins,git,github,jdk,maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins牛刀小试">
+<meta property="og:url" content="http://blog.gengsc.com/2017/09/15/Jenkins牛刀小试/index.html">
+<meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="jenkins牛刀小试想用jenkins完成项目自动部署，结果搞了一下午各种失败，没办法，买了个阿里云服务器，以后在这上面玩吧。从头弄下，搭建个基本环境，然后记录下，故有此文。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubgithub%E5%85%AC%E9%92%A5.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubjenkins_login.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/github%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/github%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubjdk.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubgit.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubmaven.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinssysconf.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishssh.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinssourcemanager.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinsbuild.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishoverssh.png">
+<meta property="og:updated_time" content="2017-09-18T03:46:03.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins牛刀小试">
+<meta name="twitter:description" content="jenkins牛刀小试想用jenkins完成项目自动部署，结果搞了一下午各种失败，没办法，买了个阿里云服务器，以后在这上面玩吧。从头弄下，搭建个基本环境，然后记录下，故有此文。">
+<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/githubgithub%E5%85%AC%E9%92%A5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.gengsc.com/2017/09/15/Jenkins牛刀小试/"/>
+
+
+
+
+
+  <title>Jenkins牛刀小试 | Gengsc's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c4c91eda846c9ec5faf2a726c6e0f69f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+	
+	<a href="https://github.com/shichaogeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gengsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/09/15/Jenkins牛刀小试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jenkins牛刀小试</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T14:44:02+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/15/Jenkins牛刀小试/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/15/Jenkins牛刀小试/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="jenkins牛刀小试"><a href="#jenkins牛刀小试" class="headerlink" title="jenkins牛刀小试"></a>jenkins牛刀小试</h1><p>想用jenkins完成项目自动部署，结果搞了一下午各种失败，没办法，买了个阿里云服务器，以后在这上面玩吧。从头弄下，搭建个基本环境，然后记录下，故有此文。</p>
+<a id="more"></a>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@test105 /usr/<span class="built_in">local</span>/tomcat/webapps]<span class="comment"># uname -a</span></div><div class="line">Linux test105.server 2.6.32-504.el6.x86_64 <span class="comment">#1 SMP Wed Oct 15 04:27:16 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux</span></div></pre></td></tr></table></figure>
+<h2 id="Jdk"><a href="#Jdk" class="headerlink" title="Jdk"></a>Jdk</h2><ol>
+<li><p>tomcat运行需要jdk环境，网上下个jdk1.8。<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">下载地址</a></p>
+</li>
+<li><p>有自带的jdk就卸了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">java –version</div><div class="line"></div><div class="line">rpm -qa | grep java</div><div class="line">rpm -e --nodeps java-1.7.0-openjdk-1.7.0.45-2.4.3.3.el6.x86_64</div><div class="line">rpm -e --nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64</div></pre></td></tr></table></figure>
+</li>
+<li><p>上传jdk到服务器，解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">tar -zxvf jdk-8u144-linux-x64.tar.gz</div><div class="line"></div><div class="line">cp -r jdk1.8.0_144/ /lab/dev/</div><div class="line"></div><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ dev]<span class="comment"># cd /lab/dev/ &amp;&amp; ll</span></div><div class="line">total 4</div><div class="line">drwxr-xr-x 8 root root 4096 Sep 15 15:09 jdk1.8.0_144</div></pre></td></tr></table></figure>
+</li>
+<li><p>第三步：配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">vim /etc/profile</div><div class="line"></div><div class="line"><span class="comment"># 在文件末尾追加</span></div><div class="line">JAVA_HOME=/usr/jdk</div><div class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></div><div class="line"></div><div class="line"><span class="comment"># 保存退出</span></div><div class="line">:wq</div><div class="line"></div><div class="line"><span class="comment">#重启</span></div><div class="line"><span class="built_in">source</span> /etc/profile</div></pre></td></tr></table></figure>
+</li>
+<li><p>检验，看成了没</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ dev]<span class="comment"># echo $PATH</span></div><div class="line">/lab/dev/jdk1.8.0_144/bin:/usr/<span class="built_in">local</span>/sbin:/usr/<span class="built_in">local</span>/bin:/usr/sbin:/usr/bin:/root/bin</div><div class="line"></div><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ dev]<span class="comment"># java -version</span></div><div class="line">java version <span class="string">"1.8.0_144"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>##　Tomcat</p>
+<ol>
+<li><p><a href="http://tomcat.apache.org/download-80.cgi" target="_blank" rel="external">下载</a></p>
+</li>
+<li><p>上传，解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar -zxvf apache-tomcat-8.0.46.tar.gz </div><div class="line"></div><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ <span class="built_in">source</span>]<span class="comment"># cp -rf apache-tomcat-8.0.46 /lab/dev/tomcat-jenkins</span></div><div class="line"></div><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ <span class="built_in">source</span>]<span class="comment"># cp -rf apache-tomcat-8.0.46 /lab/dev/tomcat-server01</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>配置下server01用tomcat端口号</p>
+</li>
+<li><p>配置下server01用tomcat用户权限（jenkins部署用）`</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 编辑</span></div><div class="line">vim tomcat-users.xml</div><div class="line"> </div><div class="line"><span class="comment">#添加</span></div><div class="line">&lt;role rolename=<span class="string">"tomcat"</span>/&gt;</div><div class="line">&lt;role rolename=<span class="string">"role1"</span>/&gt;</div><div class="line">&lt;role rolename=<span class="string">"manager-gui"</span>/&gt;</div><div class="line">&lt;role rolename=<span class="string">"manager-script"</span>/&gt;</div><div class="line">&lt;role rolename=<span class="string">"manager-status"</span>/&gt;</div><div class="line">&lt;user username=<span class="string">"tomcat"</span> password=<span class="string">"tomcat"</span> roles=<span class="string">"manager-gui,manager-script,manager-status"</span>/&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>5.启动下，找个浏览器看能不能访问</p>
+<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><ol>
+<li><p><a href="http://maven.apache.org/download.cgi" target="_blank" rel="external">下载</a></p>
+</li>
+<li><p>上传服务器，解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">tar -zxvf apache-maven-3.5.0-bin.tar.gz </div><div class="line"></div><div class="line">cp -r apache-maven-3.5.0 /lab/dev/</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置maven</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 编辑</span></div><div class="line"></div><div class="line"><span class="comment"># 添加</span></div><div class="line">&lt;localRepository&gt;/lab/dev/apache-maven-3.5.0/repository&lt;/localRepository&gt;</div><div class="line"></div><div class="line">&lt;!--配置阿里云国内镜像 --&gt;</div><div class="line">&lt;mirror&gt;</div><div class="line">    &lt;id&gt;alimaven&lt;/id&gt;</div><div class="line">    &lt;name&gt;aliyun maven&lt;/name&gt;</div><div class="line">    &lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public/&lt;/url&gt;</div><div class="line">    &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;</div><div class="line">&lt;/mirror&gt;</div><div class="line">    &lt;mirror&gt;</div><div class="line">    &lt;id&gt;central&lt;/id&gt;</div><div class="line">    &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;</div><div class="line">    &lt;url&gt;http://repo1.maven.org/maven2/&lt;/url&gt;</div><div class="line">&lt;/mirror&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 编辑</span></div><div class="line">vim /etc/profile</div><div class="line"></div><div class="line"><span class="comment"># 添加</span></div><div class="line">MAVEN_HOME=/lab/dev/apache-maven-3.5.0</div><div class="line">PATH=<span class="variable">$PATH</span>:<span class="variable">$MAVEN_HOME</span>/bin</div><div class="line"><span class="built_in">export</span> PATH MAVEN_HOME</div><div class="line"></div><div class="line"><span class="comment"># 加载</span></div><div class="line"><span class="built_in">source</span> /etc/profile</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><ol>
+<li><p>我yum安装时报错，然后就百度一番，也记录下吧。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 错误</span></div><div class="line">Not using downloaded repomd.xml because it is older than what we have</div><div class="line"></div><div class="line"><span class="comment"># 解决（清空缓存）</span></div><div class="line">yum clean all</div><div class="line">yum makecache</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">yum -y install git</div><div class="line"></div><div class="line"><span class="comment"># 测试</span></div><div class="line">git --version</div><div class="line"></div><div class="line"><span class="comment"># 查看帮助</span></div><div class="line">git --<span class="built_in">help</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="配置github"><a href="#配置github" class="headerlink" title="配置github"></a>配置github</h3><p>####　用户配置</p>
+<p>我要用github上的项目做测试，配置github用户名密码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --global user.name shichaogeng</div><div class="line">git config --global user.email shichaogeng@gmail.com</div></pre></td></tr></table></figure></p>
+<h4 id="配置秘钥"><a href="#配置秘钥" class="headerlink" title="配置秘钥"></a>配置秘钥</h4><blockquote>
+<p>git在部署github时使用SSH协议连接和验证远程服务器和服务。为避免暴露账户密码，最好使用证书认证。使用SSH密钥，可以连接到GitHub，而无需在每次访问时提供用户名或密码。</p>
+</blockquote>
+<h5 id="查看密匙"><a href="#查看密匙" class="headerlink" title="查看密匙"></a>查看密匙</h5><p>执行cd ~/.ssh命令，如果存在该目录，表明之前生成果SSH Key，利用ll命令即可以查看。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ .ssh]<span class="comment"># ll</span></div><div class="line">total 0</div><div class="line">-rw------- 1 root root 0 Sep 15 13:20 authorized_keys</div></pre></td></tr></table></figure></p>
+<p>看一下有没有id_rsa和id_rsa.pub(或者是id_dsa和id_dsa.pub之类成对的文件)，有.pub 后缀的文件就是公钥，另一个文件则是密钥。</p>
+<p>假如没有这些文件，甚至连.ssh 目录都没有，可以用 ssh-keygen 来创建。该程序在 Linux/Mac 系统上由 SSH 包提供，而在 Windows 上则包含在 MSysGit 包里。</p>
+<h5 id="生成私钥"><a href="#生成私钥" class="headerlink" title="生成私钥"></a>生成私钥</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ .ssh]<span class="comment"># ssh-keygen -t rsa -C "shichaogeng@gmail.com"</span></div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/root/.ssh/id_rsa): </div><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </div><div class="line">Enter same passphrase again: </div><div class="line">Your identification has been saved <span class="keyword">in</span> /root/.ssh/id_rsa.</div><div class="line">Your public key has been saved <span class="keyword">in</span> /root/.ssh/id_rsa.pub.</div><div class="line">The key fingerprint is:</div><div class="line">4f:e4:71:c2:89:92:03:80:41:1c:c2:11:cc:06:ff:ea shichaogeng@gmail.com</div><div class="line">The key<span class="string">'s randomart image is:</span></div><div class="line"><span class="string">+--[ RSA 2048]----+</span></div><div class="line"><span class="string">|@B=..            |</span></div><div class="line"><span class="string">|oB   . . o .     |</span></div><div class="line"><span class="string">|. .   + . * .    |</span></div><div class="line"><span class="string">|   .   o o +     |</span></div><div class="line"><span class="string">|    .   S o      |</span></div><div class="line"><span class="string">|   .     o       |</span></div><div class="line"><span class="string">|  .       .      |</span></div><div class="line"><span class="string">| .               |</span></div><div class="line"><span class="string">|  E              |</span></div><div class="line"><span class="string">+-----------------+</span></div><div class="line"><span class="string"># 本地密匙生成成功！</span></div></pre></td></tr></table></figure>
+<p>查看生成的公钥<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7+EsE7t+TmI9AA16QQMNnwB3fbogZGznD18jttNvANvkYITlNnty2a/qiFdVuaSvPHbwW5djKT8fwVpieJStlefEsdAXg+r7DPgyttFf2vHYdHULdZNc48aNy/GN1hZFvPU1PwsV/xAL8phFER4aFhQYygcnkY1/KbfSZOHo+9uL+oc7bBQZYTEhfdl+twwesnAt3erSPIl1U0Cv5tkCdj2WRnLGiLXdnUfK7Zq5jtfQiXWeXCXjt3+wB0zWS1W6HysQ4pJ5f7OuuzG8sHj44KTYqSf5hSHuGVXX5P7x9OiKT4zDyZ/rBsGJAehyxDRd3ErAP2D4IY1zmpzgEBkgx shichaogeng@gmail.com</div></pre></td></tr></table></figure></p>
+<h5 id="github公钥"><a href="#github公钥" class="headerlink" title="github公钥"></a>github公钥</h5><ol>
+<li>登陆github帐户。点击头像，然后 Settings -&gt; 左栏点击 SSH and GPG keys -&gt; 点击 New SSH key，向下面酱紫的界面</li>
+</ol>
+<center><img src="http://ov80rf6z5.bkt.clouddn.com/image/githubgithub%E5%85%AC%E9%92%A5.png" alt="github公钥"></center>
+
+<ol>
+<li><p>然后你复制上面的公钥内容，粘贴进“Key”文本域内。 title域，自己随便起个名字。点击 Add key。</p>
+</li>
+<li><p>完成以后，验证下这个key是不是正常工作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ .ssh]<span class="comment"># ssh -T git@github.com</span></div><div class="line">The authenticity of host <span class="string">'github.com (192.30.255.112)'</span> can<span class="string">'t be established.</span></div><div class="line"><span class="string">RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span></div><div class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></div><div class="line"><span class="string">Warning: Permanently added '</span>github.com,192.30.255.112<span class="string">' (RSA) to the list of known hosts.</span></div><div class="line"><span class="string">Hi shichaogeng! You'</span>ve successfully authenticated, but GitHub does not provide shell access.</div></pre></td></tr></table></figure>
+</li>
+<li><p>搞定！</p>
+</li>
+</ol>
+<h2 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h2><h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><ol>
+<li><p>还是先<a href="https://jenkins.io/download/" target="_blank" rel="external">下载</a></p>
+</li>
+<li><p>我下的war包，上传服务器，放到tomat下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp jenkins.war /lab/dev/tomcat-jenkins/webapps/</div></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器访问<a href="http://47.94.170.46:8080/jenkins，出现如下界面" target="_blank" rel="external">http://47.94.170.46:8080/jenkins，出现如下界面</a></p>
+</li>
+</ol>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/githubjenkins_login.png" alt="jenkins_login"></p>
+<p>让你输入密匙，tomcat日志查到这个<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 我的密匙</span></div><div class="line">1d4989effd224179a60709f5e5fbda3d</div><div class="line"></div><div class="line"><span class="comment"># 密匙路径</span></div><div class="line">This may also be found at: /root/.jenkins/secrets/initialAdminPassword</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>输入密匙，就开始初始化，然后让你选择插件，我就选推荐安装，等吧（有点久）。。。</p>
+</li>
+<li><p>。。。</p>
+</li>
+</ol>
+<h3 id="装插件"><a href="#装插件" class="headerlink" title="装插件"></a>装插件</h3><ol>
+<li>继续装插件</li>
+</ol>
+<center><img src="http://ov80rf6z5.bkt.clouddn.com/image/github%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6.png" alt="安装插件"></center>
+
+<p>单独添加两个插件<br>Maven Integration plugin<br>Publish Over SSH</p>
+<p>装完得重启（等。。。）</p>
+<h3 id="Global-Tool-Configuration"><a href="#Global-Tool-Configuration" class="headerlink" title="Global Tool Configuration"></a>Global Tool Configuration</h3><ol>
+<li>configuration</li>
+</ol>
+<center><img src="http://ov80rf6z5.bkt.clouddn.com/image/github%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE.png" alt="全局配置"></center>
+
+<ol>
+<li>jdk配置</li>
+</ol>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/githubjdk.png" alt="jdk配置"></p>
+<ol>
+<li>git配置</li>
+</ol>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/githubgit.png" alt="git配置"></p>
+<p>7.maven配置</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/githubmaven.png" alt="maven配置"></p>
+<h3 id="系统设置"><a href="#系统设置" class="headerlink" title="系统设置"></a>系统设置</h3><ol>
+<li>系统设置</li>
+</ol>
+<center><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinssysconf.png" alt="系统设置"></center>
+
+<ol>
+<li>Publish over SSH 设置</li>
+</ol>
+<center><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishssh.png" alt="PublishOverSsh"></center>
+
+<h3 id="构建项目（只挑重要的截图啦）"><a href="#构建项目（只挑重要的截图啦）" class="headerlink" title="构建项目（只挑重要的截图啦）"></a>构建项目（只挑重要的截图啦）</h3><h4 id="源码管理"><a href="#源码管理" class="headerlink" title="源码管理"></a>源码管理</h4><center><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinssourcemanager.png" alt="SourceManager"></center>
+
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><center><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinsbuild.png" alt="Build"></center>
+
+<h4 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h4><center><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishoverssh.png" alt="publishoverssh"></center>
+
+<p>服务器上执行的bash脚本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash  </span></div><div class="line"></div><div class="line"><span class="comment">#定义变量</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/lab/dev/jdk1.8.0_144</div><div class="line">TOMCAT_PORT=8081</div><div class="line">TOMCAT_HOME=<span class="string">"/lab/dev/tomcat-server01"</span></div><div class="line">PROJECT=<span class="string">"<span class="variable">$1</span>"</span></div><div class="line">SERVER=<span class="string">"/lab/publish"</span></div><div class="line"></div><div class="line"><span class="comment">#参数验证</span></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -lt 1 ]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you must use like this : ./publish.sh &lt;projectname&gt; [tomcat port] [tomcat home dir]"</span>    </div><div class="line">  <span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$2</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></div><div class="line">   TOMCAT_PORT=<span class="variable">$2</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$3</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></div><div class="line">   TOMCAT_HOME=<span class="string">"<span class="variable">$3</span>"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ ! -e <span class="string">"<span class="variable">$SERVER</span>"</span>/<span class="string">"<span class="variable">$PROJECT</span>"</span>.war ]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"<span class="variable">$PROJECT</span>"</span>.war <span class="string">"文件不存在，结束当前执行"</span></div><div class="line">  <span class="built_in">exit</span>;</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment">#关闭 tomcat  </span></div><div class="line"><span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/bin/shutdown.sh</div><div class="line"><span class="comment">#杀进程</span></div><div class="line"><span class="built_in">kill</span> -9 $(lsof -i:<span class="string">'$TOMCAT_PORT'</span> |awk <span class="string">'&#123;print $2&#125;'</span>| tail -1)</div><div class="line"><span class="built_in">echo</span> <span class="string">"tomcat shutdown"</span>  </div><div class="line"></div><div class="line"><span class="comment">#替换war包  </span></div><div class="line">rm -rf <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="string">"<span class="variable">$PROJECT</span>"</span>*</div><div class="line">mv /lab/publish/<span class="variable">$PROJECT</span>.war <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="variable">$PROJECT</span>.war</div><div class="line"><span class="built_in">echo</span> <span class="string">"替换webapps下的war包"</span></div><div class="line"></div><div class="line"><span class="comment">#备份项目  </span></div><div class="line">BAK_DIR=/lab/publish/bak/<span class="variable">$PROJECT</span>/`date +%Y%m%d`</div><div class="line">mkdir -p <span class="string">"<span class="variable">$BAK_DIR</span>"</span></div><div class="line">cp <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="variable">$PROJECT</span>.war <span class="string">"<span class="variable">$BAK_DIR</span>"</span>/<span class="string">"<span class="variable">$PROJECT</span>"</span>_`date +%H%M%S`.war</div><div class="line"></div><div class="line"><span class="comment">#启动 tomcat</span></div><div class="line"><span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/bin/startup.sh</div><div class="line"><span class="built_in">echo</span> <span class="string">"tomcat is starting,please try to access <span class="variable">$PROJECT</span> conslone url"</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Jenkins-git-github-jdk-maven/" rel="tag"><i class="fa fa-tag"></i> Jenkins,git,github,jdk,maven</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/12/MySQL参数优化/" rel="next" title="MySQL优化（一）--- MySQL参数优化">
+                <i class="fa fa-chevron-left"></i> MySQL优化（一）--- MySQL参数优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Geng Shichao" />
+          <p class="site-author-name" itemprop="name">Geng Shichao</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="Notes">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Notes
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jenkins牛刀小试"><span class="nav-number">1.</span> <span class="nav-text">jenkins牛刀小试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">1.1.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jdk"><span class="nav-number">1.2.</span> <span class="nav-text">Jdk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven"><span class="nav-number">1.3.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.4.</span> <span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装git"><span class="nav-number">1.4.1.</span> <span class="nav-text">安装git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置github"><span class="nav-number">1.4.2.</span> <span class="nav-text">配置github</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置秘钥"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">配置秘钥</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看密匙"><span class="nav-number">1.4.2.1.1.</span> <span class="nav-text">查看密匙</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#生成私钥"><span class="nav-number">1.4.2.1.2.</span> <span class="nav-text">生成私钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#github公钥"><span class="nav-number">1.4.2.1.3.</span> <span class="nav-text">github公钥</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins"><span class="nav-number">1.5.</span> <span class="nav-text">Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装"><span class="nav-number">1.5.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装插件"><span class="nav-number">1.5.2.</span> <span class="nav-text">装插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Global-Tool-Configuration"><span class="nav-number">1.5.3.</span> <span class="nav-text">Global Tool Configuration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统设置"><span class="nav-number">1.5.4.</span> <span class="nav-text">系统设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建项目（只挑重要的截图啦）"><span class="nav-number">1.5.5.</span> <span class="nav-text">构建项目（只挑重要的截图啦）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#源码管理"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">源码管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构建"><span class="nav-number">1.5.5.2.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构建后操作"><span class="nav-number">1.5.5.3.</span> <span class="nav-text">构建后操作</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Geng Shichao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.gengsc.com/2017/09/15/Jenkins牛刀小试/';
+          this.page.identifier = '2017/09/15/Jenkins牛刀小试/';
+          this.page.title = 'Jenkins牛刀小试';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
