@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinssourcemanager.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinsbuild.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishoverssh.png">
-<meta property="og:updated_time" content="2017-09-18T06:48:10.623Z">
+<meta property="og:updated_time" content="2017-09-18T06:55:23.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins牛刀小试">
 <meta name="twitter:description" content="想用jenkins完成项目自动部署，结果搞了一下午各种失败，没办法，买了个阿里云服务器，以后在这上面玩吧。从头弄下，搭建个基本环境，然后记录下，故有此文。">
@@ -534,7 +534,7 @@
 <h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinsbuild.png" alt="Build"></p>
 <h4 id="构建后操作"><a href="#构建后操作" class="headerlink" title="构建后操作"></a>构建后操作</h4><p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/jenkinspublishoverssh.png" alt="publishoverssh"></p>
 <p>服务器上执行的bash脚本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash  </span></div><div class="line"></div><div class="line"><span class="comment">#定义变量</span></div><div class="line"><span class="built_in">export</span> JAVA_HOME=/lab/dev/jdk1.8.0_144</div><div class="line">TOMCAT_PORT=8081</div><div class="line">TOMCAT_HOME=<span class="string">"/lab/dev/tomcat-server01"</span></div><div class="line">PROJECT=<span class="string">"<span class="variable">$1</span>"</span></div><div class="line">SERVER=<span class="string">"/lab/publish"</span></div><div class="line"></div><div class="line"><span class="comment">#参数验证</span></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -lt 1 ]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you must use like this : ./publish.sh &lt;projectname&gt; [tomcat port] [tomcat home dir]"</span>    </div><div class="line">  <span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$2</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></div><div class="line">   TOMCAT_PORT=<span class="variable">$2</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$3</span>"</span> != <span class="string">""</span> ]; <span class="keyword">then</span></div><div class="line">   TOMCAT_HOME=<span class="string">"<span class="variable">$3</span>"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ ! -e <span class="string">"<span class="variable">$SERVER</span>"</span>/<span class="string">"<span class="variable">$PROJECT</span>"</span>.war ]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"<span class="variable">$PROJECT</span>"</span>.war <span class="string">"文件不存在，结束当前执行"</span></div><div class="line">  <span class="built_in">exit</span>;</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment">#关闭 tomcat  </span></div><div class="line"><span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/bin/shutdown.sh</div><div class="line"><span class="comment">#杀进程</span></div><div class="line"><span class="built_in">kill</span> -9 $(lsof -i:<span class="string">'$TOMCAT_PORT'</span> |awk <span class="string">'&#123;print $2&#125;'</span>| tail -1)</div><div class="line"><span class="built_in">echo</span> <span class="string">"tomcat shutdown"</span>  </div><div class="line"></div><div class="line"><span class="comment">#替换war包  </span></div><div class="line">rm -rf <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="string">"<span class="variable">$PROJECT</span>"</span>*</div><div class="line">mv /lab/publish/<span class="variable">$PROJECT</span>.war <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="variable">$PROJECT</span>.war</div><div class="line"><span class="built_in">echo</span> <span class="string">"替换webapps下的war包"</span></div><div class="line"></div><div class="line"><span class="comment">#备份项目  </span></div><div class="line">BAK_DIR=/lab/publish/bak/<span class="variable">$PROJECT</span>/`date +%Y%m%d`</div><div class="line">mkdir -p <span class="string">"<span class="variable">$BAK_DIR</span>"</span></div><div class="line">cp <span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/webapps/<span class="variable">$PROJECT</span>.war <span class="string">"<span class="variable">$BAK_DIR</span>"</span>/<span class="string">"<span class="variable">$PROJECT</span>"</span>_`date +%H%M%S`.war</div><div class="line"></div><div class="line"><span class="comment">#启动 tomcat</span></div><div class="line"><span class="string">"<span class="variable">$TOMCAT_HOME</span>"</span>/bin/startup.sh</div><div class="line"><span class="built_in">echo</span> <span class="string">"tomcat is starting,please try to access <span class="variable">$PROJECT</span> conslone url"</span></div></pre></td></tr></table></figure></p>
-<p>差不多就酱紫，反正我是自动部署成功了，还有一些其他的功能，这里只完成基本的。有精力在弄吧!</p>
+<p>差不多就酱紫，反正我是自动部署成功了，还有一些其他的功能，这里只完成基本的。有精力再弄吧!</p>
 
       
     </div>
@@ -563,7 +563,15 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Jenkins-git-github-jdk-maven/" rel="tag"><i class="fa fa-tag"></i> Jenkins,git,github,jdk,maven</a>
+            <a href="/tags/Jenkins/" rel="tag"><i class="fa fa-tag"></i> Jenkins</a>
+          
+            <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+          
+            <a href="/tags/github/" rel="tag"><i class="fa fa-tag"></i> github</a>
+          
+            <a href="/tags/jdk/" rel="tag"><i class="fa fa-tag"></i> jdk</a>
+          
+            <a href="/tags/maven/" rel="tag"><i class="fa fa-tag"></i> maven</a>
           
         </div>
       
@@ -696,7 +704,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
