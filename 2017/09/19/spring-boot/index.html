@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
 <meta property="og:description" content="spring-boot新框架，大量默认配置简化开发，这里做个记录。demo项目放在github上，点我">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-19T09:51:07.339Z">
+<meta property="og:updated_time" content="2017-09-19T09:59:40.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring-boot">
 <meta name="twitter:description" content="spring-boot新框架，大量默认配置简化开发，这里做个记录。demo项目放在github上，点我">
@@ -533,13 +533,13 @@
 </li>
 <li><p>自定义资源映射</p>
 <p>继承 WebMvcConfigurerAdapter 并重写方法 addResourceHandlers</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">registry.addResourceHandler(<span class="string">"/image/**"</span>).addResourceLocations(<span class="string">"file:H:/image/"</span>);</div><div class="line">registry.addResourceHandler(“/image1<span class="comment">/**”).addResourceLocations(“classpath:/img1/”)</span></div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">registry.addResourceHandler(<span class="string">"/image/**"</span>).addResourceLocations(<span class="string">"file:H:/image/"</span>);</div><div class="line">registry.addResourceHandler(<span class="string">"/image1/**"</span>).addResourceLocations(<span class="string">"classpath:/img1/"</span>)</div></pre></td></tr></table></figure>
 </li>
 <li><p>通过配置文件映射</p>
 <p>使用 spring.mvc.static-path-pattern 可以重新定义pattern，如修改为 /image/**</p>
 <p>使用 spring.resources.static-locations 可以重新定义 pattern 所指向的路径，支持 classpath: 和 file: 注意 spring.mvc.static-path-pattern 只可以定义一个，目前不支持多个逗号分割的方式。</p>
-<p>默认值为 /..<br>映射 spring.mvc.static-path-pattern= /image/**</p>
-<p>默认值为 classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/<br>映射 spring.resources.static-locations=classpath:/image/</p>
+<p>默认值为 /<strong><br>映射: spring.mvc.static-path-pattern= /image/</strong></p>
+<p>默认值为 classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/<br>映射: spring.resources.static-locations=classpath:/image/</p>
 </li>
 </ol>
 <h2 id="SpringBoot启动加载数据"><a href="#SpringBoot启动加载数据" class="headerlink" title="SpringBoot启动加载数据"></a>SpringBoot启动加载数据</h2><p>实际应用中，我们会有在项目服务启动的时候就去加载一些数据或做一些事情这样的需求。 为了解决这样的问题，spring Boot 为我们提供了一个方法，通过实现接口 CommandLineRunner 来实现。</p>
@@ -566,8 +566,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mybatis.typeAliasesPackage=com.dongnao.jack.bean</div><div class="line">mybatis.mapperLocations=classpath:com/dongnao/jack/xml/*Mapper.xml</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="SpringBoot动态数据源"><a href="#SpringBoot动态数据源" class="headerlink" title="SpringBoot动态数据源"></a>SpringBoot动态数据源</h2><p>启动类注册动态数据源<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class, MProxyTransactionManagementConfiguration.class&#125;)</div><div class="line"></div><div class="line"><span class="meta">@SpringBootApplication</span> <span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class&#125;) <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootSampleApplication</span> </span>&#123;&#125;</div></pre></td></tr></table></figure></p>
-<ol>
+<h2 id="SpringBoot动态数据源"><a href="#SpringBoot动态数据源" class="headerlink" title="SpringBoot动态数据源"></a>SpringBoot动态数据源</h2><ol>
+<li><p>启动类注册动态数据源</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class, MProxyTransactionManagementConfiguration.class&#125;)</div><div class="line"></div><div class="line"><span class="meta">@SpringBootApplication</span> <span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class&#125;) <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootSampleApplication</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
+</li>
 <li><p>配置文件application.properties</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 更多数据源 custom.datasource.names=ds1,ds2 </div><div class="line">custom.datasource.ds1.driver-class-name=com.mysql.jdbc.Driver custom.datasource.ds1.url=jdbc:mysql://localhost:3306/test1 custom.datasource.ds1.username=root </div><div class="line">custom.datasource.ds1.password=123456 </div><div class="line">custom.datasource.ds2.driver-class-name=com.mysql.jdbc.Driver custom.datasource.ds2.url=jdbc:mysql://localhost:3306/test2 custom.datasource.ds2.username=root </div><div class="line">custom.datasource.ds2.password=123456</div></pre></td></tr></table></figure>
 </li>
