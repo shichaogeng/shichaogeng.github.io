@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="spring-boot," />
+  <meta name="keywords" content="spring-boot,动态数据源切换," />
 
 
 
@@ -95,14 +95,14 @@
 
 
 <meta name="description" content="spring-boot新框架，大量默认配置简化开发， Spring Boot是为了简化Spring应用的创建、运行、调试、部署等而出现的，使用它可以做到专注于Spring应用的开发，而无需过多关注XML的配置。简单来说，它提供了一堆依赖打包，并已经按照使用习惯解决了依赖问题—习惯大于约定。 Spring Boot默认使用tomcat作为服务器，使用logback提供日志记录。 Spring Boo">
-<meta name="keywords" content="spring-boot">
+<meta name="keywords" content="spring-boot,动态数据源切换">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spring-boot">
 <meta property="og:url" content="http://blog.gengsc.com/2017/09/19/spring-boot/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
 <meta property="og:description" content="spring-boot新框架，大量默认配置简化开发， Spring Boot是为了简化Spring应用的创建、运行、调试、部署等而出现的，使用它可以做到专注于Spring应用的开发，而无需过多关注XML的配置。简单来说，它提供了一堆依赖打包，并已经按照使用习惯解决了依赖问题—习惯大于约定。 Spring Boot默认使用tomcat作为服务器，使用logback提供日志记录。 Spring Boo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-20T08:10:38.317Z">
+<meta property="og:updated_time" content="2017-09-20T08:13:45.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring-boot">
 <meta name="twitter:description" content="spring-boot新框架，大量默认配置简化开发， Spring Boot是为了简化Spring应用的创建、运行、调试、部署等而出现的，使用它可以做到专注于Spring应用的开发，而无需过多关注XML的配置。简单来说，它提供了一堆依赖打包，并已经按照使用习惯解决了依赖问题—习惯大于约定。 Spring Boot默认使用tomcat作为服务器，使用logback提供日志记录。 Spring Boo">
@@ -582,7 +582,8 @@
 <li><p>这个博客讲的好明白<a href="http://linhongyu.blog.51cto.com/6373370/1615895" target="_blank" rel="external">Spring(AbstractRoutingDataSource)实现动态数据源切换</a></p>
 </li>
 </ol>
-<h3 id="这里记下运行流程"><a href="#这里记下运行流程" class="headerlink" title="这里记下运行流程"></a>这里记下运行流程</h3><h4 id="通知spring注册动态数据源-DemoApplication"><a href="#通知spring注册动态数据源-DemoApplication" class="headerlink" title="通知spring注册动态数据源(DemoApplication)"></a>通知spring注册动态数据源(DemoApplication)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@MapperScan</span>(basePackages=<span class="string">"com.gsc.demo.mapper"</span>)</div><div class="line"><span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class&#125;) <span class="comment">// 注册动态多数据源</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		SpringApplication.run(DemoApplication.class, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="这里记下运行流程"><a href="#这里记下运行流程" class="headerlink" title="这里记下运行流程"></a>这里记下运行流程</h3><p>代码地址点<a href="https://github.com/shichaogeng/SringBoot-DynamicSource.git" target="_blank" rel="external">spring-boot动态数据源github代码</a></p>
+<h4 id="通知spring注册动态数据源-DemoApplication"><a href="#通知spring注册动态数据源-DemoApplication" class="headerlink" title="通知spring注册动态数据源(DemoApplication)"></a>通知spring注册动态数据源(DemoApplication)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@MapperScan</span>(basePackages=<span class="string">"com.gsc.demo.mapper"</span>)</div><div class="line"><span class="meta">@Import</span>(&#123;DynamicDataSourceRegister.class&#125;) <span class="comment">// 注册动态多数据源</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		SpringApplication.run(DemoApplication.class, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="动态数据源注册-DynamicDataSourceRegister"><a href="#动态数据源注册-DynamicDataSourceRegister" class="headerlink" title="动态数据源注册(DynamicDataSourceRegister)"></a>动态数据源注册(DynamicDataSourceRegister)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDataSourceRegister</span></span></div><div class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">ImportBeanDefinitionRegistrar</span>, <span class="title">EnvironmentAware</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
 <ol>
 <li><p>spring调用EnvironmentAware.setEnvironment()接口读取配置文件，加载数据源</p>
@@ -616,7 +617,7 @@
 <li><p>这里就调用AbstractRoutingDataSource的实现类DynamicDataSource</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * </span></div><div class="line"><span class="comment"> * 动态数据源</span></div><div class="line"><span class="comment"> * <span class="doctag">@author</span> shichaogeng</span></div><div class="line"><span class="comment"> *</span></div><div class="line"><span class="comment"> * 2017年9月20日</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDataSource</span> <span class="keyword">extends</span> <span class="title">AbstractRoutingDataSource</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">determineCurrentLookupKey</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> DynamicDataSourceContextHolder.getDataSourceType();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-<li><p>就酱紫了，代码地址点<a href="https://github.com/shichaogeng/SringBoot-DynamicSource.git" target="_blank" rel="external">spring-boot动态数据源github代码</a></p>
+<li><p>就酱紫了，结束了，一切都结束了。</p>
 </li>
 </ol>
 
@@ -648,6 +649,8 @@
         <div class="post-tags">
           
             <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i> spring-boot</a>
+          
+            <a href="/tags/动态数据源切换/" rel="tag"><i class="fa fa-tag"></i> 动态数据源切换</a>
           
         </div>
       
@@ -780,7 +783,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
