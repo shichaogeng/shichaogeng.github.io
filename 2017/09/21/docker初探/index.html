@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="docker," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="弄完了springboot，接下来就可以通过springboot快速搭建springcloud组件了，配合docker完成传说中的微服务架构，但。。。docker是撒啊，决定搞一搞。整体下来操作感觉比较简单，但是理解那个镜像与容器的关系有点费劲。还有什么镜像分层的东东。。。">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker初探">
+<meta property="og:url" content="http://blog.gengsc.com/2017/09/21/docker初探/index.html">
+<meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="弄完了springboot，接下来就可以通过springboot快速搭建springcloud组件了，配合docker完成传说中的微服务架构，但。。。docker是撒啊，决定搞一搞。整体下来操作感觉比较简单，但是理解那个镜像与容器的关系有点费劲。还有什么镜像分层的东东。。。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%8E%A7%E5%88%B6%E5%8F%B0.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/tomcat-image.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/wordpress.png">
+<meta property="og:updated_time" content="2017-09-21T10:30:33.084Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker初探">
+<meta name="twitter:description" content="弄完了springboot，接下来就可以通过springboot快速搭建springcloud组件了，配合docker完成传说中的微服务架构，但。。。docker是撒啊，决定搞一搞。整体下来操作感觉比较简单，但是理解那个镜像与容器的关系有点费劲。还有什么镜像分层的东东。。。">
+<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%8E%A7%E5%88%B6%E5%8F%B0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.gengsc.com/2017/09/21/docker初探/"/>
+
+
+
+
+
+  <title>docker初探 | Gengsc's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c4c91eda846c9ec5faf2a726c6e0f69f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+	
+	<a href="https://github.com/shichaogeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gengsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/09/21/docker初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker初探</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T09:36:46+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/docker初探/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/21/docker初探/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>弄完了springboot，接下来就可以通过springboot快速搭建springcloud组件了，配合docker完成传说中的微服务架构，但。。。docker是撒啊，决定搞一搞。整体下来操作感觉比较简单，但是理解那个镜像与容器的关系有点费劲。还有什么镜像分层的东东。。。</p>
+<a id="more"></a>
+<h2 id="为啥用docker"><a href="#为啥用docker" class="headerlink" title="为啥用docker"></a>为啥用docker</h2><h3 id="Docker到底是什么"><a href="#Docker到底是什么" class="headerlink" title="Docker到底是什么"></a>Docker到底是什么</h3><p>看看官方的介绍</p>
+<blockquote>
+<p>Docker provides a way to run applications securely isolated in a container, packaged with all its dependencies and libraries.</p>
+</blockquote>
+<p>意思就是为应用提供一个安全隔绝的运行容器，打包它所有的依赖和类库。</p>
+<p>以前，如果想尝试新的编程语言/数据库/命令行工具，会先找找apt的源里有没有相应的包，没有的话再看看是否有PPA源可以用，再没有就只能尝试从源码编译，编译成功前可能还要经历一遍安装编译工具链，依赖库等过程，而这个过程中遇到下代码被墙，依赖库版本太老/太新等麻烦也不少见。</p>
+<p>比如说要安装个nginx，模块依赖性Nginx需要依赖下面3个包<br>1.gzip 模块需要 zlib 库 ( 下载: <a href="http://www.zlib.NET/" target="_blank" rel="external">http://www.zlib.NET/</a> )<br>2.rewrite 模块需要 pcre 库 ( 下载: <a href="http://www.pcre.org/" target="_blank" rel="external">http://www.pcre.org/</a> )<br>3.ssl 功能需要 openssl 库 ( 下载: <a href="http://www.openssl.org/" target="_blank" rel="external">http://www.openssl.org/</a> )<br>依赖包安装顺序依次为:openssl、zlib、pcre, 然后安装Nginx包</p>
+<p>假如有一步出错，就呵呵，一天就没了，话说我自己装个rabbitmq，弄两天没弄好。技术烂的，各种搞不定，搞定了也没用，对我有什么好处？docker镜像都搞好了，你只需要一行命令，成了。不过这种隔绝了编译过程，可能对软件的理解有一定影响。不过一般人不需要这些，而是快速搞定。如果想要了解，再去查资料好了，而不是我用的时候，先要学习他的原理。</p>
+<p>docker的名言:</p>
+<p>Java:write once, run anywhere ; java的核心是jvm</p>
+<p>docker:build once ,run any where ,configure once run anthing</p>
+<h3 id="软件的生态圈"><a href="#软件的生态圈" class="headerlink" title="软件的生态圈"></a>软件的生态圈</h3><p>Docker有自己的软件生态圈，应用是以镜像的方式存在于仓库上。然后用户可以根据需要去下载对应的镜像</p>
+<p>比如说docker官方库<a href="https://hub.docker.com/" target="_blank" rel="external">https://hub.docker.com/</a></p>
+<p>再比如阿里云的管理控制台–&gt;产品服务–容器服务–&gt;镜像里提供的镜像下载。这里也可以进行搜索。<a href="https://cs.console.aliyun.com/?spm=5176.2020520001.1001.55.3fllFd#/repo" target="_blank" rel="external">我的阿里云链接</a></p>
+<h3 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h3><p>使用docker可以灵活的控制镜像的版本，前进或者回退</p>
+<h3 id="Docker能够解决哪些问题（痛点）"><a href="#Docker能够解决哪些问题（痛点）" class="headerlink" title="Docker能够解决哪些问题（痛点）"></a>Docker能够解决哪些问题（痛点）</h3><h4 id="开发人员"><a href="#开发人员" class="headerlink" title="开发人员"></a>开发人员</h4><ol>
+<li><p>为了节约成本，很多时候是一台虚拟机由多个人或者多个团队去做<br>使用docker容器虚拟化技术，那么每一个应用都可以运行在独立的虚拟化环境中。相互隔离的</p>
+</li>
+<li><p>一个开发团队往往只有一套开发或者测试环境，但是会存在同时有多个开发任务。所以会导致反复去修改环境或者软件包</p>
+</li>
+<li><p>多个开发团队可能对软件环境的版本有严格要求，但是在开发迭代的过程中，软件的升级或者各个团队对软件本本的升级都会导致环境的变化，这样就很容易引起虚拟机环境对我们应用产生影响</p>
+</li>
+<li><p>机器硬件故障，导致系统需要重装</p>
+</li>
+</ol>
+<h4 id="测试人员"><a href="#测试人员" class="headerlink" title="测试人员"></a>测试人员</h4><ol>
+<li><p>环境问题测试出bug</p>
+</li>
+<li><p>配置不同的测试环境所浪费的时间</p>
+</li>
+</ol>
+<h4 id="运维人员"><a href="#运维人员" class="headerlink" title="运维人员"></a>运维人员</h4><ol>
+<li>环境的安装、配置、部署、扩容、故障服务器迁移</li>
+</ol>
+<h2 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h2><p>Docker对操作系统的要求是，必须是64位的、以及是linux 3.8以上版本的内核</p>
+<p>我用的是阿里云服务器Centos7(内核是3.10，centos6的好像内核在3.8以下，安装docker会失败):<br>3.10.0-514.6.2.el7.x86_64 #1 SMP Thu Feb 23 03:04:39 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux</p>
+<h3 id="配置yum软件库"><a href="#配置yum软件库" class="headerlink" title="配置yum软件库"></a>配置yum软件库</h3><p>为保证安装的成功，首先使用yum update更新Yum包，耐心等候吧。<br>然后在yum软件库中新增docker的配置：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 更新yum</span></div><div class="line">yum update</div></pre></td></tr></table></figure></p>
+<h3 id="安装启动"><a href="#安装启动" class="headerlink" title="安装启动"></a>安装启动</h3><p>有了yum软件库的配置之后，安装也变得异常的简单，只需要以下一句即可：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 安装</span></div><div class="line">yum install docker</div></pre></td></tr></table></figure></p>
+<p>一切就绪之后，使用start命令来启动Docker守护进程<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 启动docker引擎</span></div><div class="line">systemctl start docker</div></pre></td></tr></table></figure></p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>输出hello-world，基本原理是利用人家已经写好的hello-world镜像，下载到本地，然后把他运行起来<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run hello-world</div></pre></td></tr></table></figure></p>
+<p>出现如下提示表示安装成功<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">Hello from Docker!</div><div class="line">This message shows that your installation appears to be working correctly.</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<h3 id="docker的国内镜像配置"><a href="#docker的国内镜像配置" class="headerlink" title="docker的国内镜像配置"></a>docker的国内镜像配置</h3><p>一个阿里云、另一个是DaoCloud; 都是免费的</p>
+<p>这里用是阿里的镜像，上面也有提到</p>
+<p><a href="https://cs.console.aliyun.com/?spm=5176.2020520001.1001.55.3fllFd#/repo" target="_blank" rel="external">阿里容器服务</a></p>
+<p>进入容器服务之后，右上角有个镜像仓库管理控制台的按钮，戳它</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93%E6%8E%A7%E5%88%B6%E5%8F%B0.png" alt="镜像仓库管理控制台"></p>
+<p>点进去之后，点击Doker Hub镜像站点，可以看到加速服务地址和镜像配置</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F.png" alt="镜像加速"></p>
+<p>编辑配置文件，修改 vi /etc/docker/damon.json，添加如下内容<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">"live-restore"</span>:<span class="literal">true</span>,</div><div class="line"><span class="string">"registry-mirrors"</span>:[<span class="string">"https://lh4kbgp2.mirror.aliyuncs.com"</span>]</div></pre></td></tr></table></figure></p>
+<p> 重启服务<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line"></div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure></p>
+<p> 下面，我们以安装tomcat为例，来展开docker的使用。</p>
+<h2 id="Docker的操作指令"><a href="#Docker的操作指令" class="headerlink" title="Docker的操作指令"></a>Docker的操作指令</h2><p>Docker中有三个重要的点：仓库（repository）、镜像（image）、容器（Container）</p>
+<p>仓库是存储镜像的（类似appstore）<br>而镜像是软件包（app）<br>容器是基于镜像去创建的，基于一个镜像可以创建若干个不同名字但功能相同的容器</p>
+<h3 id="安装tomcat"><a href="#安装tomcat" class="headerlink" title="安装tomcat"></a>安装tomcat</h3><p>假如我们要使用tomcat镜像，首先我们要到仓库中找到它，<a href="https://cs.console.aliyun.com/?spm=5176.2020520001.1001.55.iU8okR#/repo" target="_blank" rel="external">阿里云提供了</a></p>
+<p>搜索到tomcat，<a href="https://dev.aliyun.com/detail.html?spm=5176.2020520152.210.d103.583188b7CASzRt&amp;repoId=1270" target="_blank" rel="external">点击详情</a>，翻到下面就可以看到使用tomcat镜像的指令</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/tomcat-image.png" alt="tomcat-image"></p>
+<p>按照上面的指令运行tomcat吧<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Docker run -it -d -p 8084:8080 tomcat:8.0</div></pre></td></tr></table></figure></p>
+<p>日志是酱紫的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">You can <span class="built_in">test</span> it by visiting http://container-ip:8080 <span class="keyword">in</span> a browser or, <span class="keyword">if</span> you need access outside the host, on port 8888:</div></pre></td></tr></table></figure></p>
+<p>在浏览器上访问吧:<a href="http://ip:8084/" target="_blank" rel="external">http://ip:8084/</a></p>
+<p>那么这些指令参数究竟都是什么意思呢</p>
+<h3 id="docker的指令帮助"><a href="#docker的指令帮助" class="headerlink" title="docker的指令帮助"></a>docker的指令帮助</h3><p>先查看帮助吧<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">docker --<span class="built_in">help</span></div><div class="line">Usage: docker [OPTIONS] COMMAND [arg...]</div><div class="line">       docker [ --<span class="built_in">help</span> | -v | --version ]</div><div class="line"></div><div class="line">A self-sufficient runtime <span class="keyword">for</span> containers.</div><div class="line"></div><div class="line">Options:</div><div class="line"></div><div class="line">  --config=~/.docker              Location of client config files</div><div class="line">  -D, --debug                     Enable debug mode</div><div class="line">  -H, --host=[]                   Daemon socket(s) to connect to</div><div class="line">  -h, --<span class="built_in">help</span>                      Print usage</div><div class="line">  -l, --<span class="built_in">log</span>-level=info            Set the logging level</div><div class="line">  --tls                           Use TLS; implied by --tlsverify</div><div class="line">  --tlscacert=~/.docker/ca.pem    Trust certs signed only by this CA</div><div class="line">  --tlscert=~/.docker/cert.pem    Path to TLS certificate file</div><div class="line">  --tlskey=~/.docker/key.pem      Path to TLS key file</div><div class="line">  --tlsverify                     Use TLS and verify the remote</div><div class="line">  -v, --version                   Print version information and quit</div><div class="line"></div><div class="line">Commands:</div><div class="line">    attach    Attach to a running container</div><div class="line">    build     Build an image from a Dockerfile</div><div class="line">    commit    Create a new image from a container<span class="string">'s changes</span></div><div class="line"><span class="string">    cp        Copy files/folders between a container and the local filesystem</span></div><div class="line"><span class="string">    create    Create a new container</span></div><div class="line"><span class="string">    diff      Inspect changes on a container'</span>s filesystem</div><div class="line">    events    Get real time events from the server</div><div class="line">    <span class="built_in">exec</span>      Run a <span class="built_in">command</span> <span class="keyword">in</span> a running container</div><div class="line">    <span class="built_in">export</span>    Export a container<span class="string">'s filesystem as a tar archive</span></div><div class="line"><span class="string">    history   Show the history of an image</span></div><div class="line"><span class="string">    images    List images</span></div><div class="line"><span class="string">    import    Import the contents from a tarball to create a filesystem image</span></div><div class="line"><span class="string">    info      Display system-wide information</span></div><div class="line"><span class="string">    inspect   Return low-level information on a container, image or task</span></div><div class="line"><span class="string">    kill      Kill one or more running containers</span></div><div class="line"><span class="string">    load      Load an image from a tar archive or STDIN</span></div><div class="line"><span class="string">    login     Log in to a Docker registry.</span></div><div class="line"><span class="string">    logout    Log out from a Docker registry.</span></div><div class="line"><span class="string">    logs      Fetch the logs of a container</span></div><div class="line"><span class="string">    network   Manage Docker networks</span></div><div class="line"><span class="string">    node      Manage Docker Swarm nodes</span></div><div class="line"><span class="string">    pause     Pause all processes within one or more containers</span></div><div class="line"><span class="string">    port      List port mappings or a specific mapping for the container</span></div><div class="line"><span class="string">    ps        List containers</span></div><div class="line"><span class="string">    pull      Pull an image or a repository from a registry</span></div><div class="line"><span class="string">    push      Push an image or a repository to a registry</span></div><div class="line"><span class="string">    rename    Rename a container</span></div><div class="line"><span class="string">    restart   Restart a container</span></div><div class="line"><span class="string">    rm        Remove one or more containers</span></div><div class="line"><span class="string">    rmi       Remove one or more images</span></div><div class="line"><span class="string">    run       Run a command in a new container</span></div><div class="line"><span class="string">    save      Save one or more images to a tar archive (streamed to STDOUT by default)</span></div><div class="line"><span class="string">    search    Search the Docker Hub for images</span></div><div class="line"><span class="string">    service   Manage Docker services</span></div><div class="line"><span class="string">    start     Start one or more stopped containers</span></div><div class="line"><span class="string">    stats     Display a live stream of container(s) resource usage statistics</span></div><div class="line"><span class="string">    stop      Stop one or more running containers</span></div><div class="line"><span class="string">    swarm     Manage Docker Swarm</span></div><div class="line"><span class="string">    tag       Tag an image into a repository</span></div><div class="line"><span class="string">    top       Display the running processes of a container</span></div><div class="line"><span class="string">    unpause   Unpause all processes within one or more containers</span></div><div class="line"><span class="string">    update    Update configuration of one or more containers</span></div><div class="line"><span class="string">    version   Show the Docker version information</span></div><div class="line"><span class="string">    volume    Manage Docker volumes</span></div><div class="line"><span class="string">    wait      Block until a container stops, then print its exit code</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">Run '</span>docker COMMAND --<span class="built_in">help</span><span class="string">' for more information on a command.</span></div></pre></td></tr></table></figure></p>
+<p>帮助已经写的非常明白了，这么使用指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker [OPTIONS] COMMAND [arg...]</div></pre></td></tr></table></figure></p>
+<p>COMMAND有这些，后面都有详细的功能介绍<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Commands:</div><div class="line">    attach    Attach to a running container</div><div class="line">    build     Build an image from a Dockerfile</div><div class="line">    commit    Create a new image from a container<span class="string">'s changes</span></div><div class="line"><span class="string">    cp        Copy files/folders between a container and the local filesystem</span></div><div class="line"><span class="string">    create    Create a new container</span></div><div class="line"><span class="string">    ...</span></div></pre></td></tr></table></figure></p>
+<p>每个指令的使用也可以查看帮助<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Run <span class="string">'docker COMMAND --help'</span> <span class="keyword">for</span> more information on a <span class="built_in">command</span>.</div></pre></td></tr></table></figure></p>
+<p>比如说，我想查查刚才运行tomcat容器的-it、-d、-p都是啥意思啊,就酱紫<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker run --help</span></div><div class="line"></div><div class="line">Usage:	docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</div><div class="line"></div><div class="line">Run a <span class="built_in">command</span> <span class="keyword">in</span> a new container</div><div class="line"></div><div class="line">Options:</div><div class="line">      -i, --interactive                 Keep STDIN open even <span class="keyword">if</span> not attached</div><div class="line">      -t, --tty                         Allocate a pseudo-TTY</div><div class="line">      -d, --detach                      Run container <span class="keyword">in</span> background and <span class="built_in">print</span> container ID</div><div class="line">      -p, --publish value               Publish a container<span class="string">'s port(s) to the host (default [])</span></div></pre></td></tr></table></figure></p>
+<p>再看下命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Docker run -it -d -p 8084:8080 tomcat:8.0</div></pre></td></tr></table></figure></p>
+<p>诺，-it大概就是命令行的意思，-d表示后台运行呗，-p表示映射端口到服务器，在容器里的8080端口映射到外部服务器8084端口，然后咱就可以输入外部服务器的ip:8084访问啦。</p>
+<h3 id="指令分类"><a href="#指令分类" class="headerlink" title="指令分类"></a>指令分类</h3><p>docker的指令大概可以分为四个种类，分类之后有助于使用，不然到帮助里遍历可能会比较慢</p>
+<ol>
+<li><p>针对守护进程的系统资源设置和全局信息的获取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker info</div><div class="line">docker daemon</div></pre></td></tr></table></figure>
+</li>
+<li><p>针对docker仓库的查询、下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker search</div><div class="line">docker pull</div></pre></td></tr></table></figure>
+</li>
+<li><p>针对docker镜像的查询、创建、删除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">docker images</div><div class="line">docker build</div><div class="line">docker delete</div><div class="line">docker rmi [image id]</div></pre></td></tr></table></figure>
+</li>
+<li><p>针对docker容器的查询、开启、停止</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker run</div><div class="line">docker ps</div><div class="line">docker stop [image id /container id]</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="操作tomcat"><a href="#操作tomcat" class="headerlink" title="操作tomcat"></a>操作tomcat</h3><p>这里我们操作使用tomcat来熟练下使用</p>
+<p>我们已经运行了tomcat容器，那么我们查看下tomcat的运行情况吧，查看帮助<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker --help</span></div><div class="line"> ps        List containers</div></pre></td></tr></table></figure></p>
+<p>ps命令会列出现有的容器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker ps --help</span></div><div class="line"></div><div class="line">Usage:	docker ps [OPTIONS]</div><div class="line"></div><div class="line">List containers</div><div class="line"></div><div class="line">Options:</div><div class="line">  -a, --all             Show all containers (default shows just running)</div><div class="line">      --no-trunc        Don<span class="string">'t truncate output</span></div></pre></td></tr></table></figure></p>
+<p>看到了吧，-a表示列出所有的容器，不写默认显示正在运行的容器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker ps</span></div><div class="line">CONTAINER ID        IMAGE             PORTS                    NAMES</div><div class="line">7b3e73e5c624        tomcat:8.0        0.0.0.0:8084-&gt;8080/tcp   clever_shaw</div><div class="line">04120a965a49        wordpress         0.0.0.0:8082-&gt;80/tcp     mywordPress</div><div class="line">2adb8da207e2        mariadb           3306/tcp                 mydb</div><div class="line">ee42fdb74565        tomcat:8.0        0.0.0.0:8083-&gt;8080/tcp   Atomcat</div></pre></td></tr></table></figure></p>
+<p>前面的是CONTAINER ID，用来标识不同的容器</p>
+<p>停止tomcat<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker stop 7b3e73e5c624</span></div><div class="line">7b3e73e5c624</div><div class="line"></div><div class="line"><span class="comment"># docker ps</span></div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div></pre></td></tr></table></figure></p>
+<p>发现运行的容器找不到了，查看所有容器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker ps -a</span></div><div class="line">CONTAINER ID        IMAGE              STATUS                               NAMES</div><div class="line">7b3e73e5c624        tomcat:8.0         Exited (143) About a minute ago      clever_shaw</div></pre></td></tr></table></figure></p>
+<p>删掉这个容器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker rm 7b3e73e5c624</span></div><div class="line">7b3e73e5c624</div></pre></td></tr></table></figure></p>
+<p>查看镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker images</span></div><div class="line">REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">docker.io/redis         latest              aaf79d45ddb1        2 days ago          106.6 MB</div><div class="line">docker.io/wordpress     latest              2c69ebee76a8        6 days ago          408.3 MB</div><div class="line">docker.io/tomcat        8.0                 4b4d4b37d587        7 days ago          453.8 MB</div><div class="line">docker.io/mariadb       latest              eb7b193b1631        7 days ago          397.1 MB</div><div class="line">docker.io/hello-world   latest              05a3bd381fc2        8 days ago          1.84 kB</div></pre></td></tr></table></figure></p>
+<p>删除镜像（以helloworld为例，tomcat在用）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker rmi 05a3bd381fc2</span></div><div class="line">Error response from daemon: conflict: unable to delete 05a3bd381fc2 (must be forced) - image is being used by stopped container 97531974bb1d</div></pre></td></tr></table></figure></p>
+<p>发现删不了，因为有容器在使用镜像，所以先要删除容器<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker ps -a</span></div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                   PORTS                    NAMES</div><div class="line">97531974bb1d        hello-world         <span class="string">"/hello"</span>                 4 hours ago         Exited (0) 4 hours ago                            thirsty_chandrasekhar</div><div class="line"></div><div class="line"><span class="comment"># docker rm 97531974bb1d</span></div><div class="line">97531974bb1d</div></pre></td></tr></table></figure></p>
+<p>然后再删除镜像<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker rmi 05a3bd381fc2</span></div><div class="line">Untagged: docker.io/hello-world:latest</div><div class="line">Untagged: docker.io/hello-world@sha256:1f19634d26995c320618d94e6f29c09c6589d5df3c063287a00e6de8458f8242</div><div class="line">Deleted: sha256:05a3bd381fc2470695a35f230afefd7bf978b566253199c4ae5cc96fafa29b37</div><div class="line">Deleted: sha256:3a36971a9f14df69f90891bf24dc2b9ed9c2d20959b624eab41bbf126272a023</div></pre></td></tr></table></figure></p>
+<p>上述操作也可以通过names来完成（上面操作的是id）,给容器起个别名,默认也有名<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker run --name Atomcat -it -d -p 8083:8080 tomcat:8.0</span></div><div class="line">ee42fdb74565e80ff262b40cb172f23b610f4d156c907e04cab5d13e59f1073b</div><div class="line"></div><div class="line"><span class="comment"># docker ps</span></div><div class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES</div><div class="line">ee42fdb74565        tomcat:8.0          <span class="string">"catalina.sh run"</span>   6 seconds ago       Up 4 seconds        0.0.0.0:8083-&gt;8080/tcp   Atomcat</div></pre></td></tr></table></figure></p>
+<p>单个容器的详细信息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker inspect f6071fc4ccc9</div></pre></td></tr></table></figure></p>
+<p>查看tomcat日志<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker logs -f Atomcat</div></pre></td></tr></table></figure></p>
+<h2 id="Docker容器管理"><a href="#Docker容器管理" class="headerlink" title="Docker容器管理"></a>Docker容器管理</h2><h3 id="容器标识符"><a href="#容器标识符" class="headerlink" title="容器标识符"></a>容器标识符</h3><p>每个容器被创建以后，都会分配一个Container Id作为容器唯一的标识符，后续对容器的所有操作命令都是通过container id来执行</p>
+<p>传说中有128位字符，现在它只显示在当前服务器能够区别开来的字符长度，想看全部的话，加–no-trunc参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ ~]<span class="comment"># docker ps --no-trunc | awk '&#123;print $1&#125;'</span></div><div class="line">CONTAINER</div><div class="line">7b3e73e5c6243d0d504af7f07f61d052fbc95c8450b6582d384681a0dbfbd577</div></pre></td></tr></table></figure></p>
+<p>变的好长。。。</p>
+<h3 id="容器内部命令"><a href="#容器内部命令" class="headerlink" title="容器内部命令"></a>容器内部命令</h3><p>有时候我们需要登录到容器内部执行一些命令或者配置，那么docker可以通过原生的方式去登录到容器</p>
+<p>进入容器内部<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 查看帮助</span></div><div class="line"><span class="comment"># docker exec --help</span></div><div class="line"></div><div class="line">Usage:	docker <span class="built_in">exec</span> [OPTIONS] CONTAINER COMMAND [ARG...]</div><div class="line"></div><div class="line">Run a <span class="built_in">command</span> <span class="keyword">in</span> a running container</div><div class="line"></div><div class="line">  -d, --detach         Detached mode: run <span class="built_in">command</span> <span class="keyword">in</span> the background</div><div class="line">  --detach-keys        Override the key sequence <span class="keyword">for</span> detaching a container</div><div class="line">  --<span class="built_in">help</span>               Print usage</div><div class="line">  -i, --interactive    Keep STDIN open even <span class="keyword">if</span> not attached</div><div class="line">  --privileged         Give extended privileges to the <span class="built_in">command</span></div><div class="line">  -t, --tty            Allocate a pseudo-TTY</div><div class="line">  -u, --user           Username or UID (format: &lt;name|uid&gt;[:&lt;group|gid&gt;])</div><div class="line"></div><div class="line"><span class="comment"># 进入容器内部</span></div><div class="line">[root@iZ2zehu64p5eabr7fp9t0iZ ~]<span class="comment"># docker exec -it Atomcat /bin/bash</span></div></pre></td></tr></table></figure></p>
+<p>容器的结构<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ls</span></div><div class="line">bin  boot  dev	docker-java-home  etc  home  lib  lib64  media	mnt  opt  proc	root  run  sbin  srv  sys  tmp	usr  var</div></pre></td></tr></table></figure></p>
+<p>执行完以后，通过exit来退出</p>
+<h3 id="多容器管理"><a href="#多容器管理" class="headerlink" title="多容器管理"></a>多容器管理</h3><p>假设一个场景，加入我现在想用wordpress搭建个人博客在我的服务器上，需要多长时间呢，你会搭建的很顺利吗？这些，通过docker只需要2到3min即可完成。</p>
+<h4 id="安装mariaDb"><a href="#安装mariaDb" class="headerlink" title="安装mariaDb"></a>安装mariaDb</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mydb 表示的自定义的那么 、 --env配置数据的帐号密码</span></div><div class="line">Docker run --name mydb –env MYSQL_ROOT_PASSWORD=example -d mariadb</div></pre></td></tr></table></figure>
+<h4 id="安装wordpress并关联mariaDb"><a href="#安装wordpress并关联mariaDb" class="headerlink" title="安装wordpress并关联mariaDb"></a>安装wordpress并关联mariaDb</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#　myWordPress 自定义名称，mydb表示的是第一步所运行的容器名称</span></div><div class="line">Docker run –name myWordPress –link mydb:mysql -p 8080:80 -d wordpress</div></pre></td></tr></table></figure>
+<h4 id="查看下容器"><a href="#查看下容器" class="headerlink" title="查看下容器"></a>查看下容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># docker ps</span></div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">04120a965a49        wordpress           <span class="string">"docker-entrypoint.sh"</span>   16 hours ago        Up 16 hours         0.0.0.0:8082-&gt;80/tcp     mywordPress</div><div class="line">2adb8da207e2        mariadb             <span class="string">"docker-entrypoint.sh"</span>   16 hours ago        Up 16 hours         3306/tcp                 mydb</div></pre></td></tr></table></figure>
+<p>可以看到，数据库和wordpress已经跑起来了，找个浏览器访问下吧。</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/docker/wordpress.png" alt="wordpress"></p>
+<p>根据引导，你的个人博客就搭建起来了，肿么样，快不快。</p>
+<h2 id="Docker-compose容器编排工具"><a href="#Docker-compose容器编排工具" class="headerlink" title="Docker compose容器编排工具"></a>Docker compose容器编排工具</h2><p>Docker提供了一个容器编排工具 docker compose,允许用户在一个YAML的文件中定义一组相关联的应用容器</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>地址在<a href="https://github.com/docker/compose/" target="_blank" rel="external">这里</a>，都有帮助信息的</p>
+<p><a href="https://docs.docker.com/compose/install/#install-compose" target="_blank" rel="external">查看帮助</a></p>
+<p>借鉴下<a href="http://www.cnblogs.com/freefei/p/5311294.html" target="_blank" rel="external">别人的博客</a>，编辑yaml模板</p>
+<p>Run this command to download the latest version of Docker Compose<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose</span></div></pre></td></tr></table></figure></p>
+<p>Apply executable permissions to the binary<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">local</span>]<span class="comment"># chmod +x /usr/local/bin/docker-compose</span></div></pre></td></tr></table></figure></p>
+<h3 id="创建文件-wordpress-docker-compose-yml"><a href="#创建文件-wordpress-docker-compose-yml" class="headerlink" title="创建文件~/wordpress/docker-compose.yml"></a>创建文件~/wordpress/docker-compose.yml</h3><p>这就是个配置文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">~]<span class="comment"># vim docker-compose.yml </span></div><div class="line"></div><div class="line">compose-wordpress:</div><div class="line"> image: wordpress</div><div class="line"> links:</div><div class="line"> - <span class="string">'compose-db:mysql'</span></div><div class="line"> ports:</div><div class="line"> - <span class="string">'8086:80'</span></div><div class="line">compose-db:</div><div class="line"> image: mariadb</div><div class="line"> environment:</div><div class="line">  MYSQL_ROOT_PASSWORD: example</div></pre></td></tr></table></figure></p>
+<p>文件意义：<br>a. 定义了两个服务分别叫做compose_wordpress和compose_db<br>b. 使用image定义每个服务的镜像名<br>c. MySQL容器的环境变量定义在environment<br>d. MySQL容器使用links和WildFly容器链接<br>e. 使用ports实现端口转发</p>
+<p>后台模式启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">~]<span class="comment"># docker-compose up -d</span></div><div class="line">Creating root_compose-db_1 ... </div><div class="line">Creating root_compose-db_1 ... <span class="keyword">done</span></div><div class="line">Creating root_compose-wordpress_1 ... </div><div class="line">Creating root_compose-wordpress_1 ... <span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<p>查看<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">~]# docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">32d75b04dfeb        wordpress           &quot;docker-entrypoint.sh&quot;   11 seconds ago      Up 7 seconds        0.0.0.0:8086-&gt;80/tcp     root_compose-wordpress_1</div><div class="line">1394b6ee28b0        mariadb             &quot;docker-entrypoint.sh&quot;   11 seconds ago      Up 11 seconds       3306/tcp                 root_compose-db_1</div></pre></td></tr></table></figure></p>
+<p>浏览器访问就可以了。</p>
+<p>关闭命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker-compose start/stop</div><div class="line">docker-compose ~/wordpress/docker-compose.yml down</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"><i class="fa fa-tag"></i> docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/19/spring-boot/" rel="next" title="spring-boot">
+                <i class="fa fa-chevron-left"></i> spring-boot
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Geng Shichao" />
+          <p class="site-author-name" itemprop="name">Geng Shichao</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="Notes">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Notes
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为啥用docker"><span class="nav-number">1.</span> <span class="nav-text">为啥用docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker到底是什么"><span class="nav-number">1.1.</span> <span class="nav-text">Docker到底是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件的生态圈"><span class="nav-number">1.2.</span> <span class="nav-text">软件的生态圈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本控制"><span class="nav-number">1.3.</span> <span class="nav-text">版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker能够解决哪些问题（痛点）"><span class="nav-number">1.4.</span> <span class="nav-text">Docker能够解决哪些问题（痛点）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#开发人员"><span class="nav-number">1.4.1.</span> <span class="nav-text">开发人员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试人员"><span class="nav-number">1.4.2.</span> <span class="nav-text">测试人员</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运维人员"><span class="nav-number">1.4.3.</span> <span class="nav-text">运维人员</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的安装"><span class="nav-number">2.</span> <span class="nav-text">Docker的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置yum软件库"><span class="nav-number">2.1.</span> <span class="nav-text">配置yum软件库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装启动"><span class="nav-number">2.2.</span> <span class="nav-text">安装启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">2.3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker的国内镜像配置"><span class="nav-number">2.4.</span> <span class="nav-text">docker的国内镜像配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker的操作指令"><span class="nav-number">3.</span> <span class="nav-text">Docker的操作指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装tomcat"><span class="nav-number">3.1.</span> <span class="nav-text">安装tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker的指令帮助"><span class="nav-number">3.2.</span> <span class="nav-text">docker的指令帮助</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指令分类"><span class="nav-number">3.3.</span> <span class="nav-text">指令分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作tomcat"><span class="nav-number">3.4.</span> <span class="nav-text">操作tomcat</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker容器管理"><span class="nav-number">4.</span> <span class="nav-text">Docker容器管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#容器标识符"><span class="nav-number">4.1.</span> <span class="nav-text">容器标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器内部命令"><span class="nav-number">4.2.</span> <span class="nav-text">容器内部命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多容器管理"><span class="nav-number">4.3.</span> <span class="nav-text">多容器管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装mariaDb"><span class="nav-number">4.3.1.</span> <span class="nav-text">安装mariaDb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装wordpress并关联mariaDb"><span class="nav-number">4.3.2.</span> <span class="nav-text">安装wordpress并关联mariaDb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看下容器"><span class="nav-number">4.3.3.</span> <span class="nav-text">查看下容器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-compose容器编排工具"><span class="nav-number">5.</span> <span class="nav-text">Docker compose容器编排工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载"><span class="nav-number">5.1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建文件-wordpress-docker-compose-yml"><span class="nav-number">5.2.</span> <span class="nav-text">创建文件~/wordpress/docker-compose.yml</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Geng Shichao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.gengsc.com/2017/09/21/docker初探/';
+          this.page.identifier = '2017/09/21/docker初探/';
+          this.page.title = 'docker初探';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
