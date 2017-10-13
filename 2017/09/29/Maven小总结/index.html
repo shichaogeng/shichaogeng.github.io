@@ -104,7 +104,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/maven/Dependency%20Hierarchy.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/maven/ordered-group.png">
-<meta property="og:updated_time" content="2017-10-13T08:20:43.485Z">
+<meta property="og:updated_time" content="2017-10-13T08:32:07.315Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Maven小总结">
 <meta name="twitter:description" content="maven是项目管理工具，用的也比较熟练了，但是还是有记不到的和常用的不了解的内容，在这里记录下。">
@@ -495,7 +495,7 @@
 <p>特别说明下：<br>Public Repositories：该仓库组将上述所有策略为Release的仓库聚合并通过一致的地址提供服务。可以认为这个公共仓库是多个仓库的组合,里面包含了很多个仓库。确保能下载到jar包<br>它按照下面的顺序寻找依赖</p>
 <p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/maven/ordered-group.png" alt="Ordered Group Repositories"></p>
 <p>国内镜像地址：<a href="http://maven.oschina.net/content/groups/public/" target="_blank" rel="external">http://maven.oschina.net/content/groups/public/</a></p>
-<h2 id="Maven手动添加jar包"><a href="#Maven手动添加jar包" class="headerlink" title="Maven手动添加jar包"></a>Maven手动添加jar包</h2><p>假如遇到依赖下载不到的情况，我们可以在网上弄一个，手动添加到本地仓库中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn install:install-file -Dfile=IKAnalyzer3.2.8.jar -DgroupId=org.wltea.ik-analyzer -DartifactId=ik-analyzer -Dversion=3.2.8 -Dpackaging=jar</div></pre></td></tr></table></figure></p>
+<h2 id="Maven手动添加jar包"><a href="#Maven手动添加jar包" class="headerlink" title="Maven手动添加jar包"></a>Maven手动添加jar包</h2><p>假如遇到依赖下载不到的情况，我们可以手动把jar包添加到本地仓库中，命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mvn install:install-file -Dfile=IKAnalyzer3.2.8.jar -DgroupId=org.wltea.ik-analyzer -DartifactId=ik-analyzer -Dversion=3.2.8 -Dpackaging=jar</div></pre></td></tr></table></figure></p>
 <h2 id="详细配置"><a href="#详细配置" class="headerlink" title="详细配置"></a>详细配置</h2><p>网上找了个写的比较全的，看到没用过的可以到这里查查</p>
 <p><a href="http://blog.csdn.net/chen3749102/article/details/52327800" target="_blank" rel="external">史上最全的Maven Pom文件标签详解</a></p>
 
