@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="redis," />
 
 
 
@@ -94,13 +94,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Gengsc&#39;s Blog">
-<meta property="og:url" content="http://blog.gengsc.com/categories/Linux设置/index.html">
+<meta name="description" content="关于redis使用中需要注意的地方，记录下。">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis需要注意的点">
+<meta property="og:url" content="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="关于redis使用中需要注意的地方，记录下。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png">
+<meta property="og:updated_time" content="2017-10-12T08:30:55.634Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gengsc&#39;s Blog">
+<meta name="twitter:title" content="Redis需要注意的点">
+<meta name="twitter:description" content="关于redis使用中需要注意的地方，记录下。">
+<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png">
 
 
 
@@ -129,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/categories/Linux设置/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/"/>
 
 
 
 
 
-  <title>分类: Linux设置 | Gengsc's Blog</title>
+  <title>Redis需要注意的点 | Gengsc's Blog</title>
   
 
 
@@ -165,7 +172,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 	
 	<a href="https://github.com/shichaogeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
@@ -305,55 +312,220 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Linux设置<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/09/07/FirewalldAndTelnet/" itemprop="url">
-              
-                <span itemprop="name">FirewalldAndTelnet</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Redis需要注意的点</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-07T15:18:03+08:00"
-              content="2017-09-07" >
-          09-07
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T15:09:35+08:00">
+                2017-10-11
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/no/" itemprop="url" rel="index">
+                    <span itemprop="name">no-</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/11/Redis需要注意的点/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/10/11/Redis需要注意的点/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    </div>
+      
 
+      
+        <p>关于redis使用中需要注意的地方，记录下。</p>
+<a id="more"></a>
+<h2 id="API命令"><a href="#API命令" class="headerlink" title="API命令"></a>API命令</h2><h3 id="查看键总数"><a href="#查看键总数" class="headerlink" title="查看键总数"></a>查看键总数</h3><p>127.0.0.1:6379&gt; keys *<br>1) “name”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; dbsize</div><div class="line">(integer) 1</div></pre></td></tr></table></figure>
+<p>dbsize命令在计算键总数时不会遍历所有键，而是直接获取Redis内置的键总数变量，所以dbsize命令的时间复杂度是O（1）。</p>
+<p>而keys命令会遍历所有键，所以它的时间复杂度是O（n），当Redis保存了大量键时，<font color="red">线上环境禁止使用</font>。</p>
+<h3 id="查询数据结构内部编码"><a href="#查询数据结构内部编码" class="headerlink" title="查询数据结构内部编码"></a>查询数据结构内部编码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; object encoding name</div><div class="line">&quot;embstr</div></pre></td></tr></table></figure>
+<h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p>因为Redis是单线程来处理命令的，所以一条命令从客户端达到服务端不会立刻被执行，所有命令都会进入一个队列中，然后逐个被执行。</p>
+<h3 id="为什么单线程还能这么快"><a href="#为什么单线程还能这么快" class="headerlink" title="为什么单线程还能这么快"></a>为什么单线程还能这么快</h3><ol>
+<li><p>纯内存访问，Redis将所有数据放在内存中，内存的响应时长大约为100纳秒，这是Redis达到每秒万级别访问的重要基础。</p>
+</li>
+<li><p>非阻塞I/O，Redis使用epoll作为I/O多路复用技术的实现，再加上Redis自身的事件处理模型将epoll中的连接、读写、关闭都转换为事件，不在网络I/O上浪费过多的时间。</p>
+</li>
+<li><p>单线程避免了线程切换和竞态产生的消耗。<br>单线程能带来几个好处：第一，单线程可以简化数据结构和算法的实现。如果对高级编程语言熟悉的读者应该了解并发数据结构实现不但困难而且开发测试比较麻烦。第二，单线程避免了线程切换和竞态产生的消耗，对于服务端开发来说，锁和线程切换通常是性能杀手。</p>
+</li>
+</ol>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>最大512M</p>
+<h4 id="mget命令"><a href="#mget命令" class="headerlink" title="mget命令"></a>mget命令</h4><p>假如没有mget这样的命令，要执行n次get命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">n次get时间 = n次网络时间 + n次命令时间</div></pre></td></tr></table></figure></p>
+<p>使用mget命令后，要执行n次get命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">n次get时间 = 1次网络时间 + n次命令时间</div></pre></td></tr></table></figure></p>
+<p>1000次get命令，网络耗时1ms，执行命令0.1ms,1000次get和一次met对比<br><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png" alt="met"></p>
+<p>使用批量操作，有助于提高业务处理效率，但是要注意的是每次批量操作所发送的命令数不是无节制的，如果数量过多可能造成Redis阻塞或者网络拥塞。</p>
+<h3 id="SETNX"><a href="#SETNX" class="headerlink" title="SETNX"></a>SETNX</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; set company go+</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; setnx company go+</div><div class="line">(integer) 0</div></pre></td></tr></table></figure>
+<p>因为键hello已存在，所以setnx失败，返回结果为0</p>
+<p>由于Redis的单线程命令处理机制，如果有多个客户端同时执行setnx key value，根据setnx的特性只有一个客户端能设置成功，setnx可以作为分布式锁的一种实现方案，Redis官方给出了使用setnx实现分布式锁的方法：<a href="http://redis.io/topics/distlock" target="_blank" rel="external">http://redis.io/topics/distlock</a>。</p>
+<h3 id="redis数据迁移"><a href="#redis数据迁移" class="headerlink" title="redis数据迁移"></a>redis数据迁移</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i> redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/29/Maven小总结/" rel="next" title="Maven小总结">
+                <i class="fa fa-chevron-left"></i> Maven小总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -361,6 +533,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -381,8 +564,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -479,6 +671,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#API命令"><span class="nav-number">1.</span> <span class="nav-text">API命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看键总数"><span class="nav-number">1.1.</span> <span class="nav-text">查看键总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据结构内部编码"><span class="nav-number">1.2.</span> <span class="nav-text">查询数据结构内部编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单线程模型"><span class="nav-number">1.3.</span> <span class="nav-text">单线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么单线程还能这么快"><span class="nav-number">1.4.</span> <span class="nav-text">为什么单线程还能这么快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.5.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mget命令"><span class="nav-number">1.5.1.</span> <span class="nav-text">mget命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SETNX"><span class="nav-number">1.6.</span> <span class="nav-text">SETNX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis数据迁移"><span class="nav-number">1.7.</span> <span class="nav-text">redis数据迁移</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -602,10 +810,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
@@ -623,6 +831,18 @@
       <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.gengsc.com/2017/10/11/Redis需要注意的点/';
+          this.page.identifier = '2017/10/11/Redis需要注意的点/';
+          this.page.title = 'Redis需要注意的点';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
