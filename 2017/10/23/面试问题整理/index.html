@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="redis," />
+  <meta name="keywords" content="面试," />
 
 
 
@@ -94,20 +94,18 @@
 
 
 
-<meta name="description" content="关于redis使用中需要注意的地方，记录下。">
-<meta name="keywords" content="redis">
+<meta name="description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
+<meta name="keywords" content="面试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis需要注意的点">
-<meta property="og:url" content="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/index.html">
+<meta property="og:title" content="面试问题整理">
+<meta property="og:url" content="http://blog.gengsc.com/2017/10/23/面试问题整理/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="关于redis使用中需要注意的地方，记录下。">
+<meta property="og:description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png">
-<meta property="og:updated_time" content="2017-10-12T08:30:55.634Z">
+<meta property="og:updated_time" content="2017-10-24T06:41:11.235Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis需要注意的点">
-<meta name="twitter:description" content="关于redis使用中需要注意的地方，记录下。">
-<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png">
+<meta name="twitter:title" content="面试问题整理">
+<meta name="twitter:description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
 
 
 
@@ -136,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/10/23/面试问题整理/"/>
 
 
 
 
 
-  <title>Redis需要注意的点 | Gengsc's Blog</title>
+  <title>面试问题整理 | Gengsc's Blog</title>
   
 
 
@@ -326,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/23/面试问题整理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Geng Shichao">
@@ -343,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Redis需要注意的点</h1>
+          <h1 class="post-title" itemprop="name headline">面试问题整理</h1>
         
 
         <div class="post-meta">
@@ -355,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T15:09:35+08:00">
-                2017-10-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-23T11:31:36+08:00">
+                2017-10-23
               </time>
             
 
@@ -378,8 +376,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/no/" itemprop="url" rel="index">
-                    <span itemprop="name">no-</span>
+                  <a href="/categories/面试/" itemprop="url" rel="index">
+                    <span itemprop="name">面试</span>
                   </a>
                 </span>
 
@@ -396,9 +394,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/11/Redis需要注意的点/#comments" itemprop="discussionUrl">
+                <a href="/2017/10/23/面试问题整理/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/11/Redis需要注意的点/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/10/23/面试问题整理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -426,31 +424,31 @@
       
 
       
-        <p>关于redis使用中需要注意的地方，记录下。</p>
-<a id="more"></a>
-<h2 id="API命令"><a href="#API命令" class="headerlink" title="API命令"></a>API命令</h2><h3 id="查看键总数"><a href="#查看键总数" class="headerlink" title="查看键总数"></a>查看键总数</h3><p>127.0.0.1:6379&gt; keys *<br>1) “name”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; dbsize</div><div class="line">(integer) 1</div></pre></td></tr></table></figure>
-<p>dbsize命令在计算键总数时不会遍历所有键，而是直接获取Redis内置的键总数变量，所以dbsize命令的时间复杂度是O（1）。</p>
-<p>而keys命令会遍历所有键，所以它的时间复杂度是O（n），当Redis保存了大量键时，<font color="red">线上环境禁止使用</font>。</p>
-<h3 id="查询数据结构内部编码"><a href="#查询数据结构内部编码" class="headerlink" title="查询数据结构内部编码"></a>查询数据结构内部编码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; object encoding name</div><div class="line">&quot;embstr</div></pre></td></tr></table></figure>
-<h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p>因为Redis是单线程来处理命令的，所以一条命令从客户端达到服务端不会立刻被执行，所有命令都会进入一个队列中，然后逐个被执行。</p>
-<h3 id="为什么单线程还能这么快"><a href="#为什么单线程还能这么快" class="headerlink" title="为什么单线程还能这么快"></a>为什么单线程还能这么快</h3><ol>
-<li><p>纯内存访问，Redis将所有数据放在内存中，内存的响应时长大约为100纳秒，这是Redis达到每秒万级别访问的重要基础。</p>
-</li>
-<li><p>非阻塞I/O，Redis使用epoll作为I/O多路复用技术的实现，再加上Redis自身的事件处理模型将epoll中的连接、读写、关闭都转换为事件，不在网络I/O上浪费过多的时间。</p>
-</li>
-<li><p>单线程避免了线程切换和竞态产生的消耗。<br>单线程能带来几个好处：第一，单线程可以简化数据结构和算法的实现。如果对高级编程语言熟悉的读者应该了解并发数据结构实现不但困难而且开发测试比较麻烦。第二，单线程避免了线程切换和竞态产生的消耗，对于服务端开发来说，锁和线程切换通常是性能杀手。</p>
-</li>
-</ol>
-<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>最大512M</p>
-<h4 id="mget命令"><a href="#mget命令" class="headerlink" title="mget命令"></a>mget命令</h4><p>假如没有mget这样的命令，要执行n次get命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">n次get时间 = n次网络时间 + n次命令时间</div></pre></td></tr></table></figure></p>
-<p>使用mget命令后，要执行n次get命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">n次get时间 = 1次网络时间 + n次命令时间</div></pre></td></tr></table></figure></p>
-<p>1000次get命令，网络耗时1ms，执行命令0.1ms,1000次get和一次met对比<br><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png" alt="met"></p>
-<p>使用批量操作，有助于提高业务处理效率，但是要注意的是每次批量操作所发送的命令数不是无节制的，如果数量过多可能造成Redis阻塞或者网络拥塞。</p>
-<h3 id="SETNX"><a href="#SETNX" class="headerlink" title="SETNX"></a>SETNX</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; set company go+</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; setnx company go+</div><div class="line">(integer) 0</div></pre></td></tr></table></figure>
-<p>因为键hello已存在，所以setnx失败，返回结果为0</p>
-<p>由于Redis的单线程命令处理机制，如果有多个客户端同时执行setnx key value，根据setnx的特性只有一个客户端能设置成功，setnx可以作为分布式锁的一种实现方案，Redis官方给出了使用setnx实现分布式锁的方法：<a href="http://redis.io/topics/distlock" target="_blank" rel="external">http://redis.io/topics/distlock</a>。</p>
-<h3 id="redis数据迁移"><a href="#redis数据迁移" class="headerlink" title="redis数据迁移"></a>redis数据迁移</h3>
+        <h2 id="数据结构-amp-算法"><a href="#数据结构-amp-算法" class="headerlink" title="数据结构&amp;算法"></a>数据结构&amp;算法</h2><p>JAVA开发中常用的数据结构有哪些？<br>快速排序 广度优先搜索（队列实现）</p>
+<p>谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包<br>concurrentmap的机制 treemap</p>
+<h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p>对JVM熟不熟悉？简单说说类加载过程，里面执行的哪些操作？问了GC和内存管理，平时在tomcat里面有没有进行过相关配置<br>JVM内存模型<br>JVM新生代和老年代的比例<br>YFC和FGC的具体场景<br>jstack，jmap，jutil分别的意义，如何排查线上相关问题</p>
+<h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><p>http协议 get和post区别 tcp/ip协议 三次握手 窗口滑动机制</p>
+<p>接口如何处理重复请求，具体的处理方案是什么。<br>如何保障请求执行顺序<br>设计一个对外接口实现类，在三个主机ip上实现轮循和负载均衡（考虑并发）</p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>开发中用了哪些数据库？mysql存储引擎有哪些？悲观锁和乐观锁问题使用场景、分布式集群实现原理<br>数据库垂直和水平拆分</p>
+<p>redis基本存储类型 事物 使用场景</p>
+<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p>spring和mybatis实现原理 底层源码<br>Mybatis如何分页；如何设置缓存；Mysql分页<br>执行某操作，前50次成功，51次失败，a全回滚b前50次提交51次抛出异常 ab场景如何设置spring传播行为</p>
+<h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><p>Dubbo超时重试 超时时间设置<br>dubbo的底层原理，zookeeper是什么<br>zookeeper作用<br>分布式事物和分布式锁（扣款不要出现负数）<br>分布式session设置<br>分布式session一致性<br>分布式接口的幂等设计[不能重复扣款]</p>
+<h2 id="业务"><a href="#业务" class="headerlink" title="业务"></a>业务</h2><p>最近做的比较熟悉的项目技术架构图</p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>线程池的构造类的五个参数的具体意义是什么？</p>
+<p>单机上一个线程池突然断电的处理机制（正在处理的请求和阻塞队列里的请求如何处理）</p>
+<p>栅栏机制<br>所有线程必须到达栅栏的位置才能继续执行，等待其他线程到达之前一直阻塞。</p>
+<p>使用无界阻塞队列会出现什么问题</p>
+<p>如何保证共享变量修改时的原子性</p>
+<p>volatile</p>
+<h3 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h3><p>synchronized无法中断一个等待锁的线程。<br>lock要在finally中主动释放锁。</p>
+<p>### </p>
+<h3 id="同步工具类"><a href="#同步工具类" class="headerlink" title="同步工具类"></a>同步工具类</h3><h4 id="信号量Semaphore"><a href="#信号量Semaphore" class="headerlink" title="信号量Semaphore"></a>信号量Semaphore</h4><p>Semaphore用来控制某个特定资源的数量。</p>
+<p>Semaphore管理这一批管理许可，由构造函数来指定。执行操作之前可以获得许可，使用之后释放许可。acquire讲阻塞直到有许可，release方法将返回一个许可。</p>
+<p>使用Semaphore为容器设置边界，可以将容器变成有界阻塞队列。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.gsc.tools;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Collections;</div><div class="line"><span class="keyword">import</span> java.util.HashSet;</div><div class="line"><span class="keyword">import</span> java.util.Set;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoundedHashSet</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;T&gt; set;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Semphore sem;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BoundedHashSet</span><span class="params">(<span class="keyword">int</span> bound)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.set = Collections.synchronizedSet(<span class="keyword">new</span> HashSet&lt;T&gt;());</div><div class="line">        <span class="keyword">this</span>.sem = <span class="keyword">new</span> Semaphore(bound);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        sem.acquire();</div><div class="line">        <span class="keyword">boolean</span> wasAdded = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            wasAdded =set.add(e);</div><div class="line">            <span class="keyword">return</span> wasAdded;</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">if</span> (!wasAdded) &#123;</div><div class="line">                sem.release();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="keyword">boolean</span> wasRemoved = set.remove(o);</div><div class="line">        <span class="keyword">if</span> (wasRemoved) &#123;</div><div class="line">            sem.release();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> wasRemoved;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="栅栏Barrier"><a href="#栅栏Barrier" class="headerlink" title="栅栏Barrier"></a>栅栏Barrier</h4><p><a href="http://blog.csdn.net/wujumei1962/article/details/43458659" target="_blank" rel="external">栅栏CyclicBarrier</a></p>
+<h4 id="闭锁Latch"><a href="#闭锁Latch" class="headerlink" title="闭锁Latch"></a>闭锁Latch</h4><h5 id="CountDownLatchLock"><a href="#CountDownLatchLock" class="headerlink" title="CountDownLatchLock"></a>CountDownLatchLock</h5><p>CountDownLatchLock是一种灵活的闭锁实现，可以使一个或多个线程等待一组事物完成。维护一个计数器，初始化一个整数表示事物的数量，countDown事物完成减1，await阻塞等待直到计数器归零。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.gsc.tools;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 闭锁CountDownLatch</span></div><div class="line"><span class="comment"> * 计算并发执行某个任务所需时间</span></div><div class="line"><span class="comment"> * </span></div><div class="line"><span class="comment"> * <span class="doctag">@author</span> shichaogeng</span></div><div class="line"><span class="comment"> *</span></div><div class="line"><span class="comment"> * 2017年9月27日</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestHarness</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">TimeTask</span><span class="params">(<span class="keyword">int</span> nThread, <span class="keyword">final</span> Runnable task)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">		</div><div class="line">		<span class="keyword">final</span> CountDownLatch startGate = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</div><div class="line">		<span class="keyword">final</span> CountDownLatch endGate = <span class="keyword">new</span> CountDownLatch(nThread);</div><div class="line">		</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nThread; i++) &#123;</div><div class="line">			<span class="keyword">new</span> Thread()&#123;</div><div class="line">				<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">					<span class="keyword">try</span> &#123;</div><div class="line">						<span class="comment">//线程阻塞等待所有线程准备完成</span></div><div class="line">						startGate.await();</div><div class="line">						<span class="keyword">try</span> &#123;</div><div class="line">							task.run();</div><div class="line">						&#125; <span class="keyword">finally</span> &#123;</div><div class="line">							<span class="comment">//表示当前线程执行结束</span></div><div class="line">							endGate.countDown();</div><div class="line">						&#125;</div><div class="line">					&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;&#125;</div><div class="line">				&#125;;</div><div class="line">			&#125;.start();</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="keyword">long</span> start = System.nanoTime();</div><div class="line">		<span class="comment">//准备完成，开始所有线程，await阻塞消失</span></div><div class="line">		startGate.countDown();</div><div class="line">		<span class="comment">//等待所有线程释放完毕</span></div><div class="line">		endGate.await();</div><div class="line">		<span class="keyword">long</span> end = System.nanoTime();</div><div class="line"></div><div class="line">		<span class="keyword">return</span> end -start;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="FutureTask-get"><a href="#FutureTask-get" class="headerlink" title="FutureTask#get()"></a>FutureTask#get()</h4><p>FutureTask听过callable来实现，get()方法会阻塞直到任务走到完成状态，就获取callable的结果。参见Java Concurrency in Practise page 80。</p>
+
       
     </div>
     
@@ -478,7 +476,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i> redis</a>
+            <a href="/tags/面试/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
           
         </div>
       
@@ -491,8 +489,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/29/Maven小总结/" rel="next" title="Maven小总结">
-                <i class="fa fa-chevron-left"></i> Maven小总结
+              <a href="/2017/10/19/IntelliJ-IDEA使用简记/" rel="next" title="IntelliJ IDEA使用简记">
+                <i class="fa fa-chevron-left"></i> IntelliJ IDEA使用简记
               </a>
             
           </div>
@@ -501,8 +499,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/17/git/" rel="prev" title="git">
-                git <i class="fa fa-chevron-right"></i>
+              <a href="/2017/10/24/zookeeper-分布式的关键/" rel="prev" title="zookeeper-分布式的关键">
+                zookeeper-分布式的关键 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -685,7 +683,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#API命令"><span class="nav-number">1.</span> <span class="nav-text">API命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看键总数"><span class="nav-number">1.1.</span> <span class="nav-text">查看键总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据结构内部编码"><span class="nav-number">1.2.</span> <span class="nav-text">查询数据结构内部编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单线程模型"><span class="nav-number">1.3.</span> <span class="nav-text">单线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么单线程还能这么快"><span class="nav-number">1.4.</span> <span class="nav-text">为什么单线程还能这么快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.5.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mget命令"><span class="nav-number">1.5.1.</span> <span class="nav-text">mget命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SETNX"><span class="nav-number">1.6.</span> <span class="nav-text">SETNX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis数据迁移"><span class="nav-number">1.7.</span> <span class="nav-text">redis数据迁移</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据结构-amp-算法"><span class="nav-number">1.</span> <span class="nav-text">数据结构&算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM"><span class="nav-number">2.</span> <span class="nav-text">JVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通信协议"><span class="nav-number">3.</span> <span class="nav-text">通信协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架"><span class="nav-number">5.</span> <span class="nav-text">框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式"><span class="nav-number">6.</span> <span class="nav-text">分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#业务"><span class="nav-number">7.</span> <span class="nav-text">业务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发"><span class="nav-number">8.</span> <span class="nav-text">并发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lock"><span class="nav-number">8.1.</span> <span class="nav-text">Lock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步工具类"><span class="nav-number">8.2.</span> <span class="nav-text">同步工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#信号量Semaphore"><span class="nav-number">8.2.1.</span> <span class="nav-text">信号量Semaphore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#栅栏Barrier"><span class="nav-number">8.2.2.</span> <span class="nav-text">栅栏Barrier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#闭锁Latch"><span class="nav-number">8.2.3.</span> <span class="nav-text">闭锁Latch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#CountDownLatchLock"><span class="nav-number">8.2.3.1.</span> <span class="nav-text">CountDownLatchLock</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FutureTask-get"><span class="nav-number">8.2.4.</span> <span class="nav-text">FutureTask#get()</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -838,9 +836,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.gengsc.com/2017/10/11/Redis需要注意的点/';
-          this.page.identifier = '2017/10/11/Redis需要注意的点/';
-          this.page.title = 'Redis需要注意的点';
+          this.page.url = 'http://blog.gengsc.com/2017/10/23/面试问题整理/';
+          this.page.identifier = '2017/10/23/面试问题整理/';
+          this.page.title = '面试问题整理';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://gengshichao.disqus.com/embed.js';
