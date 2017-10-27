@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
+<meta name="description" content="对一些常见的面试题的总结">
 <meta name="keywords" content="面试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="面试问题整理">
 <meta property="og:url" content="http://blog.gengsc.com/2017/10/23/面试问题整理/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
+<meta property="og:description" content="对一些常见的面试题的总结">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-24T06:41:11.235Z">
+<meta property="og:updated_time" content="2017-10-27T03:21:40.132Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试问题整理">
-<meta name="twitter:description" content="数据结构&amp;amp;算法JAVA开发中常用的数据结构有哪些？快速排序 广度优先搜索（队列实现） 谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包concurrentmap的机制 treemap JVM对JVM熟不熟悉？简单说说类加载">
+<meta name="twitter:description" content="对一些常见的面试题的总结">
 
 
 
@@ -424,7 +424,9 @@
       
 
       
-        <h2 id="数据结构-amp-算法"><a href="#数据结构-amp-算法" class="headerlink" title="数据结构&amp;算法"></a>数据结构&amp;算法</h2><p>JAVA开发中常用的数据结构有哪些？<br>快速排序 广度优先搜索（队列实现）</p>
+        <p>对一些常见的面试题的总结</p>
+<a id="more"></a>
+<h2 id="数据结构-amp-算法"><a href="#数据结构-amp-算法" class="headerlink" title="数据结构&amp;算法"></a>数据结构&amp;算法</h2><p>JAVA开发中常用的数据结构有哪些？<br>快速排序 广度优先搜索（队列实现）</p>
 <p>谈谈对HashMap的理解，底层的基本实现。HashMap怎么解决碰撞问题的？数据结构是线程安全的吗？加入你回答HashMap不是线程安全的，HashTabl是线程安全的，有没有线程安全的Map，concurrent包<br>concurrentmap的机制 treemap</p>
 <h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><p>对JVM熟不熟悉？简单说说类加载过程，里面执行的哪些操作？问了GC和内存管理，平时在tomcat里面有没有进行过相关配置<br>JVM内存模型<br>JVM新生代和老年代的比例<br>YFC和FGC的具体场景<br>jstack，jmap，jutil分别的意义，如何排查线上相关问题</p>
 <h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><p>http协议 get和post区别 tcp/ip协议 三次握手 窗口滑动机制</p>
@@ -434,14 +436,14 @@
 <h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><p>spring和mybatis实现原理 底层源码<br>Mybatis如何分页；如何设置缓存；Mysql分页<br>执行某操作，前50次成功，51次失败，a全回滚b前50次提交51次抛出异常 ab场景如何设置spring传播行为</p>
 <h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><p>Dubbo超时重试 超时时间设置<br>dubbo的底层原理，zookeeper是什么<br>zookeeper作用<br>分布式事物和分布式锁（扣款不要出现负数）<br>分布式session设置<br>分布式session一致性<br>分布式接口的幂等设计[不能重复扣款]</p>
 <h2 id="业务"><a href="#业务" class="headerlink" title="业务"></a>业务</h2><p>最近做的比较熟悉的项目技术架构图</p>
-<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>线程池的构造类的五个参数的具体意义是什么？</p>
-<p>单机上一个线程池突然断电的处理机制（正在处理的请求和阻塞队列里的请求如何处理）</p>
-<p>栅栏机制<br>所有线程必须到达栅栏的位置才能继续执行，等待其他线程到达之前一直阻塞。</p>
-<p>使用无界阻塞队列会出现什么问题</p>
-<p>如何保证共享变量修改时的原子性</p>
-<p>volatile</p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>线程池的构造类的五个参数的具体意义是什么？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">corePoolSize 线程池的线程数量</div><div class="line">maximumPoolSize 允许的最大线程数</div><div class="line">keepAliveTime 超过coreSize的线程空闲的最大时间</div><div class="line">unit 时间单位</div><div class="line">workQueue 工作队列</div><div class="line"></div><div class="line">初始化无限程，然后创建线程直到线程池满，然后放入工作队列，工作队列满，然后创建线程直到最大线程数，线程闲置超时即销毁直到核心线程数。</div></pre></td></tr></table></figure></p>
+<p>单机上一个线程池突然断电的处理机制（正在处理的请求和阻塞队列里的请求如何处理）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">shutdown方法，平滑的关闭，不再接受新的任务，同时等待提交任务完成。</div><div class="line">shutdownNow方法，粗暴的关闭，尝试取消实行的任务，并不再启动未开始执行的任务。返回等待执行的任务。</div></pre></td></tr></table></figure></p>
+<p>栅栏机制<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">所有线程必须到达栅栏的位置才能继续执行，等待其他线程到达之前一直阻塞。</div></pre></td></tr></table></figure></p>
+<p>使用无界阻塞队列会出现什么问题<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果消费者的消费速度赶不上生产者的生产速度，无界阻塞队列生产者无限生产任务放入队列容易造成内存耗尽</div></pre></td></tr></table></figure></p>
+<p>如何保证共享变量修改时的原子性<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">synchronized</span> lock</div></pre></td></tr></table></figure></p>
+<p>volatile<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>. 先介绍JMM 主内存 各个线程的工作内存</div><div class="line"><span class="number">2</span>. 然后是原子性 可见性(把修改立即刷新到主内存) 有序性(指令重排 为何提高工作效率 单线程无问题 但多线程并发容易产生问题）</div><div class="line"><span class="number">3</span>. <span class="keyword">volatile</span>语义：</div><div class="line">（<span class="number">1</span>）可见性</div><div class="line">线程修改之后更新到主内存</div><div class="line">线程修改之后其他线程缓存无效 CPU L1 &amp; L2</div><div class="line">（<span class="number">2</span>）禁止指令重排</div><div class="line">（<span class="number">3</span>）不保证原子性</div><div class="line"><span class="number">4</span>.原理</div><div class="line">JVM会向处理器发送一条Lock前缀的指令，将这个变量所在缓存行的数据写会到系统内存</div><div class="line"><span class="number">5</span>.应用</div><div class="line">状态标识</div><div class="line"><span class="keyword">double</span> check</div><div class="line">为什么要使用<span class="keyword">volatile</span> 修饰instance？主要在于instance = <span class="keyword">new</span> Singleton()这句，这并非是一个原子操作，事实上在 JVM 中这句话大概做了下面 <span class="number">3</span> 件事情:</div><div class="line"><span class="number">1</span>.给 instance 分配内存</div><div class="line"><span class="number">2</span>.调用 Singleton 的构造函数来初始化成员变量</div><div class="line"><span class="number">3</span>.将instance对象指向分配的内存空间（执行完这步 instance 就为非 <span class="keyword">null</span> 了）。</div><div class="line">但是在 JVM 的即时编译器中存在指令重排序的优化。也就是说上面的第二步和第三步的顺序是不能保证的，最终的执行顺序可能是 <span class="number">1</span>-<span class="number">2</span>-<span class="number">3</span> 也可能是 <span class="number">1</span>-<span class="number">3</span>-<span class="number">2</span>。如果是后者，则在 <span class="number">3</span> 执行完毕、<span class="number">2</span> 未执行之前，被线程二抢占了，这时 instance 已经是非 <span class="keyword">null</span> 了（但却没有初始化），所以线程二会直接返回 instance，然后使用，然后顺理成章地报错。</div></pre></td></tr></table></figure></p>
+<p>atomic是利用CAS来实现原子性操作的（Compare And Swap）</p>
 <h3 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h3><p>synchronized无法中断一个等待锁的线程。<br>lock要在finally中主动释放锁。</p>
-<p>### </p>
 <h3 id="同步工具类"><a href="#同步工具类" class="headerlink" title="同步工具类"></a>同步工具类</h3><h4 id="信号量Semaphore"><a href="#信号量Semaphore" class="headerlink" title="信号量Semaphore"></a>信号量Semaphore</h4><p>Semaphore用来控制某个特定资源的数量。</p>
 <p>Semaphore管理这一批管理许可，由构造函数来指定。执行操作之前可以获得许可，使用之后释放许可。acquire讲阻塞直到有许可，release方法将返回一个许可。</p>
 <p>使用Semaphore为容器设置边界，可以将容器变成有界阻塞队列。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.gsc.tools;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Collections;</div><div class="line"><span class="keyword">import</span> java.util.HashSet;</div><div class="line"><span class="keyword">import</span> java.util.Set;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoundedHashSet</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;T&gt; set;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Semphore sem;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BoundedHashSet</span><span class="params">(<span class="keyword">int</span> bound)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.set = Collections.synchronizedSet(<span class="keyword">new</span> HashSet&lt;T&gt;());</div><div class="line">        <span class="keyword">this</span>.sem = <span class="keyword">new</span> Semaphore(bound);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        sem.acquire();</div><div class="line">        <span class="keyword">boolean</span> wasAdded = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            wasAdded =set.add(e);</div><div class="line">            <span class="keyword">return</span> wasAdded;</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">if</span> (!wasAdded) &#123;</div><div class="line">                sem.release();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">        <span class="keyword">boolean</span> wasRemoved = set.remove(o);</div><div class="line">        <span class="keyword">if</span> (wasRemoved) &#123;</div><div class="line">            sem.release();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> wasRemoved;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
@@ -602,7 +604,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -613,7 +615,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

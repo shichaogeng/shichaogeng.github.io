@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="分布式," />
 
 
 
@@ -94,14 +94,18 @@
 
 
 
+<meta name="description" content="安装配置下载地址 下载1$ wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz 解压1234$ tar xvzf zookeeper-3.4.9.tar.gz$ mv ./zookeeper-3.4.9 /lab/dev/zookeeper$ cd /lab/dev/zookee">
+<meta name="keywords" content="分布式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="zookeeper-分布式的关键">
 <meta property="og:url" content="http://blog.gengsc.com/2017/10/24/zookeeper-分布式的关键/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="安装配置下载地址 下载1$ wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz 解压1234$ tar xvzf zookeeper-3.4.9.tar.gz$ mv ./zookeeper-3.4.9 /lab/dev/zookeeper$ cd /lab/dev/zookee">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-24T06:42:12.331Z">
+<meta property="og:updated_time" content="2017-10-25T09:03:43.350Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zookeeper-分布式的关键">
+<meta name="twitter:description" content="安装配置下载地址 下载1$ wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz 解压1234$ tar xvzf zookeeper-3.4.9.tar.gz$ mv ./zookeeper-3.4.9 /lab/dev/zookeeper$ cd /lab/dev/zookee">
 
 
 
@@ -360,6 +364,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -398,7 +424,28 @@
       
 
       
-        
+        <h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p><a href="http://mirror.bit.edu.cn/apache/zookeeper/?C=M;O=A" target="_blank" rel="external">下载地址</a></p>
+<h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz</span></div></pre></td></tr></table></figure>
+<h4 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> tar xvzf zookeeper-3.4.9.tar.gz</span></div><div class="line"><span class="meta">$</span><span class="bash"> mv ./zookeeper-3.4.9 /lab/dev/zookeeper</span></div><div class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> /lab/dev/zookeeper</span></div><div class="line"><span class="meta">$</span><span class="bash"> ln -s zookeeper-3.4.9 zookeeper</span></div></pre></td></tr></table></figure>
+<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><p>配置文件位置：<code>${ZOOKEEPER_HOME}/conf/zoo_sample.cfg</code></p>
+<h4 id="分布式配置"><a href="#分布式配置" class="headerlink" title="分布式配置"></a>分布式配置</h4><p>dataDir指定当前服务器数据存放的路径(目录)<br>clientPort 指定当前服务器服务器的端口<br>server.1/server.2/server.3 指定服务器的集群情况（有几台服务器）</p>
+<p>myid必须手动建立且指定在zk数据目录，也就是dataDir指定的路径<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> 1 &gt;&gt; /lab/dev/zookeeper/zk1/myid</span></div><div class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> 2 &gt;&gt; /lab/dev/zookeeper/zk2/myid</span></div><div class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> 3 &gt;&gt; /lab/dev/zookeeper/zk3/myid</span></div></pre></td></tr></table></figure></p>
+<p>在{ZOOKEEPER_HOME}/conf下拷贝zoo_sample.cfg出三个配置文件<code>zoo1.cfg</code> <code>zoo2.cfg</code> <code>zoo3.cfg</code></p>
+<p>zoo1.cfg配置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">tickTime=2000</div><div class="line">initLimit=10</div><div class="line">syncLimit=5</div><div class="line">dataDir=/lab/dev/zookeeper/zk1(这个目录可以自行指定)</div><div class="line">clientPort=2181</div><div class="line"></div><div class="line">server.1=127.0.0.1(ip):2888(通讯端口):3888（选举端口）</div><div class="line">server.2=127.0.0.1127.0.0.1:2889:3889</div><div class="line">server.3=127.0.0.1:2890:3890</div></pre></td></tr></table></figure></p>
+<p>zoo2.cfg配置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">tickTime=2000</div><div class="line">initLimit=10</div><div class="line">syncLimit=5</div><div class="line">dataDir=/lab/dev/zookeeper/zk2</div><div class="line">clientPort=2182</div><div class="line"></div><div class="line">server.1=127.0.0.1:2888:3888</div><div class="line">server.2=127.0.0.1:2889:3889</div><div class="line">server.3=127.0.0.1:2890:3890</div></pre></td></tr></table></figure></p>
+<p>zoo3.cfg配置<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">tickTime=2000</div><div class="line">initLimit=10</div><div class="line">syncLimit=5</div><div class="line">dataDir=/lab/dev/zookeeper/zk3</div><div class="line">clientPort=2183</div><div class="line"></div><div class="line">server.1=127.0.0.1:2888:3888</div><div class="line">server.2=127.0.0.1:2889:3889</div><div class="line">server.3=127.0.0.1:2890:3890</div></pre></td></tr></table></figure></p>
+<h3 id="Zookeeper及其API的使用"><a href="#Zookeeper及其API的使用" class="headerlink" title="Zookeeper及其API的使用"></a>Zookeeper及其API的使用</h3><h4 id="启动Zookeeper"><a href="#启动Zookeeper" class="headerlink" title="启动Zookeeper"></a>启动Zookeeper</h4><p>我把三个启动做成个脚本start.sh<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ZOO_HOME=/lab/dev/zookeeper/zookeeper</div><div class="line"><span class="meta">$</span><span class="bash">ZOO_HOME/bin/zkServer.sh start <span class="variable">$ZOO_HOME</span>/conf/zoo1.cfg</span></div><div class="line"><span class="meta">$</span><span class="bash">ZOO_HOME/bin/zkServer.sh start <span class="variable">$ZOO_HOME</span>/conf/zoo2.cfg</span></div><div class="line"><span class="meta">$</span><span class="bash">ZOO_HOME/bin/zkServer.sh start <span class="variable">$ZOO_HOME</span>/conf/zoo3.cfg</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 运行start.sh</span></div><div class="line">sh start.sh</div></pre></td></tr></table></figure></p>
+<h4 id="停止Zookeeper"><a href="#停止Zookeeper" class="headerlink" title="停止Zookeeper"></a>停止Zookeeper</h4><p>三个停止也做成脚本stop.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ zkServer.sh stop /usr/local/zookeeper-3.4.6/conf/zoo1.cfg</div><div class="line">$ zkServer.sh stop /usr/local/zookeeper-3.4.6/conf/zoo2.cfg</div><div class="line">$ zkServer.sh stop /usr/local/zookeeper-3.4.6/conf/zoo3.cfg</div><div class="line"></div><div class="line"># 运行脚本</div><div class="line">sh stop.sh</div></pre></td></tr></table></figure></p>
+<h4 id="查看zookeeper状态"><a href="#查看zookeeper状态" class="headerlink" title="查看zookeeper状态"></a>查看zookeeper状态</h4><p>查看状态脚本<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ZOO_HOME=/lab/dev/zookeeper/zookeeper</div><div class="line"><span class="meta">$</span><span class="bash">ZOO_HOME/bin/zkServer.sh status <span class="variable">$ZOO_HOME</span>/conf/zoo<span class="string">"<span class="variable">$1</span>"</span>.cfg</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> 查看zk2的运行状态,它是leader</span></div><div class="line"><span class="meta">$</span><span class="bash"> sh status.sh 2</span></div><div class="line">ZooKeeper JMX enabled by default</div><div class="line">Using config: /lab/dev/zookeeper/zookeeper/conf/zoo2.cfg</div><div class="line">Mode: leader</div></pre></td></tr></table></figure></p>
+<h3 id="ZK-SHELL"><a href="#ZK-SHELL" class="headerlink" title="ZK SHELL"></a>ZK SHELL</h3><p>使用<code>zkCli.sh [-server ip:port]</code>进入命令行shell</p>
+<p>进入之后可以用help命令查看帮助信息，并选择你要使用的命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[zk: localhost:2181(CONNECTED) 1] help</div><div class="line">ZooKeeper -server host:port cmd args</div><div class="line">	stat path [watch]</div><div class="line">	set path data [version]</div><div class="line">	ls path [watch]</div><div class="line">	delquota [-n|-b] path</div><div class="line">	ls2 path [watch]</div><div class="line">	setAcl path acl</div><div class="line">	setquota -n|-b val path</div><div class="line">	history </div><div class="line">	redo cmdno</div><div class="line">	printwatches on|off</div><div class="line">	delete path [version]</div><div class="line">	sync path</div><div class="line">	listquota path</div><div class="line">	rmr path</div><div class="line">	get path [watch]</div><div class="line">	create [-s] [-e] path data acl</div><div class="line">	addauth scheme auth</div><div class="line">	quit </div><div class="line">	getAcl path</div><div class="line">	close </div><div class="line">	connect host:port</div></pre></td></tr></table></figure></p>
+<p><a href="http://www.cnblogs.com/leesf456/p/6022357.html" target="_blank" rel="external">Zookeeper使用–命令行</a></p>
+<p><code>ephemeralOwner = 0x15f4d0ecaf60002</code>判断是否临时节点</p>
+<p><code>setquota -n|-b val path</code> 某个Znode指定多少存储空间或者允许创建多少个节点<br>n 指定可以设置多少个子节点<br>b 指定可以设置多大空间（byte）</p>
+<p><code>listquota path</code><br>对于配额不是硬性的提示，超过配额还是可以继续创建，只不过在日志里面有提示</p>
+<p>错误日志<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">2017-10-24 16:33:08,151 [myid:1] - WARN  [CommitProcessor:1:DataTree@301] - Quota exceeded: /zk-123 count=6 limit=5</div><div class="line">2017-10-24 16:33:13,958 [myid:1] - WARN  [CommitProcessor:1:DataTree@301] - Quota exceeded: /zk-123 count=7 limit=5</div></pre></td></tr></table></figure></p>
+<p><code>stat path</code>查看节点的状态</p>
+
       
     </div>
     
@@ -423,6 +470,12 @@
 </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+          
+        </div>
       
 
       
@@ -506,8 +559,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -533,7 +595,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -544,7 +606,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -604,6 +666,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装配置"><span class="nav-number">1.</span> <span class="nav-text">安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载"><span class="nav-number">1.1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解压"><span class="nav-number">1.2.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改配置文件"><span class="nav-number">1.3.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式配置"><span class="nav-number">1.4.</span> <span class="nav-text">分布式配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper及其API的使用"><span class="nav-number">2.</span> <span class="nav-text">Zookeeper及其API的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动Zookeeper"><span class="nav-number">2.1.</span> <span class="nav-text">启动Zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#停止Zookeeper"><span class="nav-number">2.2.</span> <span class="nav-text">停止Zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看zookeeper状态"><span class="nav-number">2.3.</span> <span class="nav-text">查看zookeeper状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK-SHELL"><span class="nav-number">3.</span> <span class="nav-text">ZK SHELL</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
