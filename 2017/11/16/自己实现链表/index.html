@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="git," />
+  <meta name="keywords" content="数据结构,Algorithms," />
 
 
 
@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="感觉IntelliJ IDEA现在比较流行的开发ide，同事大部分也使用这个，只有我用eclipse有点low，打算学习下，把常用的配置记录下，把常用配置放到github上，以后直接使用就可以了。">
-<meta name="keywords" content="git">
+<meta name="description" content="自己实现一个链表，并对关键点进行记录。">
+<meta name="keywords" content="数据结构,Algorithms">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IntelliJ IDEA使用简记">
-<meta property="og:url" content="http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA使用简记/index.html">
+<meta property="og:title" content="自己实现链表">
+<meta property="og:url" content="http://blog.gengsc.com/2017/11/16/自己实现链表/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="感觉IntelliJ IDEA现在比较流行的开发ide，同事大部分也使用这个，只有我用eclipse有点low，打算学习下，把常用的配置记录下，把常用配置放到github上，以后直接使用就可以了。">
+<meta property="og:description" content="自己实现一个链表，并对关键点进行记录。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-28T08:13:47.050Z">
+<meta property="og:updated_time" content="2017-11-16T08:27:51.563Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IntelliJ IDEA使用简记">
-<meta name="twitter:description" content="感觉IntelliJ IDEA现在比较流行的开发ide，同事大部分也使用这个，只有我用eclipse有点low，打算学习下，把常用的配置记录下，把常用配置放到github上，以后直接使用就可以了。">
+<meta name="twitter:title" content="自己实现链表">
+<meta name="twitter:description" content="自己实现一个链表，并对关键点进行记录。">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA使用简记/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/11/16/自己实现链表/"/>
 
 
 
 
 
-  <title>IntelliJ IDEA使用简记 | Gengsc's Blog</title>
+  <title>自己实现链表 | Gengsc's Blog</title>
   
 
 
@@ -324,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA使用简记/">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/11/16/自己实现链表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Geng Shichao">
@@ -341,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">IntelliJ IDEA使用简记</h1>
+          <h1 class="post-title" itemprop="name headline">自己实现链表</h1>
         
 
         <div class="post-meta">
@@ -353,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-19T10:52:40+08:00">
-                2017-10-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-16T16:14:12+08:00">
+                2017-11-16
               </time>
             
 
@@ -376,8 +376,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/categories/数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
                   </a>
                 </span>
 
@@ -394,9 +394,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/19/IntelliJ-IDEA使用简记/#comments" itemprop="discussionUrl">
+                <a href="/2017/11/16/自己实现链表/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/19/IntelliJ-IDEA使用简记/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/11/16/自己实现链表/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -424,56 +424,12 @@
       
 
       
-        <p>感觉<code>IntelliJ IDEA</code>现在比较流行的开发ide，同事大部分也使用这个，只有我用eclipse有点low，打算学习下，把常用的配置记录下，把常用配置放到github上，以后直接使用就可以了。</p>
+        <p>自己实现一个链表，并对关键点进行记录。</p>
 <a id="more"></a>
-<p><a href="https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows" target="_blank" rel="external">下载地址</a></p>
-<p>破解：（切换license server 然后输入网址：<code>http://idea.iteblog.com/key.php</code>即可）</p>
-<h2 id="JVM配置文件"><a href="#JVM配置文件" class="headerlink" title="JVM配置文件"></a>JVM配置文件</h2><p><code>idea64.exe.vmoptions</code>是 64 位可执行文件的 JVM 配置文件内容</p>
-<p>使用 IDEA 自带菜单中的 <code>Help -&gt; Edit Custom VM Options</code> 来进行个性化配置，而不是直接修改安装目录中的该文件！</p>
-<ul>
-<li><code>-Xms128m</code>，16 G 内存的机器可尝试设置为 <code>-Xms512m</code></li>
-<li><code>-Xmx750m</code>，16 G 内存的机器可尝试设置为 <code>-Xmx1500m</code></li>
-<li><code>-XX:MaxPermSize=350m</code>，16G内存的机器可尝试设置为<code>-XX:MaxPermSize=500m</code></li>
-<li><code>-XX:ReservedCodeCacheSize=225m</code>，16G内存的机器可尝试设置为<code>-XX:ReservedCodeCacheSize=500m</code></li>
-</ul>
-<h2 id="属性配置文件"><a href="#属性配置文件" class="headerlink" title="属性配置文件"></a>属性配置文件</h2><p><code>idea.properties</code>是 IntelliJ IDEA 一些属性配置，修改原则主要根据个人对 IntelliJ IDEA 的个性化配置情况来分析。</p>
-<p>在阅读了安装目录中的带注释的配置文件后，使用 IDEA 自带菜单中的 <code>Help -&gt; Edit Custom Properties</code> 来进行个性化配置！<br>常修改的就是下面 4 个参数：</p>
-<ul>
-<li><code>idea.config.path=${user.home}/.IntelliJIdea/config</code>，该属性主要用于指向 IntelliJ IDEA 的个性化配置目录，默认是被注释，打开注释之后才算启用该属性，这里需要特别注意的是斜杠方向，这里用的是正斜杠。</li>
-<li><code>idea.system.path=${user.home}/.IntelliJIdea/system</code>，该属性主要用于指向 IntelliJ IDEA 的系统文件目录，默认是被注释，打开注释之后才算启用该属性，这里需要特别注意的是斜杠方向，这里用的是正斜杠。如果你的项目很多，则该目录会很大，如果你的 C 盘空间不够的时候，还是建议把该目录转移到其他盘符下。</li>
-<li><code>idea.max.intellisense.filesize=2500</code>，该属性主要用于提高在编辑大文件时候的代码帮助。IntelliJ IDEA 在编辑大文件的时候还是很容易卡顿的。</li>
-<li><code>idea.cycle.buffer.size=1024</code>，该属性主要用于控制控制台输出缓存。有遇到一些项目开启很多输出，控制台很快就被刷满了没办法再自动输出后面内容，这种项目建议增大该值或是直接禁用掉，禁用语句 <code>idea.cycle.buffer.size=disabled</code>。</li>
-</ul>
-<h2 id="必要配置"><a href="#必要配置" class="headerlink" title="必要配置"></a>必要配置</h2><h3 id="ToolBar"><a href="#ToolBar" class="headerlink" title="ToolBar"></a>ToolBar</h3><p><code>View-&gt;ToolBar/Tool Buttons</code></p>
-<h3 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h3><p><code>File-&gt;Setting-&gt;Editor-&gt;File Encoding</code><br>设置Project Encoding<br>别忘了下面的properties Encoding 并勾选后面的选项（能查看中文）</p>
-<h3 id="Compiler-Heap-Size"><a href="#Compiler-Heap-Size" class="headerlink" title="Compiler Heap Size"></a>Compiler Heap Size</h3><p><code>File-&gt;Setting-&gt;Build-&gt;Compiler</code>设置Compiler heap大小</p>
-<h3 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h3><p><code>File-&gt;Project Structure-&gt;Platform Settings-&gt;SDKs</code></p>
-<h3 id="包层级设置"><a href="#包层级设置" class="headerlink" title="包层级设置"></a>包层级设置</h3><p>点击右上角齿轮，在弹出的菜单中去掉选项：<code>Compact Empty Middle Packages</code></p>
-<h3 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h3><p><code>File-&gt;Setting-&gt;Version Control-&gt;Git</code>确定系统已安装git并git路径正确。</p>
-<h3 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h3><p><a href="https://github.com/judasn/IntelliJ-IDEA-Tutorial" target="_blank" rel="external">IntelliJ IDEA 简体中文专题教程</a></p>
-<h3 id="提示忽略大小写"><a href="#提示忽略大小写" class="headerlink" title="提示忽略大小写"></a>提示忽略大小写</h3><p><code>setting-&gt;Editor-&gt;General-&gt;Code Completion-&gt;Case sensitive completion</code>设为None</p>
-<h3 id="文件和导航关联"><a href="#文件和导航关联" class="headerlink" title="文件和导航关联"></a>文件和导航关联</h3><p><code>小齿轮-&gt;AtuoScroll from source/AtuoScroll to source</code></p>
-<h3 id="添加xml模板"><a href="#添加xml模板" class="headerlink" title="添加xml模板"></a>添加xml模板</h3><p><code>settting-&gt;Editor-&gt;Code Stype-File &amp; Code Template&gt;</code>新建一个xml模板</p>
-<h2 id="记录下常用快捷键"><a href="#记录下常用快捷键" class="headerlink" title="记录下常用快捷键"></a>记录下常用快捷键</h2><p>main函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">psvm</div></pre></td></tr></table></figure></p>
-<p>print<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sout</div></pre></td></tr></table></figure></p>
-<p>for循环<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fori</div></pre></td></tr></table></figure></p>
-<p>foreach<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iter</div></pre></td></tr></table></figure></p>
-<p>创建包，类 构造方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alter+insert</div></pre></td></tr></table></figure></p>
-<p>类似ctrl+1,提示帮助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alt+enter</div></pre></td></tr></table></figure></p>
-<p>删除一行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+Y</div></pre></td></tr></table></figure></p>
-<p>窗口左右切换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alt+→/←</div></pre></td></tr></table></figure></p>
-<p>重命名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">shift+F6</div></pre></td></tr></table></figure></p>
-<p>进入方法、变量声明，相当于eclipse f3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+b</div></pre></td></tr></table></figure></p>
-<p>File Structure，相当于eclipse CTRL+O<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+F12</div></pre></td></tr></table></figure></p>
-<p>查找类，相当于eclipse ctrl+shift+t<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+n</div></pre></td></tr></table></figure></p>
-<p>进入父类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+u</div></pre></td></tr></table></figure></p>
-<p>进入子类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+alt+b</div></pre></td></tr></table></figure></p>
-<p>上次浏览位置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+alt+left/right</div></pre></td></tr></table></figure></p>
-<p>Find Usage<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alt+f7</div></pre></td></tr></table></figure></p>
-<p>上下移动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+shift+↑/↓</div></pre></td></tr></table></figure></p>
-<p>Hide All Tool Windows<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+shift+f12</div></pre></td></tr></table></figure></p>
-<p>自动补全（好东西，我喜欢用来补全括号）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+shift+enter</div></pre></td></tr></table></figure></p>
-<p>surround with<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ctrl+alt+t</div></pre></td></tr></table></figure></p>
+<p>主要有两个实现思路<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1.首先链表的任何操作都设计递归问题</div><div class="line">2.把操作分为重载的两个方法，其中一个增加传入节点参数，对节点进行递归操作。</div></pre></td></tr></table></figure></p>
+<p>专门记录下关于删除节点的问题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">删除节点分为两种情况</div><div class="line">1. 删除的节点为根节点，需要root = root.next</div><div class="line">2. 删除的节点不在根节点，需要preNode.next = currNode.next;</div></pre></td></tr></table></figure></p>
+<p>后面又添加了删除尾节点的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">也分为两种情况</div><div class="line">1. 只有一个节点，在根节点中，直接删除根节点root = null</div><div class="line">2. 两个及以上节点，递归找到currNode.next == null,删除当前节点preNode.next = null</div></pre></td></tr></table></figure></p>
+<p>贴上代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.gengsc.algorithms.link;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * <span class="doctag">@Description</span></span></div><div class="line"><span class="comment"> * <span class="doctag">@Author</span> shichaogeng</span></div><div class="line"><span class="comment"> * <span class="doctag">@Create</span> 2017-11-16 11:43</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RealLink</span>&lt;<span class="title">Item</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Node root;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index;</div><div class="line">    <span class="keyword">private</span> Item[] array;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">private</span> Item data;</div><div class="line">        <span class="keyword">private</span> Node next;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Item data)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.data = data;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Item item)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (item == <span class="keyword">null</span>) <span class="keyword">return</span>;</div><div class="line">        Node node = <span class="keyword">new</span> Node(item);</div><div class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</div><div class="line">            root = node;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            add(root, node);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.count++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Node current, Node newNode)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (current.next == <span class="keyword">null</span>) &#123;</div><div class="line">            current.next = newNode;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            add(current.next, newNode);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</div><div class="line">        print(root);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Node node)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node != <span class="keyword">null</span>) &#123;</div><div class="line">            System.out.println(node.data);</div><div class="line">            print(node.next);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.count;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> root == <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (data == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> contains(root, data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Node node, Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">if</span> (data.equals(node.data)) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span>  contains(node.next, data);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Item <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index &gt; (<span class="keyword">this</span>.count - <span class="number">1</span>) || index &lt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//索引从0开始</span></div><div class="line">        <span class="keyword">this</span>.index = <span class="number">0</span>;</div><div class="line">        <span class="keyword">return</span> get(<span class="keyword">this</span>.root, index);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> Item <span class="title">get</span><span class="params">(Node node, <span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index == <span class="keyword">this</span>.index++) &#123;</div><div class="line">            <span class="keyword">return</span> node.data;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node.next != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> get(node.next, index);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index &gt; (<span class="keyword">this</span>.count - <span class="number">1</span>) || index &lt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.index = <span class="number">0</span>;</div><div class="line">        set(<span class="keyword">this</span>.root, index, data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(Node node, <span class="keyword">int</span> index, Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (index == <span class="keyword">this</span>.index++) &#123;</div><div class="line">            node.data = data;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node.next != <span class="keyword">null</span>) &#123;</div><div class="line">            set(node.next, index, data);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!contains(data)) <span class="keyword">return</span>;</div><div class="line">        <span class="comment">//分两种情况，1.在根节点中2.不在根节点中</span></div><div class="line">        <span class="keyword">if</span> (data.equals(<span class="keyword">this</span>.root.data)) &#123;</div><div class="line">            <span class="keyword">this</span>.root = <span class="keyword">this</span>.root.next;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            remove(<span class="keyword">this</span>.root, <span class="keyword">this</span>.root.next, data);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.count--;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(Node pre, Node current, Item data)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (data.equals(current.data)) &#123;</div><div class="line">            pre.next = current.next;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            remove(current, current.next, data);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> Item[] toArray() &#123;</div><div class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">this</span>.index = <span class="number">0</span>;</div><div class="line">        <span class="keyword">this</span>.array = (Item[]) <span class="keyword">new</span> Object[<span class="keyword">this</span>.count];</div><div class="line">        toArray(<span class="keyword">this</span>.root);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.array;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">toArray</span><span class="params">(Node node)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span>;</div><div class="line">        array[index++] = node.data;</div><div class="line">        toArray(node.next);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeLast</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (isEmpty()) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.root.next == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.root = <span class="keyword">null</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            removeLast(<span class="keyword">this</span>.root, <span class="keyword">this</span>.root.next);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.count--;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">removeLast</span><span class="params">(Node preNode, Node currNode)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (currNode.next == <span class="keyword">null</span>) &#123;</div><div class="line">            preNode.next = <span class="keyword">null</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            removeLast(currNode, currNode.next);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -502,7 +458,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+          
+            <a href="/tags/Algorithms/" rel="tag"><i class="fa fa-tag"></i> Algorithms</a>
           
         </div>
       
@@ -515,8 +473,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/17/git/" rel="next" title="git">
-                <i class="fa fa-chevron-left"></i> git
+              <a href="/2017/11/14/java-concurrent/" rel="next" title="java-concurrent">
+                <i class="fa fa-chevron-left"></i> java-concurrent
               </a>
             
           </div>
@@ -524,10 +482,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/23/面试问题整理/" rel="prev" title="面试问题整理">
-                面试问题整理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -592,17 +546,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -699,22 +644,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM配置文件"><span class="nav-number">1.</span> <span class="nav-text">JVM配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性配置文件"><span class="nav-number">2.</span> <span class="nav-text">属性配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#必要配置"><span class="nav-number">3.</span> <span class="nav-text">必要配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ToolBar"><span class="nav-number">3.1.</span> <span class="nav-text">ToolBar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Encoding"><span class="nav-number">3.2.</span> <span class="nav-text">Encoding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Compiler-Heap-Size"><span class="nav-number">3.3.</span> <span class="nav-text">Compiler Heap Size</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK"><span class="nav-number">3.4.</span> <span class="nav-text">JDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包层级设置"><span class="nav-number">3.5.</span> <span class="nav-text">包层级设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git"><span class="nav-number">3.6.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#教程"><span class="nav-number">3.7.</span> <span class="nav-text">教程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提示忽略大小写"><span class="nav-number">3.8.</span> <span class="nav-text">提示忽略大小写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件和导航关联"><span class="nav-number">3.9.</span> <span class="nav-text">文件和导航关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加xml模板"><span class="nav-number">3.10.</span> <span class="nav-text">添加xml模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录下常用快捷键"><span class="nav-number">4.</span> <span class="nav-text">记录下常用快捷键</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -862,9 +791,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA使用简记/';
-          this.page.identifier = '2017/10/19/IntelliJ-IDEA使用简记/';
-          this.page.title = 'IntelliJ IDEA使用简记';
+          this.page.url = 'http://blog.gengsc.com/2017/11/16/自己实现链表/';
+          this.page.identifier = '2017/11/16/自己实现链表/';
+          this.page.title = '自己实现链表';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://gengshichao.disqus.com/embed.js';
