@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="rabbitmq,分布式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="发现不记录几天完全忘记了，还是记录下。">
+<meta name="keywords" content="rabbitmq,分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rabbitmq">
+<meta property="og:url" content="http://blog.gengsc.com/2017/11/20/rabbitmq/index.html">
+<meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="发现不记录几天完全忘记了，还是记录下。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-22T02:57:02.758Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rabbitmq">
+<meta name="twitter:description" content="发现不记录几天完全忘记了，还是记录下。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.gengsc.com/2017/11/20/rabbitmq/"/>
+
+
+
+
+
+  <title>rabbitmq | Gengsc's Blog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c4c91eda846c9ec5faf2a726c6e0f69f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+	
+	<a href="https://github.com/shichaogeng"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gengsc's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/11/20/rabbitmq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Geng Shichao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gengsc's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">rabbitmq</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-20T14:49:32+08:00">
+                2017-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/amqp/" itemprop="url" rel="index">
+                    <span itemprop="name">amqp</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/20/rabbitmq/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/20/rabbitmq/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>发现不记录几天完全忘记了，还是记录下。</p>
+<a id="more"></a>
+<h2 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h2><p>首先当然是安装，我参考的是这篇博客：<a href="http://www.linuxidc.com/Linux/2016-03/129557.htm" target="_blank" rel="external">CentOS7下RabbitMQ服务安装配置</a></p>
+<p>安装过程中也遇到些麻烦，但是我忘了，哎，想起来补充吧。</p>
+<p>文章下面的命令也可使用，比如列出所有用户<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">sbin]#</span><span class="bash"> rabbitmqctl list_users;</span></div><div class="line">Listing users ...</div><div class="line">shichaogeng	[administrator]</div><div class="line">guest	[administrator]</div></pre></td></tr></table></figure></p>
+<h2 id="消息中间件有些什么使用场景？"><a href="#消息中间件有些什么使用场景？" class="headerlink" title="消息中间件有些什么使用场景？"></a>消息中间件有些什么使用场景？</h2><ol>
+<li><p>异步处理</p>
+<p>用户注册（50ms），还需发送邮件（50ms）和短信（50ms）<br>串行：（150ms）用户注册—》发送邮件—-》发送短信<br>并行（100ms）：用户注册—》发送邮件</p>
+<pre><code>|----》发送短信
+</code></pre><p>消息中间件（56ms）：<br>用户注册（50ms）—》（6ms）消息中间件《—–发送邮件<br>《—–发送短信</p>
+</li>
+<li><p>应用的解耦</p>
+<p>订单系统—》库存系统（强耦合）<br>消息中间件：订单系统—》消息中间件《—-库存系统（解耦）</p>
+</li>
+<li><p>流量的削峰</p>
+<p>用户请求—–》秒杀应用<br>应用的前端加入消息队列<br>用户请求—–》消息队列《—-秒杀应用</p>
+</li>
+<li><p>日志处理</p>
+</li>
+</ol>
+<p>错误日志—》消息队列《—-日志处理<br>用户行为日志–》消息队列(kafka)《—–日志的存储或流式处理</p>
+<ol>
+<li>纯粹的消息通信</li>
+</ol>
+<h2 id="需要注意的问题"><a href="#需要注意的问题" class="headerlink" title="需要注意的问题"></a>需要注意的问题</h2><h3 id="如果消息达到无人订阅的队列会怎么办？"><a href="#如果消息达到无人订阅的队列会怎么办？" class="headerlink" title="如果消息达到无人订阅的队列会怎么办？"></a>如果消息达到无人订阅的队列会怎么办？</h3><p>消息会一直在队列中等待，rabbitmq会默认队列是无限长度的。</p>
+<h3 id="多个消费者订阅到同一队列怎么办？"><a href="#多个消费者订阅到同一队列怎么办？" class="headerlink" title="多个消费者订阅到同一队列怎么办？"></a>多个消费者订阅到同一队列怎么办？</h3><p>消息会轮询的方式发送给消费者，每个消息只会发送给一个消费者</p>
+<h3 id="消息路由到了不存在的队列怎么办？"><a href="#消息路由到了不存在的队列怎么办？" class="headerlink" title="消息路由到了不存在的队列怎么办？"></a>消息路由到了不存在的队列怎么办？</h3><p>会忽略，当消息不存在，消息丢失了。</p>
+<h2 id="消息的确认机制"><a href="#消息的确认机制" class="headerlink" title="消息的确认机制"></a>消息的确认机制</h2><p>消费者收到的每一条消息都必须进行确认。<br>（分为自动确认和消费者自行确认）</p>
+<p>消费者在声明队列时，指定autoAck参数:<br>true自动确认<br>false时rabbitmq会等到消费者显示的发回一个ack信号才会删除消息。<br>autoAck=false，有足够时间让消费者处理消息，直到消费者显示调用basicAck为止（防止消息丢失）。</p>
+<p>Rabbitmq中消息分为了两部分：<br>1、等待投递的消息；<br>2、已经投递，但是还没有收到ack信号的。如果消费者断连了，服务器会把消息重新入队，投递给下一个消费者。<br>未ack的消息是没有超时时间的。</p>
+<p>如何明确拒绝消息？<br> 1、消费者断连<br> 2、消费者使用reject命令（requeue=true,重新分发消息，false移除消息）<br> 3、nack命令（批量的拒绝）</p>
+<h2 id="创建队列"><a href="#创建队列" class="headerlink" title="创建队列"></a>创建队列</h2><p>（生产/消费）declareQueue。消费者订阅了队列，不能再声明队列了。相关参数（exclusive 队列为应用程序私有，auto-delete 最后一个消费者取消订阅时，队列会自动删除，durable 队列持久化）<br>检测队列是否存在<br> Declare 时的passive参数</p>
+<h2 id="消息持久化"><a href="#消息持久化" class="headerlink" title="消息持久化"></a>消息持久化</h2><p>1、    队列必须是持久化的<br>2、    交换器也必须是持久化的<br>3、    消息的投递模式必须（int型） 2 </p>
+<p>以上条件全部满足，消息才能持久化</p>
+<p>问题：性能（下降10倍）</p>
+<h2 id="AMQP和JMS区别："><a href="#AMQP和JMS区别：" class="headerlink" title="AMQP和JMS区别："></a>AMQP和JMS区别：</h2><table>
+<thead>
+<tr>
+<th>定义</th>
+<th style="text-align:center">Java api</th>
+<th style="text-align:right">协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td style="text-align:center">P2P Pub/Sub</td>
+<td style="text-align:right">Direct Fanout Topic headers</td>
+</tr>
+<tr>
+<td>支持消息类型</td>
+<td style="text-align:center">5种</td>
+<td style="text-align:right">Byte[] 自行消息序列化，Json化</td>
+</tr>
+<tr>
+<td>综合评价</td>
+<td style="text-align:center">Java系统，模型满足要求，跨平台较差</td>
+<td style="text-align:right">协议，天然跨平台，跨语言</td>
+</tr>
+</tbody>
+</table>
+<h2 id="为什么设计成exchange"><a href="#为什么设计成exchange" class="headerlink" title="为什么设计成exchange"></a>为什么设计成exchange</h2><p>易于归类<br>生产者不需要关心队列和消费者，实现发送方和消费方的完全解耦<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">比如书上介绍的，用户上传图片需要清空相册缓存，你把消息发送到一个队列可以做到，假如这是需要新加入一个需求，同时会奖励用户一定量的积分，如果你想通过直接发送到队列而不是通过exchange来实现，那么就需要更改生产方的代码，而通过exchange，发送方不需要任何更改，只需要消费者新声明队列并绑定到exchange即可。从而实现发送方和消费方的完全解耦。</div></pre></td></tr></table></figure></p>
+<h2 id="与Spring集成"><a href="#与Spring集成" class="headerlink" title="与Spring集成"></a>与Spring集成</h2><p>配置文件中增加命名空间:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xmlns:rabbit=&quot;http://www.springframework.org/schema/rabbit&quot;</div><div class="line">http://www.springframework.org/schema/rabbit</div><div class="line">http://www.springframework.org/schema/rabbit/spring-rabbit-2.0.xsd</div></pre></td></tr></table></figure></p>
+<p>配置文件中的配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1、	连接工厂配置</div><div class="line">2、	&lt;rabbit:admin&gt;</div><div class="line">3、	声明队列</div><div class="line">4、	声明交换器</div><div class="line">5、	队列和交换器进行绑定</div><div class="line">6、	生产者端要声明RabbitmqTemplate</div></pre></td></tr></table></figure></p>
+<p>配置可以参照这个: <a href="http://blog.csdn.net/u012204058/article/details/54292888" target="_blank" rel="external">spring集成rabbitMq(基于topic和fanout模式)</a></p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><h3 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h3><p>场景：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">用户注册，写入数据库成功以后，发送邮件和短信。</div><div class="line">串行模式  ************spend time : 251ms</div><div class="line">并行模式  ************spend time : 153ms</div><div class="line">消息队列模式：************spend time : 66ms</div></pre></td></tr></table></figure></p>
+<h3 id="应用解耦"><a href="#应用解耦" class="headerlink" title="应用解耦"></a>应用解耦</h3><p>场景：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">订单订货，通知库存系统，有库存直接扣减，没有库存，可以扣减成功，这时通知（订单系统尽快调货，采购系统尽快采购）。</div></pre></td></tr></table></figure></p>
+<p>设计思路：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Rpc：库存系统失败，订单系统也失败，订单与库存系统耦合性太高。</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Rabbitmq：写一个扣减消息，保证消息的处理</div><div class="line">这时有三个问题需要解决：</div><div class="line">	发给mq的消息必须要被接收到</div><div class="line">		事物或者发送者确认模式</div><div class="line">	Mq拿到消息后在消息被处理以前不能丢失</div><div class="line">		持久化存储</div><div class="line">	库存服务出现异常，扣减库存的消息能被其他的库存服务处理</div><div class="line">		消费者ack</div></pre></td></tr></table></figure>
+<h4 id="发送者确认模式"><a href="#发送者确认模式" class="headerlink" title="发送者确认模式"></a>发送者确认模式</h4><p>咋xml中配置,在消息模板中添加两个回调处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 创建rabbitTemplate 消息模板类 --&gt;</div><div class="line">&lt;bean id=&quot;rabbitTemplate&quot; class=&quot;org.springframework.amqp.rabbit.core.RabbitTemplate&quot;&gt;</div><div class="line">	&lt;constructor-arg ref=&quot;rabbitConnectionFactory&quot;&gt;&lt;/constructor-arg&gt;</div><div class="line">	&lt;!--消息确认监听回调 --&gt;</div><div class="line">	&lt;property name=&quot;confirmCallback&quot; ref=&quot;confirmCallback&quot;/&gt;</div><div class="line">	&lt;!--消息发送失败返回监听回调 --&gt;</div><div class="line">	&lt;property name=&quot;returnCallback&quot; ref=&quot;sendReturnCallback&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p>发送者确认回调’confirmCallback’，需要实现RabbitTemplate内部接口RabbitTemplate.ConfirmCallback<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">package com.dongnaoedu.service.callback;</div><div class="line"></div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.amqp.rabbit.core.RabbitTemplate;</div><div class="line">import org.springframework.amqp.rabbit.support.CorrelationData;</div><div class="line">import org.springframework.stereotype.Service;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @Description</div><div class="line"> * @Author shichaogeng</div><div class="line"> * @Create 2017-11-21 16:37</div><div class="line"> */</div><div class="line">@Service</div><div class="line">public class ConfirmCallback implements RabbitTemplate.ConfirmCallback &#123;</div><div class="line">    private Logger logger = LoggerFactory.getLogger(ConfirmCallback.class);</div><div class="line"></div><div class="line">    public void confirm(CorrelationData correlationData, boolean ack, String cause) &#123;</div><div class="line">        if (ack) &#123;</div><div class="line">            logger.info(&quot;消息确认发送给mq成功&quot;);</div><div class="line">        &#125; else &#123;</div><div class="line">            //处理失败的消息</div><div class="line">            /**</div><div class="line">             * 一般发送的失败设计：</div><div class="line">             * 先重复发送三次，如果都发送失败，存到数据库中</div><div class="line">             * 编写一个定时任务程序，开启新的线程定时处理数据库中发送失败的任务。</div><div class="line">             */</div><div class="line">            logger.info(&quot;消息发送给mq失败,考虑重发:&quot;+cause);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>消息发送失败回调’returnCallback’，需要实现RabbitTemplate内部接口RabbitTemplate.ReturnCallback<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">package com.dongnaoedu.service.callback;</div><div class="line"></div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line">import org.springframework.amqp.core.Message;</div><div class="line">import org.springframework.amqp.rabbit.core.RabbitTemplate;</div><div class="line">import org.springframework.stereotype.Service;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @Description</div><div class="line"> * @Author shichaogeng</div><div class="line"> * @Create 2017-11-21 16:37</div><div class="line"> */</div><div class="line">@Service</div><div class="line">public class SendReturnCallback implements RabbitTemplate.ReturnCallback &#123;</div><div class="line"></div><div class="line">    private Logger logger = LoggerFactory.getLogger(SendReturnCallback.class);</div><div class="line"></div><div class="line">    public void returnedMessage(Message message, int replyCode,</div><div class="line">                                String replyText, String exchange,</div><div class="line">                                String routingKey) &#123;</div><div class="line">        logger.info(&quot;Returned replyText：&quot;+replyText);</div><div class="line">        logger.info(&quot;Returned exchange：&quot;+exchange);</div><div class="line">        logger.info(&quot;Returned routingKey：&quot;+routingKey);</div><div class="line">        String msgJson  = new String(message.getBody());</div><div class="line">        logger.info(&quot;Returned Message：&quot;+msgJson);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h4><p>前面有提到，想要实现消息持久化，必须满足三个条件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1、队列必须是持久化的</div><div class="line">2、交换器也必须是持久化的</div><div class="line">3、消息的投递模式必须（int型） 2</div></pre></td></tr></table></figure></p>
+<p>队列持久化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;rabbit:queue name=&quot;depot_queue&quot; durable=&quot;true&quot;/&gt;</div></pre></td></tr></table></figure></p>
+<p>交换器持久化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;rabbit:direct-exchange name=&quot;depot-amount-exchange&quot;</div><div class="line">          xmlns=&quot;http://www.springframework.org/schema/rabbit&quot; durable=&quot;true&quot;&gt;</div><div class="line">		&lt;rabbit:bindings&gt;</div><div class="line">			&lt;rabbit:binding queue=&quot;depot_queue&quot; key=&quot;amount.depot&quot; &gt;&lt;/rabbit:binding&gt;</div><div class="line">		&lt;/rabbit:bindings&gt;</div><div class="line">	&lt;/rabbit:direct-exchange&gt;</div></pre></td></tr></table></figure></p>
+<p>消息投递模式设为持久化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">package com.dongnaoedu.service;</div><div class="line"></div><div class="line">import com.dongnaoedu.vo.GoodTransferVo;</div><div class="line">import com.google.gson.Gson;</div><div class="line">import org.springframework.amqp.core.Message;</div><div class="line">import org.springframework.amqp.core.MessageDeliveryMode;</div><div class="line">import org.springframework.amqp.core.MessageProperties;</div><div class="line">import org.springframework.amqp.rabbit.core.RabbitTemplate;</div><div class="line">import org.springframework.beans.factory.annotation.Autowired;</div><div class="line">import org.springframework.beans.factory.annotation.Qualifier;</div><div class="line">import org.springframework.stereotype.Service;</div><div class="line"></div><div class="line">/**</div><div class="line"> * @Description</div><div class="line"> * @Author shichaogeng</div><div class="line"> * @Create 2017-11-21 16:37</div><div class="line"> */</div><div class="line">@Service</div><div class="line">@Qualifier(&quot;mq&quot;)</div><div class="line">public class MqMode  implements IProDepot &#123;</div><div class="line"></div><div class="line">    private final static String DEPOT_RK = &quot;amount.depot&quot;;</div><div class="line">    private final static String DEPOT_EXCHANGE = &quot;depot-amount-exchange&quot;;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    RabbitTemplate rabbitTemplate;</div><div class="line"></div><div class="line">    private static Gson gson = new Gson();</div><div class="line"></div><div class="line">    public void processDepot(String goodsId, int amount) &#123;</div><div class="line">        GoodTransferVo goodTransferVo = new GoodTransferVo();</div><div class="line">        goodTransferVo.setGoodsId(goodsId);</div><div class="line">        goodTransferVo.setChangeAmount(amount);</div><div class="line">        goodTransferVo.setInOrOut(false);</div><div class="line">        String goods = gson.toJson(goodTransferVo);</div><div class="line">        MessageProperties messageProperties = new MessageProperties();</div><div class="line">        messageProperties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);//PERSISTENT表示持久化的投递方式</div><div class="line">        rabbitTemplate.send(DEPOT_EXCHANGE, DEPOT_RK,</div><div class="line">                new Message(goods.getBytes(), messageProperties));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="消费者确认"><a href="#消费者确认" class="headerlink" title="消费者确认"></a>消费者确认</h4><p>把确认模式配置为手动确认<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 对消息要手动确认 --&gt;</div><div class="line">&lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; acknowledge=&quot;manual&quot;&gt;</div><div class="line">    &lt;rabbit:listener queues=&quot;depot_queue&quot; ref=&quot;processDepot&quot; method=&quot;onMessage&quot; /&gt;</div><div class="line">&lt;/rabbit:listener-container&gt;</div></pre></td></tr></table></figure></p>
+<p>消息监听类要实现’ChannelAwareMessageListener’接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+	
+	<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+
+  
+</div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rabbitmq/" rel="tag"><i class="fa fa-tag"></i> rabbitmq</a>
+          
+            <a href="/tags/分布式/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/16/自己实现链表/" rel="next" title="自己实现链表">
+                <i class="fa fa-chevron-left"></i> 自己实现链表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Geng Shichao" />
+          <p class="site-author-name" itemprop="name">Geng Shichao</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/your-user-name" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="Notes">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      Notes
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置"><span class="nav-number">1.</span> <span class="nav-text">安装配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息中间件有些什么使用场景？"><span class="nav-number">2.</span> <span class="nav-text">消息中间件有些什么使用场景？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要注意的问题"><span class="nav-number">3.</span> <span class="nav-text">需要注意的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如果消息达到无人订阅的队列会怎么办？"><span class="nav-number">3.1.</span> <span class="nav-text">如果消息达到无人订阅的队列会怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个消费者订阅到同一队列怎么办？"><span class="nav-number">3.2.</span> <span class="nav-text">多个消费者订阅到同一队列怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息路由到了不存在的队列怎么办？"><span class="nav-number">3.3.</span> <span class="nav-text">消息路由到了不存在的队列怎么办？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息的确认机制"><span class="nav-number">4.</span> <span class="nav-text">消息的确认机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建队列"><span class="nav-number">5.</span> <span class="nav-text">创建队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息持久化"><span class="nav-number">6.</span> <span class="nav-text">消息持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AMQP和JMS区别："><span class="nav-number">7.</span> <span class="nav-text">AMQP和JMS区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么设计成exchange"><span class="nav-number">8.</span> <span class="nav-text">为什么设计成exchange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与Spring集成"><span class="nav-number">9.</span> <span class="nav-text">与Spring集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">10.</span> <span class="nav-text">应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异步处理"><span class="nav-number">10.1.</span> <span class="nav-text">异步处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用解耦"><span class="nav-number">10.2.</span> <span class="nav-text">应用解耦</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发送者确认模式"><span class="nav-number">10.2.1.</span> <span class="nav-text">发送者确认模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化存储"><span class="nav-number">10.2.2.</span> <span class="nav-text">持久化存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消费者确认"><span class="nav-number">10.2.3.</span> <span class="nav-text">消费者确认</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Geng Shichao</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Mist
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://gengshichao.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.gengsc.com/2017/11/20/rabbitmq/';
+          this.page.identifier = '2017/11/20/rabbitmq/';
+          this.page.title = 'rabbitmq';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gengshichao.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
