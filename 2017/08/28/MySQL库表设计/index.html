@@ -102,13 +102,13 @@
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
 <meta property="og:description" content="MySQL 数据库是被广泛应用的关系型数据库，其体积小、支持多处理器、开源并免费的特性使其在Internet中小型网站中的使用率尤其高。在使用 MySQL 的过程中不规范的SQL编写、非最优的策略选择都可能导致系统性能甚至功能上的缺陷。本文主要对数据库库表设计上的一些规范做出总结，希望能有助于各位同行解决工作中的相关问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/MySQL/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png">
-<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/MySQL/MySQL%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B2.png">
-<meta property="og:updated_time" content="2017-09-06T15:29:09.545Z">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta property="og:updated_time" content="2017-12-05T09:30:58.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL优化（二）--- MySQL库表设计">
 <meta name="twitter:description" content="MySQL 数据库是被广泛应用的关系型数据库，其体积小、支持多处理器、开源并免费的特性使其在Internet中小型网站中的使用率尤其高。在使用 MySQL 的过程中不规范的SQL编写、非最优的策略选择都可能导致系统性能甚至功能上的缺陷。本文主要对数据库库表设计上的一些规范做出总结，希望能有助于各位同行解决工作中的相关问题。">
-<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/MySQL/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png">
+<meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png">
 
 
 
@@ -437,9 +437,9 @@
 <li>掌握复杂业务或者大数据表的设计思路</li>
 </ol>
 <h2 id="MySQL逻辑架构"><a href="#MySQL逻辑架构" class="headerlink" title="MySQL逻辑架构"></a>MySQL逻辑架构</h2><p>了解MySQL的第一步，就要先了解MySQL的功能组件和执行流程。如下就是MySQL逻辑架构图：</p>
-<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/MySQL/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png" alt="MySQL逻辑架构"></p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png" alt="MySQL逻辑架构"></p>
 <p>从架构图分析，MySQL的执行流程：</p>
-<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/MySQL/MySQL%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B2.png" alt="MySQL逻辑架构"></p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/mysql/mysql%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt="MySQL处理流程"></p>
 <h2 id="库表设计"><a href="#库表设计" class="headerlink" title="库表设计"></a>库表设计</h2><h3 id="MySQL存储引擎的选择"><a href="#MySQL存储引擎的选择" class="headerlink" title="MySQL存储引擎的选择"></a>MySQL存储引擎的选择</h3><p>在 MySQL 5.1 中，引入了新的插件式存储引擎体系结构，允许将存储引擎加载到正在运新的MySQL服务器中。使用MySQL插件式存储引擎体系结构，允许数据库专业人员或者设计库表的软件开发人员为特定的应用需求选择专门的存储引擎，完全不需要管理任何特殊的应用编码要求，也无需考虑所有的底层实施细节。因此，尽管不同的存储引擎具有不同的能力，应用程序是与之分离的。此外，使用者可以在服务器、数据库和表格三个层级中存储引擎，提供了极大的灵活性。</p>
 <p>MySQL 常用的存储引擎包括MYISAM、Innodb和Memory。还有其他种类，这里不做赘述。那么从哪些方面来评判选择搜索引擎呢？</p>
 <ol>
