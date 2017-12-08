@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
 <meta property="og:description" content="并发通常是指，通过设计保证系统能够同时并行处理很多请求。关注指标有响应时间（Response Time），吞吐量（Throughput），每秒查询率（Query Per Second），并发用户数。多线程是实现高并发的的手段。本系列文章就Java并发概念和遇到的问题汇总。本文代码github地址：https://github.com/shichaogeng/01study_ThreadBase">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-06T02:11:32.370Z">
+<meta property="og:updated_time" content="2017-12-08T08:44:09.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Concurrent（一）--- 线程基础、中断、常用方法辨析">
 <meta name="twitter:description" content="并发通常是指，通过设计保证系统能够同时并行处理很多请求。关注指标有响应时间（Response Time），吞吐量（Throughput），每秒查询率（Query Per Second），并发用户数。多线程是实现高并发的的手段。本系列文章就Java并发概念和遇到的问题汇总。本文代码github地址：https://github.com/shichaogeng/01study_ThreadBase">
@@ -454,6 +454,7 @@
 <p><code>interrupt()</code> 中断线程，本质是将线程的中断标志位设为<code>true</code>，其他线程向需要中断的线程打个招呼。是否真正进行中断由线程自己决定。</p>
 <p><code>isInterrupted()</code> 线程检查自己的中断标志位</p>
 <p>静态方法<code>Thread.interrupted()</code> 重新设置中断状态，并返回之前的值。</p>
+<p>看下源码说到底Thread#isInterrupted()方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public static boolean interrupted() &#123;</div><div class="line">    return currentThread().isInterrupted(true);//注意这里的true，表示清空中断状态</div><div class="line">    //native方法</div><div class="line">    private native boolean isInterrupted(boolean ClearInterrupted);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>由上面的中断机制可知Java里是没有抢占式任务，只有协作式任务（中不中断由线程自己决定，其他线程不能强行中断）。</p>
 <p>为何要用中断，线程处于阻塞（如调用了java的<code>sleep()</code>,<code>wait()</code>等等方法时）的时候，是不会理会我们自己设置的取消标志位的，但是这些阻塞方法都会检查线程的中断标志位。</p>
 <p>又找到一个特别赞的文章：<a href="https://www.ibm.com/developerworks/cn/java/j-jtp05236.html" target="_blank" rel="external">处理 InterruptedException</a></p>
