@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="concurrent," />
 
 
 
@@ -94,14 +94,18 @@
 
 
 
+<meta name="description" content="线程池源码我以前都看过了，感觉不想仔细写了。">
+<meta name="keywords" content="concurrent">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线程池实现原理">
-<meta property="og:url" content="http://blog.gengsc.com/2017/11/28/线程池实现原理/index.html">
+<meta property="og:title" content="Concurrent（五）--- 线程池实现原理">
+<meta property="og:url" content="http://blog.gengsc.com/2017/12/14/线程池实现原理/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="线程池源码我以前都看过了，感觉不想仔细写了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-28T09:01:05.490Z">
+<meta property="og:updated_time" content="2017-12-14T06:26:58.865Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线程池实现原理">
+<meta name="twitter:title" content="Concurrent（五）--- 线程池实现原理">
+<meta name="twitter:description" content="线程池源码我以前都看过了，感觉不想仔细写了。">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/2017/11/28/线程池实现原理/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/12/14/线程池实现原理/"/>
 
 
 
 
 
-  <title>线程池实现原理 | Gengsc's Blog</title>
+  <title>Concurrent（五）--- 线程池实现原理 | Gengsc's Blog</title>
   
 
 
@@ -320,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/11/28/线程池实现原理/">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/12/14/线程池实现原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Geng Shichao">
@@ -337,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">线程池实现原理</h1>
+          <h1 class="post-title" itemprop="name headline">Concurrent（五）--- 线程池实现原理</h1>
         
 
         <div class="post-meta">
@@ -349,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-28T17:01:05+08:00">
-                2017-11-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-14T16:48:12+08:00">
+                2017-12-14
               </time>
             
 
@@ -360,6 +364,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/concurrent/" itemprop="url" rel="index">
+                    <span itemprop="name">concurrent</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -368,9 +394,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/11/28/线程池实现原理/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/14/线程池实现原理/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/28/线程池实现原理/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/14/线程池实现原理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -398,7 +424,9 @@
       
 
       
-        
+        <p>线程池源码我以前都看过了，感觉不想仔细写了。</p>
+<a id="more"></a>
+
       
     </div>
     
@@ -424,6 +452,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/concurrent/" rel="tag"><i class="fa fa-tag"></i> concurrent</a>
+          
+        </div>
+      
 
       
       
@@ -433,8 +467,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/28/线程基础、中断、常用方法辨析/" rel="next" title="Concurrent（一）--- 线程基础、中断、常用方法辨析">
-                <i class="fa fa-chevron-left"></i> Concurrent（一）--- 线程基础、中断、常用方法辨析
+              <a href="/2017/12/08/并发容器/" rel="next" title="Concurrent（四）--- 并发工具&并发容器">
+                <i class="fa fa-chevron-left"></i> Concurrent（四）--- 并发工具&并发容器
               </a>
             
           </div>
@@ -442,10 +476,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/28/线程安全/" rel="prev" title="线程安全">
-                线程安全 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -755,9 +785,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.gengsc.com/2017/11/28/线程池实现原理/';
-          this.page.identifier = '2017/11/28/线程池实现原理/';
-          this.page.title = '线程池实现原理';
+          this.page.url = 'http://blog.gengsc.com/2017/12/14/线程池实现原理/';
+          this.page.identifier = '2017/12/14/线程池实现原理/';
+          this.page.title = 'Concurrent（五）--- 线程池实现原理';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://gengshichao.disqus.com/embed.js';
