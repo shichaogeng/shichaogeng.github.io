@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Concurrent（五）--- 线程池实现原理]]></title>
     <url>%2F2017%2F12%2F14%2F%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%2F</url>
-    <content type="text"><![CDATA[线程池源码我以前都看过了，感觉不想仔细写了。]]></content>
+    <content type="text"><![CDATA[线程池源码我以前都看过了，感觉不想仔细写了。 什么是线程池？1、 降低资源的消耗2、 提高响应速度，任务：T1创建线程时间，T2任务执行时间，T3线程销毁时间，线程池没有或者减少T1和T33、 提高线程的可管理性。线程池要做些什么？1、 线程的容器和管理器2、 工作线程3、 任务接口4、 任务的容器 线程池的主要处理流程1）线程池判断核心线程池里的线程是否都在执行任务。如果不是，则创建一个新的工作线程来执行任务。如果核心线程池里的线程都在执行任务，则进入下个流程。2）线程池判断工作队列是否已经满。如果工作队列没有满，则将新提交的任务存储在这个工作队列里。如果工作队列满了，则进入下个流程。3）线程池判断线程池的线程是否都处于工作状态。如果没有，则创建一个新的工作线程来执行任务。如果已经满了，则交给饱和策略来处理这个任务。 ThreadPoolExecutor执行execute()方法的示意1）如果当前运行的线程少于corePoolSize，则创建新线程来执行任务（注意，执行这一步骤需要获取全局锁）。2）如果运行的线程等于或多于corePoolSize，则将任务加入BlockingQueue。3）如果无法将任务加入BlockingQueue（队列已满），则创建新的线程来处理任务（注意，执行这一步骤需要获取全局锁）。4）如果创建新线程将使当前运行的线程超出maximumPoolSize，任务将被拒绝，并调用RejectedExecutionHandler.rejectedExecution()方法。 线程池的创建各个参数含义public ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,long keepAliveTime,TimeUnit unit,BlockingQueue workQueue,ThreadFactory threadFactory,RejectedExecutionHandler handler)corePoolSize线程池中的核心线程数，当提交一个任务时，线程池创建一个新线程执行任务，直到当前线程数等于corePoolSize；如果当前线程数为corePoolSize，继续提交的任务被保存到阻塞队列中，等待被执行；如果执行了线程池的prestartAllCoreThreads()方法，线程池会提前创建并启动所有核心线程。maximumPoolSize线程池中允许的最大线程数。如果当前阻塞队列满了，且继续提交任务，则创建新的线程执行任务，前提是当前线程数小于maximumPoolSizekeepAliveTime线程空闲时的存活时间，即当线程没有任务执行时，继续存活的时间。默认情况下，该参数只在线程数大于corePoolSize时才有用TimeUnitkeepAliveTime的时间单位workQueueworkQueue必须是BlockingQueue阻塞队列。当线程池中的线程数超过它的corePoolSize的时候，线程会进入阻塞队列进行阻塞等待。通过workQueue，线程池实现了阻塞功能threadFactory创建线程的工厂，通过自定义的线程工厂可以给每个新建的线程设置一个具有识别度的线程名Executors静态工厂里默认的threadFactory，线程的命名规则是“pool-数字-thread-数字”RejectedExecutionHandler（饱和策略）线程池的饱和策略，当阻塞队列满了，且没有空闲的工作线程，如果继续提交任务，必须采取一种策略处理该任务，线程池提供了4种策略：（1）AbortPolicy：直接抛出异常，默认策略；（2）CallerRunsPolicy：用调用者所在的线程来执行任务；（3）DiscardOldestPolicy：丢弃阻塞队列中靠最前的任务，并执行当前任务；（4）DiscardPolicy：直接丢弃任务；当然也可以根据应用场景实现RejectedExecutionHandler接口，自定义饱和策略，如记录日志或持久化存储不能处理的任务。关闭线程池ShutDown():interrupt方法来终止线程shutDownNow() 尝试停止所有正在执行的线程合理地配置线程池线程数配置：任务：计算密集型，IO密集型，混合型计算密集型=计算机的cpu数或计算机的cpu数+1（应付页缺失）IO密集型=计算机的cpu数*2混合型，拆分成计算密集型，IO密集型Runtime.getRuntime().availableProcessors();当前机器中的cpu核心个数尽量有界队列，不要使用无界队列 Executor框架调度模型 三大组成部分：任务，任务的执行，异步计算的结果 成员结构图 Executor框架基本使用流程 FixedThreadPool详解 SingleThreadExecutor详解 CachedThreadPool详解 WorkStealingPool ScheduledThreadPoolExecutor详解 对这4个步骤的说明。 有关提交定时任务的四个方法：public ScheduledFuture&lt;?&gt; schedule(Runnable command, long delay, TimeUnit unit)//向定时任务线程池提交一个延时Runnable任务（仅执行一次）public ScheduledFuture schedule(Callable callable, long delay, TimeUnit unit);//向定时任务线程池提交一个延时的Callable任务（仅执行一次）public ScheduledFuture&lt;?&gt; scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)//向定时任务线程池提交一个固定时间间隔执行的任务public ScheduledFuture&lt;?&gt; scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit);//向定时任务线程池提交一个固定延时间隔执行的任务 ScheduleThreadPoolExecutor与Timer相比的优势。 scheduleAtFixedRate定时任务超时问题 Callable、Future和FutureTask详解 CompletionService详解]]></content>
       <categories>
         <category>concurrent</category>
       </categories>
@@ -214,11 +214,11 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>maven</tag>
-        <tag>Jenkins</tag>
         <tag>git</tag>
+        <tag>Jenkins</tag>
         <tag>github</tag>
         <tag>jdk</tag>
+        <tag>maven</tag>
       </tags>
   </entry>
   <entry>
