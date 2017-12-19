@@ -94,23 +94,23 @@
 
 
 
-<meta name="description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。">
+<meta name="description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。本文代码github地址：https://github.com/shichaogeng/03study_Lock">
 <meta name="keywords" content="concurrent">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Concurrent（三）--- Lock&amp;Condition&amp;AQS">
 <meta property="og:url" content="http://blog.gengsc.com/2017/12/06/Lock-Condition-AQs/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。">
+<meta property="og:description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。本文代码github地址：https://github.com/shichaogeng/03study_Lock">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/acquire.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/AQS%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/%E8%AE%BE%E7%BD%AE%E5%B0%BE%E8%8A%82%E7%82%B9.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/%E8%AE%BE%E7%BD%AE%E5%A4%B4%E8%8A%82%E7%82%B9.png">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/aqs%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%B5%81%E7%A8%8B.png">
-<meta property="og:updated_time" content="2017-12-08T09:21:32.003Z">
+<meta property="og:updated_time" content="2017-12-19T02:22:43.892Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Concurrent（三）--- Lock&amp;Condition&amp;AQS">
-<meta name="twitter:description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。">
+<meta name="twitter:description" content="本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。本文代码github地址：https://github.com/shichaogeng/03study_Lock">
 <meta name="twitter:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/concurrent/acquire.png">
 
 
@@ -430,7 +430,7 @@
       
 
       
-        <p>本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。</p>
+        <p>本篇旨在解读高级并发同步队列器的原理及其在高级主题中的应用。<br>本文代码github地址：<a href="https://github.com/shichaogeng/03study_Lock" target="_blank" rel="external">https://github.com/shichaogeng/03study_Lock</a></p>
 <a id="more"></a>
 <h2 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h2><h3 id="有了synchronized为什么还要Lock？"><a href="#有了synchronized为什么还要Lock？" class="headerlink" title="有了synchronized为什么还要Lock？"></a>有了synchronized为什么还要Lock？</h3><p>1.尝试非阻塞地获取锁</p>
 <ol>
