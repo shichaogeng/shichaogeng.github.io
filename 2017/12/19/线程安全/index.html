@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="concurrent," />
 
 
 
@@ -94,14 +94,18 @@
 
 
 
+<meta name="description" content="本文介绍java多线程线程安全。额，下面的都是Java并发实战里面的知识。记下要点。">
+<meta name="keywords" content="concurrent">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线程安全">
-<meta property="og:url" content="http://blog.gengsc.com/2017/11/28/线程安全/index.html">
+<meta property="og:title" content="Concurrent（六）--- 线程安全">
+<meta property="og:url" content="http://blog.gengsc.com/2017/12/19/线程安全/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
+<meta property="og:description" content="本文介绍java多线程线程安全。额，下面的都是Java并发实战里面的知识。记下要点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-28T09:01:22.327Z">
+<meta property="og:updated_time" content="2017-12-19T02:15:57.380Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线程安全">
+<meta name="twitter:title" content="Concurrent（六）--- 线程安全">
+<meta name="twitter:description" content="本文介绍java多线程线程安全。额，下面的都是Java并发实战里面的知识。记下要点。">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/2017/11/28/线程安全/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/12/19/线程安全/"/>
 
 
 
 
 
-  <title>线程安全 | Gengsc's Blog</title>
+  <title>Concurrent（六）--- 线程安全 | Gengsc's Blog</title>
   
 
 
@@ -320,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/11/28/线程安全/">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/12/19/线程安全/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Geng Shichao">
@@ -337,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">线程安全</h1>
+          <h1 class="post-title" itemprop="name headline">Concurrent（六）--- 线程安全</h1>
         
 
         <div class="post-meta">
@@ -349,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-28T17:01:22+08:00">
-                2017-11-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-19T15:51:19+08:00">
+                2017-12-19
               </time>
             
 
@@ -360,6 +364,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/concurrent/" itemprop="url" rel="index">
+                    <span itemprop="name">concurrent</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -368,9 +394,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/11/28/线程安全/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/19/线程安全/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/28/线程安全/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/19/线程安全/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -398,7 +424,29 @@
       
 
       
-        
+        <p>本文介绍java多线程线程安全。额，下面的都是Java并发实战里面的知识。记下要点。</p>
+<a id="more"></a>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>一定发生在多个线程争夺多个资源里的情况下，发生的原因是每个线程拿到了某个（某些）资源不释放，同时等待着其他线程所持有的资源。解决死锁的原则就是确保正确的获取资源的顺序，或者获取资源时使用定时尝试机制。</p>
+<h2 id="对性能的思考"><a href="#对性能的思考" class="headerlink" title="对性能的思考"></a>对性能的思考</h2><ol>
+<li><p>程序的安全性优于性能的提升</p>
+</li>
+<li><p>使用多线程会带来额外的性能开销，滥用线程，有可能导致得不偿失。</p>
+</li>
+<li><p>所谓性能，包含多个指标。例如“多快”：服务时间、等待时间、延迟时间；例如“多少”：吞吐量，例如可伸缩性等等。</p>
+</li>
+<li><p>性能的各个指标方面，是完全独立的，有时候甚至是相互矛盾。</p>
+</li>
+<li><p>所以性能的提升是个包括成本在内多方面权衡和妥协的结果。</p>
+</li>
+</ol>
+<p>性能优化的黄金原则：<br>首先保证程序正确，然后再提高运行速度（如果有确切的证据表明程序确实慢）。</p>
+<h2 id="Amdahl定律"><a href="#Amdahl定律" class="headerlink" title="Amdahl定律"></a>Amdahl定律</h2><p>$$ speedup &lt;= \frac {1} {F+\frac {１－Ｆ} {Ｎ}} $$</p>
+<p>F ：程序中的串行部分，是个百分比(100%-1%)，<br>N：cpu的个数<br>Speedup：指在增加cpu的情况下，程序的加速比</p>
+<h2 id="线程引入的开销"><a href="#线程引入的开销" class="headerlink" title="线程引入的开销"></a>线程引入的开销</h2><p>上下文的切换<br>内存同步<br>阻塞</p>
+<h2 id="减少锁的竞争"><a href="#减少锁的竞争" class="headerlink" title="减少锁的竞争"></a>减少锁的竞争</h2><p>快进快出，缩小锁的范围，将与锁无关的，有大量计算或者阻塞操作的代码移出同步范围。</p>
+<p>减小锁的粒度，多个相互独立的状态变量可以使用多个锁来保护，每个锁只保护一个变量。</p>
+<p>锁的分段，例如ConcurrentHashMap中的实现。<br>减少独占锁的使用，例如读多写少的情况下，用读写锁替换排他锁。</p>
+
       
     </div>
     
@@ -424,6 +472,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/concurrent/" rel="tag"><i class="fa fa-tag"></i> concurrent</a>
+          
+        </div>
+      
 
       
       
@@ -433,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/28/线程基础、中断、常用方法辨析/" rel="next" title="Concurrent（一）--- 线程基础、中断、常用方法辨析">
-                <i class="fa fa-chevron-left"></i> Concurrent（一）--- 线程基础、中断、常用方法辨析
+              <a href="/2017/12/18/Java内存模型/" rel="next" title="Concurrent（五）--- 多线程内存模型和实现原理">
+                <i class="fa fa-chevron-left"></i> Concurrent（五）--- 多线程内存模型和实现原理
               </a>
             
           </div>
@@ -442,10 +496,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/11/28/Java内存模型/" rel="prev" title="Java内存模型">
-                Java内存模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -510,8 +560,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -608,6 +667,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">1.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对性能的思考"><span class="nav-number">2.</span> <span class="nav-text">对性能的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Amdahl定律"><span class="nav-number">3.</span> <span class="nav-text">Amdahl定律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程引入的开销"><span class="nav-number">4.</span> <span class="nav-text">线程引入的开销</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#减少锁的竞争"><span class="nav-number">5.</span> <span class="nav-text">减少锁的竞争</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -755,9 +830,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.gengsc.com/2017/11/28/线程安全/';
-          this.page.identifier = '2017/11/28/线程安全/';
-          this.page.title = '线程安全';
+          this.page.url = 'http://blog.gengsc.com/2017/12/19/线程安全/';
+          this.page.identifier = '2017/12/19/线程安全/';
+          this.page.title = 'Concurrent（六）--- 线程安全';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://gengshichao.disqus.com/embed.js';
