@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</loc>
+    
+    <lastmod>2017-12-25T08:45:42.324Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.gengsc.com/2017/09/15/Jenkins%E7%89%9B%E5%88%80%E5%B0%8F%E8%AF%95/</loc>
     
     <lastmod>2017-12-25T07:22:46.404Z</lastmod>
@@ -61,13 +68,6 @@
     <loc>http://blog.gengsc.com/2017/12/05/%E4%BB%80%E4%B9%88%E6%98%AFCAS/</loc>
     
     <lastmod>2017-12-15T07:49:38.094Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.gengsc.com/2017/10/19/IntelliJ-IDEA%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</loc>
-    
-    <lastmod>2017-12-08T10:05:10.249Z</lastmod>
     
   </url>
   
