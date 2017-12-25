@@ -98,12 +98,15 @@
 <meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis需要注意的点">
-<meta property="og:url" content="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/index.html">
+<meta property="og:url" content="http://blog.gengsc.com/2017/10/11/redis笔记/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
 <meta property="og:description" content="关于redis使用中需要注意的地方，记录下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/mget.png">
-<meta property="og:updated_time" content="2017-10-12T08:30:55.634Z">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/slowlog.jpg">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/RTTwithoutpipeline.jpg">
+<meta property="og:image" content="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/RTTwithpipeline.jpg">
+<meta property="og:updated_time" content="2017-12-25T06:31:35.361Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis需要注意的点">
 <meta name="twitter:description" content="关于redis使用中需要注意的地方，记录下。">
@@ -136,7 +139,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/"/>
+  <link rel="canonical" href="http://blog.gengsc.com/2017/10/11/redis笔记/"/>
 
 
 
@@ -326,7 +329,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/11/Redis需要注意的点/">
+    <link itemprop="mainEntityOfPage" href="http://blog.gengsc.com/2017/10/11/redis笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Geng Shichao">
@@ -396,9 +399,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/11/Redis需要注意的点/#comments" itemprop="discussionUrl">
+                <a href="/2017/10/11/redis笔记/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/11/Redis需要注意的点/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/10/11/redis笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -450,7 +453,42 @@
 <h3 id="SETNX"><a href="#SETNX" class="headerlink" title="SETNX"></a>SETNX</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; set company go+</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; setnx company go+</div><div class="line">(integer) 0</div></pre></td></tr></table></figure>
 <p>因为键hello已存在，所以setnx失败，返回结果为0</p>
 <p>由于Redis的单线程命令处理机制，如果有多个客户端同时执行setnx key value，根据setnx的特性只有一个客户端能设置成功，setnx可以作为分布式锁的一种实现方案，Redis官方给出了使用setnx实现分布式锁的方法：<a href="http://redis.io/topics/distlock" target="_blank" rel="external">http://redis.io/topics/distlock</a>。</p>
-<h3 id="redis数据迁移"><a href="#redis数据迁移" class="headerlink" title="redis数据迁移"></a>redis数据迁移</h3>
+<h3 id="redis数据迁移"><a href="#redis数据迁移" class="headerlink" title="redis数据迁移"></a>redis数据迁移</h3><p>migrate命令来保证redis的原子的数据迁移<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MIGRATE host port key destination-db timeout [COPY] [REPLACE]</div></pre></td></tr></table></figure></p>
+<p>需要注意：<br>copy属性默认为””，表示删除源数据，如果加入copy选项，表示不删除源数据<br>replace属性默认为””，表示如果目标数据存在迁移的键值，失败。如果加入replace选项，表示替换目标数据，不论目标数据源是否存在。<br>如果想迁入多个键，那么<code>key</code>值为空字符串””，在最后写入键值<code>keys key1 key2 key3</code>。</p>
+<h3 id="键遍历"><a href="#键遍历" class="headerlink" title="键遍历"></a>键遍历</h3><p>全量遍历<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">keys pattern</div><div class="line">其中，pattern规则：</div><div class="line">·*代表匹配任意字符。</div><div class="line">·代表匹配一个字符。</div><div class="line">·[]代表匹配部分字符，例如[1，3]代表匹配1，3，[1-10]代表匹配1到10的任意数字。</div><div class="line">·\x用来做转义，例如要匹配星号、问号需要进行转义。</div></pre></td></tr></table></figure></p>
+<p>但是，假如有这样一个需求，需要删除video开头的所有键，就需要遍历操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli keys video* | xargs redis-cli del</div></pre></td></tr></table></figure></p>
+<p>但是，如果Redis包含了大量的键，执行<code>keys</code>命令很可能会造成Redis阻塞，这是我们就需要<code>scan</code>命令来渐进式的遍历所有键。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SCAN cursor [MATCH pattern] [COUNT count]</div></pre></td></tr></table></figure></p>
+<p>如果我们需要删除user开头的所有键<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">String key = <span class="string">"user*"</span>;</div><div class="line">String cursor = <span class="string">"0"</span>;</div><div class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</div><div class="line">    ScanResult scanResult = redis.scan(key, cursor);</div><div class="line">    List elements = scanResult.getResult();</div><div class="line">    <span class="keyword">if</span>(elements != <span class="keyword">null</span> &amp;&amp; !elements.isEmpty()) &#123;</div><div class="line">        <span class="comment">//批量山吃</span></div><div class="line">        redis.del(key, elements);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//获取游标</span></div><div class="line">    String cursor = scanResult.getStringCursor();</div><div class="line">    <span class="comment">//游标为0结束</span></div><div class="line">    <span class="keyword">if</span>(<span class="string">"0"</span>.eqauls(cursor)) &#123;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="附加功能"><a href="#附加功能" class="headerlink" title="附加功能"></a>附加功能</h2><p>Redis还提供了诸如慢查询分析、功能强大的Redis Shell、Pipeline、事务与Lua脚本、Bitmaps、HyperLogLog、发布订阅、GEO等附加功能</p>
+<h3 id="慢查询分析"><a href="#慢查询分析" class="headerlink" title="慢查询分析"></a>慢查询分析</h3><p>慢查询就是设定一个阈值，当执行命令的时间超过阈值，就记录在列表中，列表的长度固定，超过长度，移除最初插入的命令。参数配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 单位微妙</div><div class="line">slowlog-log-slower-than 10000</div><div class="line"></div><div class="line">slowlog-max-len 128</div></pre></td></tr></table></figure></p>
+<p>慢查询列表配置参数和属性:</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/slowlog.jpg" alt="慢查询列表"></p>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>获取慢查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># n为条数</div><div class="line">slowlog get [n]</div></pre></td></tr></table></figure></p>
+<p>查询日志列表长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">slowlog len</div></pre></td></tr></table></figure></p>
+<p>慢查询日志重置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">slowlog reset</div></pre></td></tr></table></figure></p>
+<h4 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h4><p><code>slowlog-max-len</code>存储时会截断命令，所以命令不会过长故而占用内存不多，建议调大数据，建议1000。</p>
+<p><code>·slowlog-log-slower-than</code>建议1毫秒</p>
+<p>客户端执行命令流程是<code>发送-&gt;排队-&gt;执行-&gt;返回</code>，而慢查询只记录<code>执行</code>消耗的时间。因为命令执行排队机制，慢查询会导致其他命令级联阻塞，因此当客户端出现请求超时，需要检查该时间点是否有对应的慢查询。</p>
+<p>慢查询日志列表长度固定，所以应该定期持久化存储日志列表。<code>Mysql</code> <code>CacheCloud</code>工具。</p>
+<h3 id="Redis-Shell"><a href="#Redis-Shell" class="headerlink" title="Redis Shell"></a>Redis Shell</h3><h4 id="Redis-cli"><a href="#Redis-cli" class="headerlink" title="Redis-cli"></a>Redis-cli</h4><p>帮助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli --help</div></pre></td></tr></table></figure></p>
+<p>相关信息都在帮助信息里，使用时在帮助中查阅。</p>
+<h4 id="Redis-Server"><a href="#Redis-Server" class="headerlink" title="Redis Server"></a>Redis Server</h4><p>帮助<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-server --help</div></pre></td></tr></table></figure></p>
+<h4 id="Pipeline"><a href="#Pipeline" class="headerlink" title="Pipeline"></a>Pipeline</h4><p>Redis客户端执行一条命令分为如下四个过程：<code>发送-&gt;排队-&gt;执行-&gt;返回结果</code><br>其中<code>发送</code>和<code>返回</code>称为Round Trip Time（RTT，往返时间）.</p>
+<p>普通形式执行不使用pipeline：</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/RTTwithoutpipeline.jpg" alt="RTTwithoutpipeline"></p>
+<p>使用pipeline：</p>
+<p><img src="http://ov80rf6z5.bkt.clouddn.com/image/blog/redis/RTTwithpipeline.jpg" alt="RTTwithpipeline"></p>
+<p>Redis命令真正执行的时间通常在微秒级别，所以才会有Redis性能瓶颈是网络这样的说法。</p>
+<p>Redis客户端都支持pipeline功能</p>
+<p>注意Pipeline不是原子操作</p>
+<p>生产环境中会将一次包含大量命令的Pipeline拆分成多次较小的Pipeline来完成，防止网络拥堵和客户端等待时间过长。</p>
+<h4 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h4><p>事务是对一组动作而言的一致性，更多是强调过程；原子是一个动作对数据的一致性，更多的是在强调数据。</p>
+<p>使用如下命令来保证命令的原子性，实际上就是放到队列中等待执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:7070&gt; multi</div><div class="line">OK</div><div class="line">127.0.0.1:7070&gt; sadd user:a:follow user:b</div><div class="line">QUEUED</div><div class="line">127.0.0.1:7070&gt; sadd user:b:fans user:a</div><div class="line">QUEUED</div><div class="line">127.0.0.1:7070&gt; exec</div><div class="line">1) (integer) 1</div><div class="line">2) (integer) 1</div></pre></td></tr></table></figure></p>
+<p>执行<code>exec</code>执行队列中的命令，执行<code>discard</code>删除队列中的命令。</p>
+<p>回滚(discard):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">语法错误会回滚事物</div><div class="line">命令错误不回滚事物</div></pre></td></tr></table></figure></p>
+<p>Redis中的watch：有些应用场景需要在事务之前，确保事务中的key没有被其他客户端修改过，才执行事务，否则不执行（类似乐观锁）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">watch key</div></pre></td></tr></table></figure></p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>其他功能如Lua脚本、Bitmaps、HyperLogLog、发布订阅、GEO等附加功能可在需要使用时查阅。</p>
+
       
     </div>
     
@@ -685,7 +723,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#API命令"><span class="nav-number">1.</span> <span class="nav-text">API命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看键总数"><span class="nav-number">1.1.</span> <span class="nav-text">查看键总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据结构内部编码"><span class="nav-number">1.2.</span> <span class="nav-text">查询数据结构内部编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单线程模型"><span class="nav-number">1.3.</span> <span class="nav-text">单线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么单线程还能这么快"><span class="nav-number">1.4.</span> <span class="nav-text">为什么单线程还能这么快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.5.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mget命令"><span class="nav-number">1.5.1.</span> <span class="nav-text">mget命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SETNX"><span class="nav-number">1.6.</span> <span class="nav-text">SETNX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis数据迁移"><span class="nav-number">1.7.</span> <span class="nav-text">redis数据迁移</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#API命令"><span class="nav-number">1.</span> <span class="nav-text">API命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看键总数"><span class="nav-number">1.1.</span> <span class="nav-text">查看键总数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据结构内部编码"><span class="nav-number">1.2.</span> <span class="nav-text">查询数据结构内部编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单线程模型"><span class="nav-number">1.3.</span> <span class="nav-text">单线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么单线程还能这么快"><span class="nav-number">1.4.</span> <span class="nav-text">为什么单线程还能这么快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.5.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mget命令"><span class="nav-number">1.5.1.</span> <span class="nav-text">mget命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SETNX"><span class="nav-number">1.6.</span> <span class="nav-text">SETNX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis数据迁移"><span class="nav-number">1.7.</span> <span class="nav-text">redis数据迁移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键遍历"><span class="nav-number">1.8.</span> <span class="nav-text">键遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附加功能"><span class="nav-number">2.</span> <span class="nav-text">附加功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢查询分析"><span class="nav-number">2.1.</span> <span class="nav-text">慢查询分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令"><span class="nav-number">2.1.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用建议"><span class="nav-number">2.1.2.</span> <span class="nav-text">使用建议</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-Shell"><span class="nav-number">2.2.</span> <span class="nav-text">Redis Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-cli"><span class="nav-number">2.2.1.</span> <span class="nav-text">Redis-cli</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-Server"><span class="nav-number">2.2.2.</span> <span class="nav-text">Redis Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pipeline"><span class="nav-number">2.2.3.</span> <span class="nav-text">Pipeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事物"><span class="nav-number">2.2.4.</span> <span class="nav-text">事物</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">2.2.5.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -838,8 +876,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://blog.gengsc.com/2017/10/11/Redis需要注意的点/';
-          this.page.identifier = '2017/10/11/Redis需要注意的点/';
+          this.page.url = 'http://blog.gengsc.com/2017/10/11/redis笔记/';
+          this.page.identifier = '2017/10/11/redis笔记/';
           this.page.title = 'Redis需要注意的点';
         };
         var d = document, s = d.createElement('script');

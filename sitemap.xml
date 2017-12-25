@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.gengsc.com/2017/10/11/redis%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2017-12-25T06:31:35.361Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.gengsc.com/2017/10/23/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98%E6%95%B4%E7%90%86/</loc>
     
     <lastmod>2017-12-19T02:36:36.931Z</lastmod>
@@ -131,13 +138,6 @@
     <loc>http://blog.gengsc.com/2017/09/29/Maven%E5%B0%8F%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2017-10-13T08:32:07.315Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.gengsc.com/2017/10/11/Redis%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9/</loc>
-    
-    <lastmod>2017-10-12T08:30:55.634Z</lastmod>
     
   </url>
   
