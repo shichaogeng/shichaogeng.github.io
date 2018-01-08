@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。">
+<meta name="description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。 解析xml的时候，spring源码会调用DefaultBeanDefinitionDocumentReader#12345678910111213141516171819202122protected void parseBeanDefinitions(Ele">
 <meta name="keywords" content="spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spring自定义标签">
 <meta property="og:url" content="http://blog.gengsc.com/2017/11/25/spring自定义标签/index.html">
 <meta property="og:site_name" content="Gengsc&#39;s Blog">
-<meta property="og:description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。">
+<meta property="og:description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。 解析xml的时候，spring源码会调用DefaultBeanDefinitionDocumentReader#12345678910111213141516171819202122protected void parseBeanDefinitions(Ele">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-28T09:02:35.260Z">
+<meta property="og:updated_time" content="2017-12-27T01:37:48.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring自定义标签">
-<meta name="twitter:description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。">
+<meta name="twitter:description" content="最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像啥的。然后写下记录下吧。 解析xml的时候，spring源码会调用DefaultBeanDefinitionDocumentReader#12345678910111213141516171819202122protected void parseBeanDefinitions(Ele">
 
 
 
@@ -425,6 +425,7 @@
 
       
         <p>最近公司用到rpc框架，准备按照dubbo自己编写个简易框架有助于理解，然而发现需要在spring中自定义标签。像<dubbo:xx>啥的。然后写下记录下吧。</dubbo:xx></p>
+<p>解析xml的时候，spring源码会调用DefaultBeanDefinitionDocumentReader#<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) &#123;</div><div class="line">	if (delegate.isDefaultNamespace(root)) &#123;</div><div class="line">		NodeList nl = root.getChildNodes();</div><div class="line">		for (int i = 0; i &lt; nl.getLength(); i++) &#123;</div><div class="line">			Node node = nl.item(i);</div><div class="line">			if (node instanceof Element) &#123;</div><div class="line">				Element ele = (Element) node;</div><div class="line">				if (delegate.isDefaultNamespace(ele)) &#123;</div><div class="line">				    //解析默认标签</div><div class="line">					parseDefaultElement(ele, delegate);</div><div class="line">				&#125;</div><div class="line">				else &#123;</div><div class="line">				    //解析知道你故意标签</div><div class="line">					delegate.parseCustomElement(ele);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	else &#123;</div><div class="line">		delegate.parseCustomElement(root);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -658,7 +659,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
