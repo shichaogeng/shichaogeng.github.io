@@ -215,8 +215,8 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>git</tag>
         <tag>Jenkins</tag>
+        <tag>git</tag>
         <tag>github</tag>
         <tag>jdk</tag>
         <tag>maven</tag>
