@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.gengsc.com/2018/01/15/jvm/</loc>
+    
+    <lastmod>2018-01-15T13:07:21.910Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.gengsc.com/2018/01/09/dubbo%E8%A7%A3%E6%9E%90/</loc>
     
     <lastmod>2018-01-14T04:32:51.759Z</lastmod>
