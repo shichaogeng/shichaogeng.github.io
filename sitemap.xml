@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.gengsc.com/2017/12/24/redis%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2018-01-15T14:26:04.345Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.gengsc.com/2018/01/15/jvm/</loc>
     
     <lastmod>2018-01-15T13:37:28.900Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://blog.gengsc.com/2018/01/09/dubbo%E8%A7%A3%E6%9E%90/</loc>
     
     <lastmod>2018-01-14T04:32:51.759Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.gengsc.com/2017/12/24/redis%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2018-01-14T03:52:31.923Z</lastmod>
     
   </url>
   
